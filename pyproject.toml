@@ -45,9 +45,8 @@ gcs = [
     "google-api-core>=2.11.0",
 ]
 cloud = [
-    "boto3>=1.26.0",
-    "google-cloud-storage>=2.10.0",
-    "google-api-core>=2.11.0",
+    "struct[s3]",
+    "struct[gcs]"
 ]
 dev = [
     "pytest>=7.0.0",

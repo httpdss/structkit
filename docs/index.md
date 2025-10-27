@@ -1,12 +1,12 @@
-# STRUCT Documentation
+# StructKit Documentation
 
-Welcome to the comprehensive documentation for STRUCT - the Automated Project Structure Generator.
+Welcome to the comprehensive documentation for StructKit - the Automated Project Structure Generator.
 
 ## 📚 Documentation Sections
 
 ### Getting Started
 
-- [Installation Guide](installation.md) - How to install STRUCT
+- [Installation Guide](installation.md) - How to install StructKit
 - [Quick Start](quickstart.md) - Get up and running quickly
 - [Basic Usage](usage.md) - Core functionality and commands
 
@@ -26,7 +26,7 @@ Welcome to the comprehensive documentation for STRUCT - the Automated Project St
 
 ### Development
 
-- [Development Setup](development.md) - Contributing to STRUCT
+- [Development Setup](development.md) - Contributing to StructKit
 - [Command-Line Completion](completion.md) - Auto-completion setup
 
 ### Reference

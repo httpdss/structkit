@@ -2,7 +2,7 @@ import pytest
 import os
 import logging
 from unittest.mock import patch, MagicMock
-from struct_module.model_wrapper import ModelWrapper
+from structkit.model_wrapper import ModelWrapper
 
 
 class TestModelWrapper:
@@ -11,7 +11,7 @@ class TestModelWrapper:
     def test_init_with_existing_openai_api_key(self):
         """Test that ModelWrapper initializes correctly when OPENAI_API_KEY is already set."""
         with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-test-key", "AI_MODEL": "openai:gpt-4.1"}, clear=False):
-            with patch('struct_module.model_wrapper.Agent') as mock_agent:
+            with patch('structkit.model_wrapper.Agent') as mock_agent:
                 wrapper = ModelWrapper()
                 assert wrapper.model_name == "openai:gpt-4.1"
                 mock_agent.assert_called_once_with(model="openai:gpt-4.1")
@@ -27,7 +27,7 @@ class TestModelWrapper:
         env_vars["AI_MODEL"] = "openai:gpt-4.1"
 
         with patch.dict(os.environ, env_vars, clear=True):
-            with patch('struct_module.model_wrapper.Agent') as mock_agent:
+            with patch('structkit.model_wrapper.Agent') as mock_agent:
                 mock_logger = MagicMock()
                 wrapper = ModelWrapper(logger=mock_logger)
 
@@ -49,7 +49,7 @@ class TestModelWrapper:
         env_vars["AI_MODEL"] = "anthropic:claude-3"
 
         with patch.dict(os.environ, env_vars, clear=True):
-            with patch('struct_module.model_wrapper.Agent') as mock_agent:
+            with patch('structkit.model_wrapper.Agent') as mock_agent:
                 mock_logger = MagicMock()
                 wrapper = ModelWrapper(logger=mock_logger)
 
@@ -63,7 +63,7 @@ class TestModelWrapper:
     def test_generate_content_with_placeholder_key(self):
         """Test that generate_content handles placeholder API key gracefully."""
         with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-default-placeholder-key"}, clear=False):
-            with patch('struct_module.model_wrapper.Agent'):
+            with patch('structkit.model_wrapper.Agent'):
                 mock_logger = MagicMock()
                 wrapper = ModelWrapper(logger=mock_logger)
 
@@ -77,7 +77,7 @@ class TestModelWrapper:
     def test_generate_content_with_valid_key(self):
         """Test that generate_content works normally with valid API key."""
         with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-valid-key"}, clear=False):
-            with patch('struct_module.model_wrapper.Agent') as mock_agent_class:
+            with patch('structkit.model_wrapper.Agent') as mock_agent_class:
                 mock_agent = MagicMock()
                 mock_agent_class.return_value = mock_agent
 
@@ -94,7 +94,7 @@ class TestModelWrapper:
 
     def test_generate_content_dry_run(self):
         """Test that generate_content handles dry run mode."""
-        with patch('struct_module.model_wrapper.Agent'):
+        with patch('structkit.model_wrapper.Agent'):
             mock_logger = MagicMock()
             wrapper = ModelWrapper(logger=mock_logger)
 
@@ -106,7 +106,7 @@ class TestModelWrapper:
     def test_generate_content_api_key_error_handling(self):
         """Test that generate_content provides helpful error messages for API key issues."""
         with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-invalid-key"}, clear=False):
-            with patch('struct_module.model_wrapper.Agent') as mock_agent_class:
+            with patch('structkit.model_wrapper.Agent') as mock_agent_class:
                 mock_agent = MagicMock()
                 mock_agent_class.return_value = mock_agent
 
@@ -127,6 +127,6 @@ class TestModelWrapper:
             del env_vars["AI_MODEL"]
 
         with patch.dict(os.environ, env_vars, clear=True):
-            with patch('struct_module.model_wrapper.Agent'):
+            with patch('structkit.model_wrapper.Agent'):
                 wrapper = ModelWrapper()
                 assert wrapper.model_name == "openai:gpt-4.1"

@@ -1,9 +1,9 @@
-from struct_module.commands import Command
+from structkit.commands import Command
 import os
 import yaml
 import asyncio
-from struct_module.file_item import FileItem
-from struct_module.utils import project_path
+from structkit.file_item import FileItem
+from structkit.utils import project_path
 
 # List command class
 class ListCommand(Command):
@@ -66,7 +66,7 @@ class ListCommand(Command):
   def _list_structures_mcp(self, args):
     """List structures using MCP integration."""
     try:
-      from struct_module.mcp_server import StructMCPServer
+      from structkit.mcp_server import StructMCPServer
 
       async def run_mcp_list():
         server = StructMCPServer()

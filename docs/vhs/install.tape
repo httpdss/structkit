@@ -8,7 +8,7 @@ Set Width 1400
 Set Height 800
 Set Shell "bash"
 
-Type "# STRUCT Installation Demo"
+Type "# StructKit Installation Demo"
 Enter
 Sleep 1s
 
@@ -22,7 +22,7 @@ Type "source .venv/bin/activate"
 Enter
 Sleep 1s
 
-Type "# Install STRUCT from GitHub"
+Type "# Install StructKit from GitHub"
 Enter
 Type "pip install git+https://github.com/httpdss/struct.git"
 Enter
@@ -30,16 +30,16 @@ Sleep 5s
 
 Type "# Verify installation"
 Enter
-Type "struct --help"
+Type "structkit --help"
 Enter
 Sleep 2s
 
 Type "# Check available structures"
 Enter
-Type "struct list"
+Type "structkit list"
 Enter
 Sleep 3s
 
-Type "# STRUCT is now installed and ready to use!"
+Type "# StructKit is now installed and ready to use!"
 Enter
 Sleep 2s

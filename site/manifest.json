@@ -1,6 +1,6 @@
 {
-  "name": "STRUCT - Automated Project Structure Generator",
-  "short_name": "STRUCT",
+  "name": "StructKit - Automated Project Structure Generator",
+  "short_name": "StructKit",
   "description": "Powerful, flexible tool for automating project structure creation through YAML configurations",
   "start_url": "/",
   "display": "standalone",
@@ -46,7 +46,7 @@
     {
       "name": "GitHub Repository",
       "short_name": "GitHub",
-      "description": "View STRUCT on GitHub",
+      "description": "View StructKit on GitHub",
       "url": "https://github.com/httpdss/struct",
       "icons": [
         {
@@ -58,7 +58,7 @@
     {
       "name": "Documentation",
       "short_name": "Docs",
-      "description": "Read STRUCT documentation",
+      "description": "Read StructKit documentation",
       "url": "https://httpdss.github.io/structkit/docs",
       "icons": [
         {

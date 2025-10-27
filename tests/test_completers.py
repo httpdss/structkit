@@ -1,7 +1,7 @@
 import pytest
 import os
 import argparse
-from struct_module.completers import log_level_completer, file_strategy_completer, structures_completer
+from structkit.completers import log_level_completer, file_strategy_completer, structures_completer
 
 def test_log_level_completer():
     completer = log_level_completer()

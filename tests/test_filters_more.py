@@ -2,7 +2,7 @@ import os
 import types
 import pytest
 
-from struct_module import filters
+from structkit import filters
 
 
 def test_slugify_basic():

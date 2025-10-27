@@ -7,7 +7,7 @@ Set Width 1400
 Set Height 800
 Set Shell "bash"
 
-Type "# STRUCT Remote Content Demo"
+Type "# StructKit Remote Content Demo"
 Enter
 Sleep 1s
 

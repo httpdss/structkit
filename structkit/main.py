@@ -2,14 +2,14 @@ import argparse
 import logging
 import os
 from dotenv import load_dotenv
-from struct_module.utils import read_config_file, merge_configs
-from struct_module.commands.generate import GenerateCommand
-from struct_module.commands.info import InfoCommand
-from struct_module.commands.validate import ValidateCommand
-from struct_module.commands.list import ListCommand
-from struct_module.commands.generate_schema import GenerateSchemaCommand
-from struct_module.commands.mcp import MCPCommand
-from struct_module.logging_config import configure_logging
+from structkit.utils import read_config_file, merge_configs
+from structkit.commands.generate import GenerateCommand
+from structkit.commands.info import InfoCommand
+from structkit.commands.validate import ValidateCommand
+from structkit.commands.list import ListCommand
+from structkit.commands.generate_schema import GenerateSchemaCommand
+from structkit.commands.mcp import MCPCommand
+from structkit.logging_config import configure_logging
 
 # Optional dependency: shtab for static shell completion generation
 try:
@@ -22,7 +22,7 @@ load_dotenv()
 def get_parser():
     parser = argparse.ArgumentParser(
       description="Generate project structure from YAML configuration.",
-      prog="struct",
+      prog="structkit",
       epilog="Thanks for using %(prog)s! :)",
     )
 
@@ -37,11 +37,11 @@ def get_parser():
     MCPCommand(subparsers.add_parser('mcp', help='MCP (Model Context Protocol) support'))
 
     # init to create a basic .struct.yaml
-    from struct_module.commands.init import InitCommand
+    from structkit.commands.init import InitCommand
     InitCommand(subparsers.add_parser('init', help='Initialize a basic .struct.yaml in the target directory'))
 
     # completion manager
-    from struct_module.commands.completion import CompletionCommand
+    from structkit.commands.completion import CompletionCommand
     CompletionCommand(subparsers.add_parser('completion', help='Manage shell completions'))
 
     # Add shtab completion printing flags if available
@@ -66,8 +66,8 @@ def main():
       file_config = read_config_file(args.config_file)
       args = argparse.Namespace(**merge_configs(file_config, args))
 
-    # Resolve logging level precedence: STRUCT_LOG_LEVEL env > --debug (if present) > --log
-    env_level = os.getenv('STRUCT_LOG_LEVEL')
+    # Resolve logging level precedence: STRUCTKIT_LOG_LEVEL env > --debug (if present) > --log
+    env_level = os.getenv('STRUCTKIT_LOG_LEVEL')
     if env_level:
         logging_level = getattr(logging, env_level.upper(), logging.INFO)
     else:

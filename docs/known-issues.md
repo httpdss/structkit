@@ -1,6 +1,6 @@
 # Known Issues
 
-This page tracks known issues, limitations, and workarounds for STRUCT. If you encounter any of these issues, check here for potential solutions.
+This page tracks known issues, limitations, and workarounds for StructKit. If you encounter any of these issues, check here for potential solutions.
 
 ## Current Known Issues
 
@@ -183,7 +183,7 @@ variables:
 
 **Limitation**: Schema validation doesn't catch all runtime errors.
 
-**Note**: Use `struct validate` and testing for comprehensive validation.
+**Note**: Use `structkit validate` and testing for comprehensive validation.
 
 ## Workarounds and Best Practices
 
@@ -220,7 +220,7 @@ variables:
 ### Issue Report Template
 
 ```markdown
-**STRUCT Version**: [e.g., 1.2.3]
+**StructKit Version**: [e.g., 1.2.3]
 **Platform**: [e.g., Ubuntu 20.04, macOS 12.0, Windows 11]
 **Python Version**: [e.g., 3.9.7]
 

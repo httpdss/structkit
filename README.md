@@ -1,13 +1,13 @@
-# 🚀 STRUCT: Automated Project Structure Generator
+# 🚀 StructKit: Automated Project Structure Generator
 
-![STRUCT Logo](./docs/assets/github-hero.gif)
+![StructKit Logo](./docs/assets/github-hero.gif)
 
 [![codecov](https://codecov.io/github/httpdss/structkit/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/struct)
 ![GitHub issues](https://img.shields.io/github/issues/httpdss/struct)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/httpdss/struct)
 ![GitHub stars](https://img.shields.io/github/stars/httpdss/struct?style=social)
 
-**STRUCT** is a powerful, flexible tool for automating project structure creation through YAML configurations. Generate consistent project layouts, boilerplate code, and configurations with template variables, remote content fetching, and intelligent file handling.
+**StructKit** is a powerful, flexible tool for automating project structure creation through YAML configurations. Generate consistent project layouts, boilerplate code, and configurations with template variables, remote content fetching, and intelligent file handling.
 
 > 📚 **[View Complete Documentation](docs/index.md)** | 🚀 **[Quick Start Guide](docs/quickstart.md)** | 🔧 **[Installation](docs/installation.md)**
 
@@ -38,16 +38,16 @@ docker run -v $(pwd):/workdir ghcr.io/httpdss/struct:main generate my-config.yam
 
 ```bash
 # Generate a Terraform module structure
-struct generate terraform-module ./my-terraform-module
+structkit generate terraform-module ./my-terraform-module
 
 # List available structures
-struct list
+structkit list
 
 # Validate a configuration
-struct validate my-config.yaml
+structkit validate my-config.yaml
 
 # Start MCP server for AI integration
-struct mcp --server
+structkit mcp --server
  ```
 
 ### Example Configuration
@@ -57,7 +57,7 @@ files:
   - README.md:
       content: |
         # {{@ project_name @}}
-        Generated with STRUCT
+        Generated with StructKit
   - .gitignore:
       file: github://github/gitignore/main/Python.gitignore
 
@@ -101,7 +101,7 @@ Our comprehensive documentation is organized into the following sections:
 
 ### 👩‍💻 Development
 
-- **[Development Setup](docs/development.md)** - Contributing to STRUCT
+- **[Development Setup](docs/development.md)** - Contributing to StructKit
 - **[Known Issues](docs/known-issues.md)** - Current limitations and workarounds
 
 ### 📖 Resources
@@ -128,7 +128,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## 💰 Support
 
-If STRUCT helps your workflow, consider supporting the project: [patreon/structproject](https://patreon.com/structproject)
+If StructKit helps your workflow, consider supporting the project: [patreon/structproject](https://patreon.com/structproject)
 
 ---
 

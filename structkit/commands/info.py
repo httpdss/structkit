@@ -2,7 +2,7 @@ import os
 import yaml
 import asyncio
 
-from struct_module.commands import Command
+from structkit.commands import Command
 
 # Info command class for exposing information about the structure
 class InfoCommand(Command):
@@ -62,7 +62,7 @@ class InfoCommand(Command):
     def _get_info_mcp(self, args):
       """Get structure info using MCP integration."""
       try:
-        from struct_module.mcp_server import StructMCPServer
+        from structkit.mcp_server import StructMCPServer
 
         async def run_mcp_info():
           server = StructMCPServer()

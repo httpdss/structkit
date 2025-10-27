@@ -1,5 +1,5 @@
 {
-  "name": "Struct devcontainer",
+  "name": "StructKit devcontainer",
   "image": "mcr.microsoft.com/devcontainers/python:3",
   "features": {
     // "ghcr.io/devcontainers/features/python:1": {},

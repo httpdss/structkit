@@ -1,6 +1,6 @@
-# STRUCT VHS Demo Tapes
+# StructKit VHS Demo Tapes
 
-This directory contains [VHS](https://github.com/charmbracelet/vhs) tape files for creating animated GIF demonstrations of STRUCT's features. These tapes showcase various use cases and capabilities of the STRUCT tool.
+This directory contains [VHS](https://github.com/charmbracelet/vhs) tape files for creating animated GIF demonstrations of StructKit's features. These tapes showcase various use cases and capabilities of the StructKit tool.
 
 ## 🎬 Available Tapes
 
@@ -8,12 +8,12 @@ This directory contains [VHS](https://github.com/charmbracelet/vhs) tape files f
 
 **File**: `install.tape`
 **Duration**: ~30 seconds
-**Description**: Shows how to install STRUCT using pip and verify the installation.
+**Description**: Shows how to install StructKit using pip and verify the installation.
 
 ### 2. Basic Usage
 
 **File**: `basic-usage.tape`
-**Description**: Demonstrates basic STRUCT commands like `list`, `info`, and simple project generation.
+**Description**: Demonstrates basic StructKit commands like `list`, `info`, and simple project generation.
 
 ```tape
 Output docs/vhs/basic-usage.gif
@@ -30,15 +30,15 @@ Set Height 800
 Set Shell "bash"
 
 Type "# Explore available structures" Enter
-Type "struct list" Enter
+Type "structkit list" Enter
 Sleep 3
 Type "" Enter
 Type "# Get information about a specific structure" Enter
-Type "struct info terraform/module" Enter
+Type "structkit info terraform/module" Enter
 Sleep 5
 Type "" Enter
 Type "# Generate a simple project structure" Enter
-Type "struct generate terraform/module ./my-terraform-module" Enter
+Type "structkit generate terraform/module ./my-terraform-module" Enter
 Sleep 8
 Type "" Enter
 Type "# Verify the generated structure" Enter
@@ -85,7 +85,7 @@ Type "EOF" Enter
 Sleep 2
 Type "" Enter
 Type "# Generate structure from YAML (note: file:// is automatic)" Enter
-Type "struct generate my-project.yaml ./output" Enter
+Type "structkit generate my-project.yaml ./output" Enter
 Sleep 5
 Type "" Enter
 Type "# Check the generated files" Enter
@@ -147,7 +147,7 @@ Type "EOF" Enter
 Sleep 3
 Type "" Enter
 Type "# Generate with mappings file" Enter
-Type "struct generate --mappings-file mappings.yaml app-config.yaml ./config-output" Enter
+Type "structkit generate --mappings-file mappings.yaml app-config.yaml ./config-output" Enter
 Sleep 5
 Type "" Enter
 Type "# Check generated configuration" Enter
@@ -217,7 +217,7 @@ Type "EOF" Enter
 Sleep 3
 Type "" Enter
 Type "# Generate with multiple mappings files (deep merge)" Enter
-Type "struct generate \\" Enter
+Type "structkit generate \\" Enter
 Type "  --mappings-file base-mappings.yaml \\" Enter
 Type "  --mappings-file prod-mappings.yaml \\" Enter
 Type "  deployment.yaml ./k8s-output" Enter
@@ -252,7 +252,7 @@ Type "mkdir -p existing-project && echo 'old content' > existing-project/README.
 Sleep 1
 Type "" Enter
 Type "# Use dry-run to preview changes" Enter
-Type "struct generate --dry-run terraform/module ./existing-project" Enter
+Type "structkit generate --dry-run terraform/module ./existing-project" Enter
 Sleep 5
 Type "" Enter
 Type "# Validate a YAML configuration" Enter
@@ -262,11 +262,11 @@ Type "  - test.txt:" Enter
 Type "      content: 'Hello World'" Enter
 Type "EOF" Enter
 Sleep 2
-Type "struct validate test-config.yaml" Enter
+Type "structkit validate test-config.yaml" Enter
 Sleep 3
 Type "" Enter
 Type "# Generate with backup strategy" Enter
-Type "struct generate --file-strategy=backup --backup=./backups terraform/module ./existing-project" Enter
+Type "structkit generate --file-strategy=backup --backup=./backups terraform/module ./existing-project" Enter
 Sleep 5
 Type "" Enter
 Type "# Check backup was created" Enter
@@ -313,7 +313,7 @@ Type "EOF" Enter
 Sleep 3
 Type "" Enter
 Type "# Generate project with remote content" Enter
-Type "struct generate remote-demo.yaml ./remote-project" Enter
+Type "structkit generate remote-demo.yaml ./remote-project" Enter
 Sleep 8
 Type "" Enter
 Type "# Check downloaded content" Enter
@@ -342,11 +342,11 @@ Set Height 800
 Set Shell "bash"
 
 Type "# Generate JSON schema for available structures" Enter
-Type "struct generate-schema" Enter
+Type "structkit generate-schema" Enter
 Sleep 5
 Type "" Enter
 Type "# Save schema to file for IDE integration" Enter
-Type "struct generate-schema -o struct-schema.json" Enter
+Type "structkit generate-schema -o struct-schema.json" Enter
 Sleep 3
 Type "" Enter
 Type "# Check the generated schema" Enter
@@ -394,7 +394,7 @@ These GIFs can be embedded in:
 Example markdown embedding:
 
 ```markdown
-![STRUCT Basic Usage](./docs/vhs/basic-usage.gif)
+![StructKit Basic Usage](./docs/vhs/basic-usage.gif)
 ```
 
 ## ⚙️ VHS Configuration
@@ -409,7 +409,7 @@ All tapes use consistent settings:
 
 ## 🔄 Updating Tapes
 
-When STRUCT features change:
+When StructKit features change:
 
 1. Update the relevant tape file
 2. Regenerate the GIF: `vhs filename.tape`
@@ -418,4 +418,4 @@ When STRUCT features change:
 
 ---
 
-These demonstrations provide comprehensive coverage of STRUCT's capabilities, from basic usage to advanced features like multiple mappings files, remote content fetching, and schema generation.
+These demonstrations provide comprehensive coverage of StructKit's capabilities, from basic usage to advanced features like multiple mappings files, remote content fetching, and schema generation.

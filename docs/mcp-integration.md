@@ -5,7 +5,7 @@ tags:
 
 # MCP (Model Context Protocol) Integration
 
-The struct tool now supports MCP (Model Context Protocol) integration, providing a programmable interface to interact with structure definitions. This enables automation and integration with other tools, particularly AI-assisted development workflows.
+The structkit tool now supports MCP (Model Context Protocol) integration, providing a programmable interface to interact with structure definitions. This enables automation and integration with other tools, particularly AI-assisted development workflows.
 
 ## Available MCP Tools
 
@@ -92,17 +92,17 @@ The MCP server uses FastMCP (v2.0+) and can run over stdio, http, or sse transpo
 
 - stdio (default):
 ```bash
-struct mcp --server --transport stdio
+structkit mcp --server --transport stdio
 ```
 
 - HTTP (StreamableHTTP):
 ```bash
-struct mcp --server --transport http --host 127.0.0.1 --port 9000 --path /mcp
+structkit mcp --server --transport http --host 127.0.0.1 --port 9000 --path /mcp
 ```
 
 - SSE:
 ```bash
-struct mcp --server --transport sse --host 0.0.0.0 --port 8080 --path /events
+structkit mcp --server --transport sse --host 0.0.0.0 --port 8080 --path /events
 ```
 
 ### Command Line Integration
@@ -111,10 +111,10 @@ The existing `list` and `info` commands now support an optional `--mcp` flag:
 
 ```bash
 # List structures with MCP support
-struct list --mcp
+structkit list --mcp
 
 # Get structure info with MCP support
-struct info project/python --mcp
+structkit info project/python --mcp
 ```
 
 ## MCP Client Integration
@@ -130,8 +130,8 @@ Add the following to your Claude Desktop configuration file:
 ```json
 {
   "mcpServers": {
-    "struct": {
-      "command": "struct",
+    "structkit": {
+      "command": "structkit",
       "args": ["mcp", "--server"],
       "cwd": "/path/to/your/project"
     }
@@ -146,8 +146,8 @@ For Cline (VS Code extension), add to your `.cline_mcp_settings.json`:
 ```json
 {
   "mcpServers": {
-    "struct": {
-      "command": "struct",
+    "structkit": {
+      "command": "structkit",
       "args": ["mcp", "--server"]
     }
   }
@@ -189,7 +189,7 @@ from mcp.client.stdio import stdio_client
 
 async def main():
     server_params = StdioServerParameters(
-        command="struct",
+        command="structkit",
         args=["mcp", "--server"]
     )
 
@@ -217,7 +217,7 @@ Using `output: "console"` with `generate_structure` allows piping structure cont
 
 ```bash
 # Generate structure content to console for AI review
-struct mcp --server | ai-tool "Review this project structure"
+structkit mcp --server | ai-tool "Review this project structure"
 ```
 
 ### Chaining Operations
@@ -268,8 +268,8 @@ The MCP tools can be chained together for complex workflows:
 ## Configuration
 
 ### Environment Variables
-The MCP server respects the same environment variables as the regular struct tool:
-- `STRUCT_STRUCTURES_PATH`: Default path for structure definitions
+The MCP server respects the same environment variables as the regular structkit tool:
+- `STRUCTKIT_STRUCTURES_PATH`: Default path for structure definitions
 - Any mapping variables used in templates
 
 ### Client Configuration Examples
@@ -277,41 +277,46 @@ The MCP server respects the same environment variables as the regular struct too
 #### 1. Basic Configuration
 ```json
 {
-  "command": "struct",
+  "command": "structkit",
   "args": ["mcp", "--server"]
 }
 ```
 
 #### 2. With Custom Structures Path
+
 ```json
 {
-  "command": "struct",
+  "command": "structkit",
   "args": ["mcp", "--server"],
   "env": {
-    "STRUCT_STRUCTURES_PATH": "/path/to/custom/structures"
+    "STRUCTKIT_STRUCTURES_PATH": "/path/to/custom/structures"
   }
 }
 ```
 
 #### 3. With Python Virtual Environment
+
 ```json
 {
   "command": "/path/to/venv/bin/python",
-  "args": ["-m", "struct_module.main", "mcp", "--server"],
+  "args": ["-m", "structkit.main", "mcp", "--server"],
   "cwd": "/path/to/structkit/project"
 }
 ```
 
 #### 4. Using Shell Script Wrapper
+
 Create a shell script `struct-mcp.sh`:
+
 ```bash
 #!/bin/bash
 cd /path/to/your/project
 source .venv/bin/activate
-struct mcp --server
+structkit mcp --server
 ```
 
 Then configure your MCP client:
+
 ```json
 {
   "command": "/path/to/struct-mcp.sh",
@@ -321,25 +326,30 @@ Then configure your MCP client:
 
 ## Quick Start Guide
 
-### Step 1: Install struct with MCP support
+### Step 1: Install structkit with MCP support
+
 ```bash
 pip install fastmcp>=2.0
 # (your MCP client may also require installing the MCP SDK, e.g., `pip install mcp`)
 ```
 
 ### Step 2: Test MCP server
+
 ```bash
 # Test that MCP server starts correctly
-struct mcp --server
+structkit mcp --server
 # Should show: Starting MCP server...
 # Press Ctrl+C to stop
 ```
 
 ### Step 3: Configure your MCP client
+
 Add the configuration to your MCP client (see examples above).
 
 ### Step 4: Start using MCP tools
+
 Once connected, you can use these tools:
+
 - `list_structures` - Get all available structures
 - `get_structure_info` - Get details about a specific structure
 - `generate_structure` - Generate project structures
@@ -350,12 +360,12 @@ Once connected, you can use these tools:
 ### Common Issues
 
 1. **"Command not found: struct"**
-   - Solution: Ensure struct is installed and in your PATH
+   - Solution: Ensure structkit is installed and in your PATH
    - Alternative: Use full path to Python executable
 
 2. **MCP server won't start**
    - Check if `mcp` package is installed: `pip show mcp`
-   - Try running with verbose logging: `struct mcp --server --log DEBUG`
+   - Try running with verbose logging: `structkit mcp --server --log DEBUG`
 
 3. **Client can't connect**
    - Verify the command and args in your client configuration
@@ -363,19 +373,20 @@ Once connected, you can use these tools:
    - Check working directory and environment variables
 
 4. **Structures not found**
-   - Set `STRUCT_STRUCTURES_PATH` environment variable
+   - Set `STRUCTKIT_STRUCTURES_PATH` environment variable
    - Use absolute paths in configuration
    - Verify structure files exist and are readable
 
 ### Debug Mode
+
 ```bash
 # Run with debug logging
-STRUCT_LOG_LEVEL=DEBUG struct mcp --server
+STRUCTKIT_LOG_LEVEL=DEBUG structkit mcp --server
 ```
 
 ## Benefits
 
-1. **Automation**: Programmatic access to all struct tool functionality
+1. **Automation**: Programmatic access to all structkit tool functionality
 2. **Integration**: Easy integration with other development tools
 3. **AI Workflows**: Enhanced support for AI-assisted development processes
 4. **Consistency**: Same underlying logic as CLI commands
@@ -383,4 +394,4 @@ STRUCT_LOG_LEVEL=DEBUG struct mcp --server
 
 ## Backward Compatibility
 
-All existing struct tool functionality remains unchanged. The MCP integration is additive and does not affect existing workflows or commands.
+All existing structkit tool functionality remains unchanged. The MCP integration is additive and does not affect existing workflows or commands.

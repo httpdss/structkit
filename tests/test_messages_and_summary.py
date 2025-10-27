@@ -4,8 +4,8 @@ import logging
 
 import pytest
 
-from struct_module.commands.generate import GenerateCommand
-from struct_module.mcp_server import StructMCPServer
+from structkit.commands.generate import GenerateCommand
+from structkit.mcp_server import StructMCPServer
 
 
 def _ensure_store(tmp_path):
@@ -19,8 +19,8 @@ def _ensure_store(tmp_path):
 def test_generate_summary_counts_created_updated(tmp_path, caplog):
     # capture INFO logs for our modules
     caplog.set_level(logging.INFO)
-    caplog.set_level(logging.INFO, logger='struct_module.file_item')
-    caplog.set_level(logging.INFO, logger='struct_module.commands.generate')
+    caplog.set_level(logging.INFO, logger='structkit.file_item')
+    caplog.set_level(logging.INFO, logger='structkit.commands.generate')
 
     parser = argparse.ArgumentParser()
     command = GenerateCommand(parser)
@@ -63,7 +63,7 @@ def test_generate_summary_counts_created_updated(tmp_path, caplog):
 
 def test_fileitem_append_logs_message(tmp_path, caplog):
     caplog.set_level(logging.INFO)
-    caplog.set_level(logging.INFO, logger='struct_module.file_item')
+    caplog.set_level(logging.INFO, logger='structkit.file_item')
 
     parser = argparse.ArgumentParser()
     command = GenerateCommand(parser)

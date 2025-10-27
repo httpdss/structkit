@@ -6,7 +6,7 @@ import tempfile
 import unittest
 import yaml
 
-from struct_module.mcp_server import StructMCPServer
+from structkit.mcp_server import StructMCPServer
 
 
 class TestMCPIntegration(unittest.TestCase):
@@ -67,11 +67,11 @@ class TestMCPCommands(unittest.TestCase):
     """Test MCP command line integration."""
 
     def test_mcp_command_import(self):
-        from struct_module.commands.mcp import MCPCommand
+        from structkit.commands.mcp import MCPCommand
         self.assertIsNotNone(MCPCommand)
 
     def test_list_command_mcp_option(self):
-        from struct_module.commands.list import ListCommand
+        from structkit.commands.list import ListCommand
         import argparse
 
         parser = argparse.ArgumentParser()
@@ -84,7 +84,7 @@ class TestMCPCommands(unittest.TestCase):
         self.assertTrue(hasattr(args, 'mcp'))
 
     def test_info_command_mcp_option(self):
-        from struct_module.commands.info import InfoCommand
+        from structkit.commands.info import InfoCommand
         import argparse
 
         parser = argparse.ArgumentParser()

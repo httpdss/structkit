@@ -154,8 +154,8 @@ class ContentFetcher:
     to avoid surprise network requests.
     """
     # Deny network option
-    if os.getenv("STRUCT_DENY_NETWORK") == "1":
-      self.logger.debug("Network denied by STRUCT_DENY_NETWORK=1; using git fallback if available")
+    if os.getenv("STRUCTKIT_DENY_NETWORK") == "1":
+      self.logger.debug("Network denied by STRUCTKIT_DENY_NETWORK=1; using git fallback if available")
       return self._clone_or_fetch_github(owner, repo, branch, file_path, https=use_https)
 
     repo_cache_path = self.cache_dir / f"{owner}_{repo}_{branch}"
@@ -165,8 +165,8 @@ class ContentFetcher:
 
     # Attempt raw fetch
     raw_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{file_path}"
-    timeout = float(os.getenv("STRUCT_HTTP_TIMEOUT", "10"))
-    retries = int(os.getenv("STRUCT_HTTP_RETRIES", "2"))
+    timeout = float(os.getenv("STRUCTKIT_HTTP_TIMEOUT", "10"))
+    retries = int(os.getenv("STRUCTKIT_HTTP_RETRIES", "2"))
 
     last_err = None
     for attempt in range(retries + 1):

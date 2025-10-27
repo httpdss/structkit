@@ -1,5 +1,5 @@
 """
-MCP Server implementation for the struct tool using FastMCP stdio transport.
+MCP Server implementation for the structkit tool using FastMCP stdio transport.
 
 This module provides MCP (Model Context Protocol) support for:
 1. Listing available structures
@@ -16,15 +16,16 @@ from typing import Any, Dict, Optional
 
 from fastmcp import FastMCP
 
-from struct_module.commands.generate import GenerateCommand
-from struct_module.commands.validate import ValidateCommand
+from structkit.commands.generate import GenerateCommand
+from structkit.commands.validate import ValidateCommand
+from structkit import __version__
 
 
 class StructMCPServer:
     """FastMCP-based MCP Server for struct tool operations."""
 
     def __init__(self):
-        self.app = FastMCP("struct-mcp-server", version="1.0.0")
+        self.app = FastMCP("structkit-mcp-server", version=__version__)
         self.logger = logging.getLogger(__name__)
         self._register_tools()
 
@@ -94,7 +95,8 @@ class StructMCPServer:
                     for folder, content in item.items():
                         result_lines.append(f"       - {folder}\n")
                         if isinstance(content, dict):
-                            structs = content.get("struct")
+                            # Support both 'struct' (config key) and 'structkit' (package name)
+                            structs = content.get("struct") or content.get("structkit")
                             if isinstance(structs, list):
                                 result_lines.append("         • struct(s):\n")
                                 for s in structs:

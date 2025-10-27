@@ -1,6 +1,6 @@
-# Contributing to STRUCT
+# Contributing to StructKit
 
-Thank you for your interest in contributing to STRUCT! We welcome contributions from the community and are pleased to have you join us.
+Thank you for your interest in contributing to StructKit! We welcome contributions from the community and are pleased to have you join us.
 
 ## 🚀 Quick Start
 
@@ -62,7 +62,7 @@ pytest
 - Write tests for new functionality
 - Ensure all existing tests pass
 - Run the test suite: `pytest`
-- Check test coverage: `pytest --cov=struct_module`
+- Check test coverage: `pytest --cov=structkit`
 
 ### Pull Request Guidelines
 
@@ -108,7 +108,7 @@ docs/
 
 ## 🏗️ Contributing New Structures
 
-STRUCT includes a collection of contrib structures in `struct_module/contribs/`. To add a new structure:
+StructKit includes a collection of contrib structures in `structkit/contribs/`. To add a new structure:
 
 1. **Create a new YAML file** in the appropriate subdirectory
 2. **Follow naming conventions**: use lowercase with hyphens
@@ -131,7 +131,7 @@ STRUCT includes a collection of contrib structures in `struct_module/contribs/`.
 When reporting bugs, please include:
 
 - **OS and Python version**
-- **STRUCT version** (`struct --version`)
+- **StructKit version** (`structkit --version`)
 - **Complete error message** or traceback
 - **Steps to reproduce** the issue
 - **Expected vs actual behavior**
@@ -150,7 +150,7 @@ For feature requests:
 
 ```text
 struct/
-├── struct_module/           # Main Python package
+├── structkit/           # Main Python package
 │   ├── commands/           # CLI command implementations
 │   ├── contribs/          # Contributed structure templates
 │   ├── __init__.py
@@ -210,4 +210,4 @@ If you need help contributing:
 3. Create a new issue with the `question` label
 4. Join our [GitHub Discussions](https://github.com/httpdss/structkit/discussions)
 
-Thank you for contributing to STRUCT! 🎉
+Thank you for contributing to StructKit! 🎉

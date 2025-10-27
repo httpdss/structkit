@@ -1,7 +1,7 @@
 import asyncio
 import logging
-from struct_module.commands import Command
-from struct_module.mcp_server import StructMCPServer
+from structkit.commands import Command
+from structkit.mcp_server import StructMCPServer
 
 
 # MCP command class for starting the MCP server (FastMCP stdio only)

@@ -1,4 +1,4 @@
-// STRUCT Service Worker for Offline Support
+// StructKit Service Worker for Offline Support
 
 const CACHE_NAME = 'struct-site-v1';
 const STATIC_CACHE_URLS = [

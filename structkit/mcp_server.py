@@ -95,7 +95,8 @@ class StructMCPServer:
                     for folder, content in item.items():
                         result_lines.append(f"       - {folder}\n")
                         if isinstance(content, dict):
-                            structs = content.get("structkit")
+                            # Support both 'struct' (config key) and 'structkit' (package name)
+                            structs = content.get("struct") or content.get("structkit")
                             if isinstance(structs, list):
                                 result_lines.append("         • struct(s):\n")
                                 for s in structs:

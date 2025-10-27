@@ -130,8 +130,8 @@ Add the following to your Claude Desktop configuration file:
 ```json
 {
   "mcpServers": {
-    "struct": {
-      "command": "struct",
+    "structkit": {
+      "command": "structkit",
       "args": ["mcp", "--server"],
       "cwd": "/path/to/your/project"
     }
@@ -146,8 +146,8 @@ For Cline (VS Code extension), add to your `.cline_mcp_settings.json`:
 ```json
 {
   "mcpServers": {
-    "struct": {
-      "command": "struct",
+    "structkit": {
+      "command": "structkit",
       "args": ["mcp", "--server"]
     }
   }
@@ -189,7 +189,7 @@ from mcp.client.stdio import stdio_client
 
 async def main():
     server_params = StdioServerParameters(
-        command="struct",
+        command="structkit",
         args=["mcp", "--server"]
     )
 
@@ -277,7 +277,7 @@ The MCP server respects the same environment variables as the regular struct too
 #### 1. Basic Configuration
 ```json
 {
-  "command": "struct",
+  "command": "structkit",
   "args": ["mcp", "--server"]
 }
 ```
@@ -285,7 +285,7 @@ The MCP server respects the same environment variables as the regular struct too
 #### 2. With Custom Structures Path
 ```json
 {
-  "command": "struct",
+  "command": "structkit",
   "args": ["mcp", "--server"],
   "env": {
     "STRUCT_STRUCTURES_PATH": "/path/to/custom/structures"

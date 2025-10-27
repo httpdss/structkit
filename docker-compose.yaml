@@ -1,5 +1,5 @@
 services:
-  struct-dry-run:
+  structkit-dry-run:
     build: .
     volumes:
       - .:/app
@@ -17,7 +17,7 @@ services:
       "/app/example/structure.yaml",
       "/app/example_project"
     ]
-  struct-test:
+  structkit-test:
     build: .
     volumes:
       - .:/app

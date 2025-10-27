@@ -24,7 +24,7 @@ class StructMCPServer:
     """FastMCP-based MCP Server for struct tool operations."""
 
     def __init__(self):
-        self.app = FastMCP("struct-mcp-server", version="1.0.0")
+        self.app = FastMCP("structkit-mcp-server", version="1.0.0")
         self.logger = logging.getLogger(__name__)
         self._register_tools()
 
@@ -94,7 +94,7 @@ class StructMCPServer:
                     for folder, content in item.items():
                         result_lines.append(f"       - {folder}\n")
                         if isinstance(content, dict):
-                            structs = content.get("struct")
+                            structs = content.get("structkit")
                             if isinstance(structs, list):
                                 result_lines.append("         • struct(s):\n")
                                 for s in structs:

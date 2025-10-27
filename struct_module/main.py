@@ -22,7 +22,7 @@ load_dotenv()
 def get_parser():
     parser = argparse.ArgumentParser(
       description="Generate project structure from YAML configuration.",
-      prog="struct",
+      prog="structkit",
       epilog="Thanks for using %(prog)s! :)",
     )
 

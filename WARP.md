@@ -2,31 +2,14 @@
 
 > This file serves as a comprehensive guide for developers working with the StructKit project. It contains project-specific conventions, development workflows, and institutional knowledge.
 
-## 📋 Table of Contents
-
-- [Project Overview](#project-overview)
-- [Development Environment](#development-environment)
-- [Code Structure](#code-structure)
-- [Development Workflow](#development-workflow)
-- [Testing Guidelines](#testing-guidelines)
-- [Code Style & Standards](#code-style--standards)
-- [Release Process](#release-process)
-- [Common Tasks](#common-tasks)
-- [Troubleshooting](#troubleshooting)
-- [Architecture Decisions](#architecture-decisions)
-- [Performance Considerations](#performance-considerations)
-- [Security Guidelines](#security-guidelines)
-- [Documentation Standards](#documentation-standards)
-- [Dependencies & Tools](#dependencies--tools)
-- [Monitoring & Observability](#monitoring--observability)
-- [Issue & Work Management](#issue--work-management)
-
 ## 🎯 Project Overview
 
 ### Mission
+
 StructKit simplifies project organization by creating consistent file and folder structures tailored to specific needs. It enhances productivity and maintains uniformity across projects through YAML-based configuration files.
 
 ### Key Features
+
 - **YAML-Based Configuration**: Simple, readable project structure definitions
 - **Template Variables**: Dynamic content with Jinja2 templating and interactive prompts
 - **Remote Content Fetching**: Support for GitHub, HTTP/HTTPS, S3, and Google Cloud Storage
@@ -35,6 +18,7 @@ StructKit simplifies project organization by creating consistent file and folder
 - **MCP Integration**: Model Context Protocol support for AI-assisted workflows
 
 ### Technology Stack
+
 - **Language**: Python 3.12+
 - **CLI Framework**: argparse with custom command pattern
 - **Templating**: Jinja2 with custom delimiters
@@ -46,6 +30,7 @@ StructKit simplifies project organization by creating consistent file and folder
 ## 🛠 Development Environment
 
 ### Prerequisites
+
 ```bash
 # Python 3.12 or higher
 python --version
@@ -62,6 +47,7 @@ pip install -r requirements.dev.txt
 ```
 
 ### Environment Variables
+
 ```bash
 # Optional: OpenAI API key for AI features
 export OPENAI_API_KEY="your-api-key-here"
@@ -74,6 +60,7 @@ export STRUCTKIT_LOG_LEVEL="DEBUG"
 ```
 
 ### IDE Configuration
+
 - **VS Code**: Recommended extensions in `.vscode/extensions.json`
 - **PyCharm**: Python interpreter should point to `.venv/bin/python`
 - **Pre-commit hooks**: Run `pre-commit install` after setup
@@ -81,7 +68,8 @@ export STRUCTKIT_LOG_LEVEL="DEBUG"
 ## 🏗 Code Structure
 
 ### Directory Layout
-```
+
+```text
 structkit/
 ├── commands/           # CLI command implementations
 │   ├── generate.py    # Main generation command
@@ -104,17 +92,20 @@ examples/              # Example configurations
 ### Key Modules
 
 #### `template_renderer.py`
+
 - Handles Jinja2 templating with custom delimiters
 - Interactive variable prompting with descriptions
 - Type coercion and validation
 - Icon-based user interface
 
 #### `file_item.py`
+
 - Represents files to be created/modified
 - Handles different content sources (inline, remote, etc.)
 - Implements file creation strategies (overwrite, skip, backup, etc.)
 
 #### `commands/`
+
 - Each command is a separate class inheriting from `Command`
 - Self-contained argument parsing and execution logic
 - Consistent error handling and logging
@@ -272,17 +263,20 @@ pre-commit run --all-files
 ### Common Issues
 
 #### Template Variables Not Resolving
+
 - Check custom delimiters: `{{@` `@}}`
 - Verify variable names match configuration
 - Check for typos in YAML structure
 
 #### File Creation Failures
+
 - Verify file permissions
 - Check disk space
 - Validate file paths (no invalid characters)
 - Review file strategy settings
 
 #### Import Errors
+
 - Ensure virtual environment is activated
 - Check Python version compatibility
 - Verify all dependencies installed: `pip install -r requirements.txt`
@@ -309,18 +303,21 @@ structkit generate config.yaml --output console
 ## 🏛 Architecture Decisions
 
 ### Template Engine Choice (Jinja2)
+
 - **Decision**: Use Jinja2 with custom delimiters
 - **Rationale**: Mature, well-documented, powerful
 - **Trade-offs**: Custom delimiters prevent YAML conflicts
 - **Date**: 2024-07-11
 
 ### Command Pattern Implementation
+
 - **Decision**: Each CLI command is a separate class
 - **Rationale**: Modular, testable, extensible
 - **Trade-offs**: Slightly more boilerplate
 - **Date**: 2024-07-15
 
 ### File Strategy System
+
 - **Decision**: Pluggable file handling strategies
 - **Rationale**: Flexibility for different use cases
 - **Trade-offs**: Increased complexity

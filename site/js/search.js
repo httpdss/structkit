@@ -93,7 +93,7 @@ class AdvancedSearch {
       // Community
       {
         title: 'GitHub Repository',
-        description: 'Contribute to STRUCT development and report issues',
+        description: 'Contribute to StructKit development and report issues',
         category: 'Community',
         url: '#community',
         content: 'github repository contribute development issues',
@@ -109,14 +109,14 @@ class AdvancedSearch {
       // Getting Started
       {
         title: 'Installation',
-        description: 'Install STRUCT using pip, Docker, or from source',
+        description: 'Install StructKit using pip, Docker, or from source',
         category: 'Getting Started',
         url: '#installation',
         content: 'installation install pip docker source setup',
       },
       {
         title: 'Quick Start',
-        description: 'Get started with STRUCT in minutes using our wizard',
+        description: 'Get started with StructKit in minutes using our wizard',
         category: 'Getting Started',
         url: '#wizard',
         content: 'quick start wizard getting started minutes tutorial',

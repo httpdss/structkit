@@ -53,6 +53,22 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Check package version
+        run: |
+          # Ensure the version in pyproject.toml is equivalent to the latest git tag
+          # use import metadata to get version
+          PACKAGE_VERSION=$(python -c "import importlib.metadata; print(importlib.metadata.version('structkit'))")
+          echo "Package version: $PACKAGE_VERSION"
+
+          # Go to github releases to get latest tag
+          LATEST_TAG=$(curl -s https://api.github.com/repos/httpdss/struct/releases/latest | grep 'tag_name' | cut -d\" -f4)
+          echo "Latest tag: $LATEST_TAG"
+
+          if [ "$PACKAGE_VERSION" != "$LATEST_TAG" ]; then
+            echo "Error: Package version ($PACKAGE_VERSION) does not match latest git tag ($LATEST_TAG)"
+            exit 1
+          fi
+
       - name: Install build dependencies
         run: |
           python -m pip install --upgrade pip

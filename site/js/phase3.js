@@ -286,7 +286,7 @@ variables:
     const wizardSteps = [
       {
         title: 'Choose Your Project Type',
-        description: 'Select the type of project you want to create with STRUCT',
+        description: 'Select the type of project you want to create with StructKit',
         options: [
           {
             id: 'python',
@@ -312,7 +312,7 @@ variables:
       },
       {
         title: 'Installation Method',
-        description: 'Choose how you want to install STRUCT',
+        description: 'Choose how you want to install StructKit',
         options: [
           {
             id: 'pip',
@@ -333,7 +333,7 @@ variables:
       },
       {
         title: 'Configuration',
-        description: 'Generate your first STRUCT configuration',
+        description: 'Generate your first StructKit configuration',
         isResult: true
       }
     ];
@@ -580,7 +580,7 @@ variables:
   - description:
       description: "Project description"
       type: string
-      default: "A Python project created with STRUCT"`,
+      default: "A Python project created with StructKit"`,
 
       web: `files:
   - README.md:
@@ -619,7 +619,7 @@ variables:
   - description:
       description: "Project description"
       type: string
-      default: "A web application created with STRUCT"`,
+      default: "A web application created with StructKit"`,
     };
 
     const config = configurations[projectType] || configurations.python;
@@ -659,7 +659,7 @@ variables:
         icon: 'fab fa-github',
         title: 'GitHub Repository',
         description:
-          'Contribute to STRUCT, report issues, and collaborate with the community',
+          'Contribute to StructKit, report issues, and collaborate with the community',
         action: 'View on GitHub',
         link: 'https://github.com/httpdss/struct',
       },
@@ -667,7 +667,7 @@ variables:
         icon: 'fas fa-comments',
         title: 'Discussions',
         description:
-          'Ask questions, share ideas, and get help from other STRUCT users',
+          'Ask questions, share ideas, and get help from other StructKit users',
         action: 'Join Discussion',
         link: 'https://github.com/httpdss/struct/discussions',
       },
@@ -681,7 +681,7 @@ variables:
       {
         icon: 'fas fa-heart',
         title: 'Support Project',
-        description: 'Help keep STRUCT development active and growing',
+        description: 'Help keep StructKit development active and growing',
         action: 'Support Us',
         link: 'https://patreon.com/structproject',
       },
@@ -758,7 +758,7 @@ variables:
     const testimonials = [
       {
         content:
-          'STRUCT has completely transformed how we scaffold new projects. What used to take hours of manual setup now takes minutes. The YAML configuration is intuitive and the template system is incredibly powerful.',
+          'StructKit has completely transformed how we scaffold new projects. What used to take hours of manual setup now takes minutes. The YAML configuration is intuitive and the template system is incredibly powerful.',
         author: 'Sarah Chen',
         role: 'Senior DevOps Engineer',
         avatar:
@@ -774,7 +774,7 @@ variables:
       },
       {
         content:
-          "STRUCT's flexibility is unmatched. We use it for everything from microservices to Terraform modules. The hook system allows us to integrate it perfectly into our CI/CD pipeline.",
+          "StructKit's flexibility is unmatched. We use it for everything from microservices to Terraform modules. The hook system allows us to integrate it perfectly into our CI/CD pipeline.",
         author: 'Alex Thompson',
         role: 'Lead Developer',
         avatar:

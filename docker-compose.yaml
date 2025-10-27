@@ -3,7 +3,7 @@ services:
     build: .
     volumes:
       - .:/app
-    entrypoint: ["python", "struct_module/main.py"]
+    entrypoint: ["python", "structkit/main.py"]
     env_file:
       - .env
     command: [
@@ -21,7 +21,7 @@ services:
     build: .
     volumes:
       - .:/app
-    entrypoint: ["python", "struct_module/main.py"]
+    entrypoint: ["python", "structkit/main.py"]
     env_file:
       - .env
     command: [

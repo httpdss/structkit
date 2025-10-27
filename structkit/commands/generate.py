@@ -1,10 +1,10 @@
-from struct_module.commands import Command
+from structkit.commands import Command
 import os
 import yaml
 import argparse
-from struct_module.file_item import FileItem
-from struct_module.completers import file_strategy_completer, structures_completer
-from struct_module.template_renderer import TemplateRenderer
+from structkit.file_item import FileItem
+from structkit.completers import file_strategy_completer, structures_completer
+from structkit.template_renderer import TemplateRenderer
 
 import subprocess
 

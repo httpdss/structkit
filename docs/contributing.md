@@ -62,7 +62,7 @@ pytest
 - Write tests for new functionality
 - Ensure all existing tests pass
 - Run the test suite: `pytest`
-- Check test coverage: `pytest --cov=struct_module`
+- Check test coverage: `pytest --cov=structkit`
 
 ### Pull Request Guidelines
 
@@ -108,7 +108,7 @@ docs/
 
 ## 🏗️ Contributing New Structures
 
-STRUCT includes a collection of contrib structures in `struct_module/contribs/`. To add a new structure:
+STRUCT includes a collection of contrib structures in `structkit/contribs/`. To add a new structure:
 
 1. **Create a new YAML file** in the appropriate subdirectory
 2. **Follow naming conventions**: use lowercase with hyphens
@@ -150,7 +150,7 @@ For feature requests:
 
 ```text
 struct/
-├── struct_module/           # Main Python package
+├── structkit/           # Main Python package
 │   ├── commands/           # CLI command implementations
 │   ├── contribs/          # Contributed structure templates
 │   ├── __init__.py

@@ -202,7 +202,7 @@ The structure name completion feature:
 
 1. **Dynamically discovers** all available structure files (`.yaml` files)
 2. **Scans multiple locations**:
-   - Built-in structures in `struct_module/contribs/`
+   - Built-in structures in `structkit/contribs/`
    - Custom structures from `--structures-path` if specified
 3. **Returns clean names** without `.yaml` extensions
 4. **Supports nested directories** like `github/workflows/codeql`

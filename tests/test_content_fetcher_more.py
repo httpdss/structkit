@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from struct_module.content_fetcher import ContentFetcher
+from structkit.content_fetcher import ContentFetcher
 
 
 def test_fetch_local_file(tmp_path):
@@ -29,7 +29,7 @@ def test_fetch_http_url_caches(monkeypatch, tmp_path):
         return Resp()
 
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", fake_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", fake_get)
 
     # First call populates cache
     assert cf.fetch_content(url) == "DATA"
@@ -37,7 +37,7 @@ def test_fetch_http_url_caches(monkeypatch, tmp_path):
     # Second call should read from cache and not invoke requests.get
     def boom(u):
         raise AssertionError("should not be called due to cache hit")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", boom)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", boom)
     assert cf.fetch_content(url) == "DATA"
 
 
@@ -134,7 +134,7 @@ def test_http_error_bubbles_and_no_cache(monkeypatch, tmp_path):
         return Resp()
 
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", fake_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", fake_get)
 
     with pytest.raises(Exception):
         cf.fetch_content(url)
@@ -144,7 +144,7 @@ def test_http_error_bubbles_and_no_cache(monkeypatch, tmp_path):
     def fake_get2(u):
         called["count"] += 1
         return Resp()
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", fake_get2)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", fake_get2)
     with pytest.raises(Exception):
         cf.fetch_content(url)
     assert called["count"] == 1
@@ -163,7 +163,7 @@ def test_github_invalid_path_raises(monkeypatch, tmp_path):
 def test_s3_unavailable_raises_valueerror(monkeypatch, tmp_path):
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
     # Force unavailable path; dispatcher will not include s3 and treat as unsupported
-    import struct_module.content_fetcher as mod
+    import structkit.content_fetcher as mod
     monkeypatch.setattr(mod, "boto3_available", False)
     with pytest.raises(ValueError):
         cf.fetch_content("s3://bucket/key.txt")
@@ -171,7 +171,7 @@ def test_s3_unavailable_raises_valueerror(monkeypatch, tmp_path):
 
 def test_gcs_unavailable_raises_valueerror(monkeypatch, tmp_path):
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
-    import struct_module.content_fetcher as mod
+    import structkit.content_fetcher as mod
     monkeypatch.setattr(mod, "gcs_available", False)
     with pytest.raises(ValueError):
         cf.fetch_content("gs://bucket/key.txt")
@@ -180,7 +180,7 @@ def test_gcs_unavailable_raises_valueerror(monkeypatch, tmp_path):
 def test_s3_invalid_path_raises_valueerror(monkeypatch, tmp_path):
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
     # Ensure available so it reaches regex
-    import struct_module.content_fetcher as mod
+    import structkit.content_fetcher as mod
     monkeypatch.setattr(mod, "boto3_available", True)
     # Do not mock boto3 since we only test invalid pattern, which raises earlier
     with pytest.raises(ValueError):
@@ -189,7 +189,7 @@ def test_s3_invalid_path_raises_valueerror(monkeypatch, tmp_path):
 
 def test_gcs_invalid_path_raises_valueerror(monkeypatch, tmp_path):
     cf = ContentFetcher(cache_dir=tmp_path / "cache")
-    import struct_module.content_fetcher as mod
+    import structkit.content_fetcher as mod
     monkeypatch.setattr(mod, "gcs_available", True)
     with pytest.raises(ValueError):
         cf.fetch_content("gs://invalid-format")
@@ -238,7 +238,7 @@ def test_github_raw_fetch_success_no_git_calls(monkeypatch, tmp_path):
     def fake_run(args, check):
         called["git"] += 1
         raise AssertionError("git should not be called on raw success")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", fake_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", fake_get)
     monkeypatch.setattr(subprocess, "run", fake_run)
 
     out = cf.fetch_content("githubhttps://owner/repo/main/path/to/file.txt")
@@ -256,7 +256,7 @@ def test_github_raw_fetch_retries_then_fallback_to_git(monkeypatch, tmp_path):
     # Fail HTTP calls
     def bad_get(url, timeout=None):
         raise Exception("network down")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", bad_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", bad_get)
 
     calls = {"clone": 0}
     def fake_run(args, check):
@@ -291,7 +291,7 @@ def test_github_deny_network_uses_git(monkeypatch, tmp_path):
     # HTTP must not be called
     def bad_get(url, timeout=None):
         raise AssertionError("HTTP should not be invoked when STRUCT_DENY_NETWORK=1")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", bad_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", bad_get)
 
     def fake_run(args, check):
         if args[:2] == ["git", "clone"]:
@@ -315,7 +315,7 @@ def test_github_existing_cache_prefers_git(monkeypatch, tmp_path):
     # HTTP must not be needed; if called, fail
     def bad_get(url, timeout=None):
         raise AssertionError("HTTP should not be called when cache exists")
-    monkeypatch.setattr("struct_module.content_fetcher.requests.get", bad_get)
+    monkeypatch.setattr("structkit.content_fetcher.requests.get", bad_get)
 
     pulls = {"count": 0}
     def fake_run(args, check):

@@ -26,7 +26,7 @@ structures:
 ### Defining folders
 
 The `folders` key is used to define folders that are created. Each folder path should include a `struct` key with a list of struct files to call. Optionally, you can define the value of a variable using the `with:` key.
-The list of struct files available can be taken from all the files defined inside `struct_module/contribs/`.
+The list of struct files available can be taken from all the files defined inside `structkit/contribs/`.
 Remember the name of the struct file is the path to the file without the `.yaml` extension.
 Read from the struct file to kown the variables that can be used.
 

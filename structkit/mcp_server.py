@@ -16,9 +16,9 @@ from typing import Any, Dict, Optional
 
 from fastmcp import FastMCP
 
-from struct_module.commands.generate import GenerateCommand
-from struct_module.commands.validate import ValidateCommand
-from struct_module import __version__
+from structkit.commands.generate import GenerateCommand
+from structkit.commands.validate import ValidateCommand
+from structkit import __version__
 
 
 class StructMCPServer:

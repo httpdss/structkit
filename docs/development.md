@@ -52,7 +52,7 @@ struct --help
 pytest
 
 # Run tests with coverage
-pytest --cov=struct_module
+pytest --cov=structkit
 
 # Run specific test file
 pytest tests/test_specific.py
@@ -73,7 +73,7 @@ isort .
 flake8 .
 
 # Type checking with mypy
-mypy struct_module/
+mypy structkit/
 ```
 
 ### Pre-commit Hooks
@@ -90,7 +90,7 @@ This will run formatting, linting, and tests before each commit.
 
 ```text
 struct/
-├── struct_module/          # Main Python package
+├── structkit/          # Main Python package
 │   ├── commands/          # CLI command implementations
 │   ├── contribs/          # Built-in structure templates
 │   └── ...
@@ -105,7 +105,7 @@ struct/
 
 ### 1. Create a New Command
 
-Commands are defined in `struct_module/commands/`. Each command should:
+Commands are defined in `structkit/commands/`. Each command should:
 
 - Inherit from a base command class
 - Include proper argument parsing
@@ -115,7 +115,7 @@ Commands are defined in `struct_module/commands/`. Each command should:
 Example:
 
 ```python
-# struct_module/commands/my_command.py
+# structkit/commands/my_command.py
 from .base import BaseCommand
 
 class MyCommand(BaseCommand):
@@ -129,7 +129,7 @@ class MyCommand(BaseCommand):
 
 ### 2. Add Structure Templates
 
-New structure templates go in `struct_module/contribs/`. Each template should:
+New structure templates go in `structkit/contribs/`. Each template should:
 
 - Have a clear directory structure
 - Provide good documentation
@@ -142,7 +142,7 @@ All new functionality must include tests:
 ```python
 # tests/test_my_feature.py
 import pytest
-from struct_module.my_feature import MyFeature
+from structkit.my_feature import MyFeature
 
 def test_my_feature():
     feature = MyFeature()

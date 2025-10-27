@@ -5,9 +5,9 @@ import shutil
 import logging
 import time
 from dotenv import load_dotenv
-from struct_module.template_renderer import TemplateRenderer
-from struct_module.content_fetcher import ContentFetcher
-from struct_module.model_wrapper import ModelWrapper
+from structkit.template_renderer import TemplateRenderer
+from structkit.content_fetcher import ContentFetcher
+from structkit.model_wrapper import ModelWrapper
 
 load_dotenv()
 

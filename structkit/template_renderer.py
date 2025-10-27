@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 from jinja2 import Environment, meta
-from struct_module.filters import (
+from structkit.filters import (
   get_latest_release,
   slugify,
   get_default_branch,
@@ -16,8 +16,8 @@ from struct_module.filters import (
   to_json,
   from_json,
 )
-from struct_module.input_store import InputStore
-from struct_module.utils import get_current_repo
+from structkit.input_store import InputStore
+from structkit.utils import get_current_repo
 
 class TemplateRenderer:
     def __init__(self, config_variables, input_store, non_interactive, mappings=None):

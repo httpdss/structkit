@@ -82,7 +82,7 @@ export STRUCT_LOG_LEVEL="DEBUG"
 
 ### Directory Layout
 ```
-struct_module/
+structkit/
 ├── commands/           # CLI command implementations
 │   ├── generate.py    # Main generation command
 │   ├── validate.py    # YAML validation
@@ -164,7 +164,7 @@ docs(api): update template variables documentation
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=struct_module --cov-report=html
+pytest tests/ --cov=structkit --cov-report=html
 
 # Run specific test file
 pytest tests/test_template_renderer.py -v
@@ -200,10 +200,10 @@ pytest tests/test_template_renderer.py::test_prompt_with_description_display -v
 ### Code Quality Tools
 ```bash
 # Linting
-flake8 struct_module/
+flake8 structkit/
 
 # Type checking
-mypy struct_module/
+mypy structkit/
 
 # Pre-commit hooks (automated)
 pre-commit run --all-files
@@ -247,7 +247,7 @@ pre-commit run --all-files
 ## 🔧 Common Tasks
 
 ### Adding a New Command
-1. Create new file in `struct_module/commands/`
+1. Create new file in `structkit/commands/`
 2. Inherit from `Command` base class
 3. Implement `__init__` with argument parsing
 4. Implement `execute` method
@@ -255,13 +255,13 @@ pre-commit run --all-files
 6. Add tests in `tests/test_commands.py`
 
 ### Adding New Template Filters
-1. Implement filter function in `struct_module/filters.py`
+1. Implement filter function in `structkit/filters.py`
 2. Add to `custom_filters` dict in `template_renderer.py`
 3. Document in `docs/template-variables.md`
 4. Add tests in `tests/test_filters.py`
 
 ### Creating Built-in Structures
-1. Create YAML file in `struct_module/contribs/`
+1. Create YAML file in `structkit/contribs/`
 2. Follow naming convention: `project-type.yaml`
 3. Include comprehensive variable definitions
 4. Add example in `docs/examples/`

@@ -1,4 +1,4 @@
-from struct_module.commands import Command
+from structkit.commands import Command
 import os
 import textwrap
 

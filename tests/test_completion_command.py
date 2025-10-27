@@ -2,7 +2,7 @@ import argparse
 import os
 from unittest.mock import patch
 
-from struct_module.commands.completion import CompletionCommand
+from structkit.commands.completion import CompletionCommand
 
 
 def make_parser():

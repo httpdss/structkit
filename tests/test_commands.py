@@ -1,10 +1,10 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from struct_module.commands.generate import GenerateCommand
-from struct_module.commands.info import InfoCommand
-from struct_module.commands.validate import ValidateCommand
-from struct_module.commands.list import ListCommand
-from struct_module.commands.generate_schema import GenerateSchemaCommand
+from structkit.commands.generate import GenerateCommand
+from structkit.commands.info import InfoCommand
+from structkit.commands.validate import ValidateCommand
+from structkit.commands.list import ListCommand
+from structkit.commands.generate_schema import GenerateSchemaCommand
 import argparse
 import json
 import os
@@ -57,7 +57,7 @@ def test_validate_command(parser):
         mock_validate_variables.assert_called_once()
 
 def test_with_value_renders_jinja2_with_mappings():
-    from struct_module.template_renderer import TemplateRenderer
+    from structkit.template_renderer import TemplateRenderer
     config_variables = []
     input_store = "/tmp/input.json"
     non_interactive = True

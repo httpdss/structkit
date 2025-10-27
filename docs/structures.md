@@ -1,4 +1,4 @@
-# List of Structures in `struct_module/contribs`
+# List of Structures in `structkit/contribs`
 
 ## Ansible Playbook
 

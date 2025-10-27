@@ -1,4 +1,4 @@
-# FILE: struct_module/logging_config.py
+# FILE: structkit/logging_config.py
 import logging
 import colorlog
 

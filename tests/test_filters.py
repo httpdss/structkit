@@ -1,8 +1,8 @@
 from unittest.mock import patch, MagicMock
-from struct_module.filters import get_latest_release, slugify
+from structkit.filters import get_latest_release, slugify
 
-@patch('struct_module.filters.Github')
-@patch('struct_module.filters.os.getenv')
+@patch('structkit.filters.Github')
+@patch('structkit.filters.os.getenv')
 def test_get_latest_release(mock_getenv, mock_github):
     # Mock the environment variable
     mock_getenv.return_value = 'fake_token'

@@ -297,7 +297,7 @@ The MCP server respects the same environment variables as the regular struct too
 ```json
 {
   "command": "/path/to/venv/bin/python",
-  "args": ["-m", "struct_module.main", "mcp", "--server"],
+  "args": ["-m", "structkit.main", "mcp", "--server"],
   "cwd": "/path/to/struct/project"
 }
 ```

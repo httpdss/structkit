@@ -61,14 +61,14 @@ Homepage = "https://github.com/httpdss/structkit"
 Repository = "https://github.com/httpdss/structkit.git"
 
 [project.scripts]
-structkit = "struct_module.main:main"
+structkit = "structkit.main:main"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]  # Look for packages in root directory
-include = ["struct_module*"]
+include = ["structkit*"]
 
 [tool.setuptools.package-data]
-struct_module = ["contribs/*.yaml"]
+structkit = ["contribs/*.yaml"]

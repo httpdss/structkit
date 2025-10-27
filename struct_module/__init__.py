@@ -1,6 +1,6 @@
 from importlib.metadata import version, PackageNotFoundError
 
 try:
-    __version__ = version(__name__)
+    __version__ = version('struct')
 except PackageNotFoundError:
     __version__ = "unknown"

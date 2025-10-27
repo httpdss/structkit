@@ -1,14 +1,23 @@
-PyYAML
-requests
-openai
-python-dotenv
-jinja2
-PyGithub
-shtab
-colorlog
-boto3
-google-cloud
-google-api-core
-cachetools
-pydantic-ai
-fastmcp>=2.0
+# Core dependencies (always installed)
+PyYAML>=6.0
+requests>=2.28.0
+openai>=1.0.0
+python-dotenv>=0.21.0
+jinja2>=3.1.0
+PyGithub>=1.58.0
+shtab>=1.6.0
+colorlog>=6.7.0
+pydantic-ai>=0.1.0
+fastmcp>=2.0.0
+
+# Optional: AWS S3 support
+# Install with: pip install struct[s3]
+# boto3>=1.26.0
+
+# Optional: Google Cloud Storage support
+# Install with: pip install struct[gcs]
+# google-cloud-storage>=2.10.0
+# google-api-core>=2.11.0
+
+# Optional: Both cloud providers
+# Install with: pip install struct[cloud]

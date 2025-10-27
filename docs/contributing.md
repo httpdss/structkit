@@ -1,6 +1,6 @@
-# Contributing to STRUCT
+# Contributing to StructKit
 
-Thank you for your interest in contributing to STRUCT! We welcome contributions from the community and are pleased to have you join us.
+Thank you for your interest in contributing to StructKit! We welcome contributions from the community and are pleased to have you join us.
 
 ## 🚀 Quick Start
 
@@ -210,4 +210,4 @@ If you need help contributing:
 3. Create a new issue with the `question` label
 4. Join our [GitHub Discussions](https://github.com/httpdss/struct/discussions)
 
-Thank you for contributing to STRUCT! 🎉
+Thank you for contributing to StructKit! 🎉

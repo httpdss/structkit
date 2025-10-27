@@ -7,7 +7,7 @@ Set Width 1400
 Set Height 800
 Set Shell "bash"
 
-Type "# STRUCT Advanced Features Demo"
+Type "# StructKit Advanced Features Demo"
 Enter
 Sleep 1s
 
@@ -15,7 +15,7 @@ Type "# Generate schema for VSCode autocompletion"
 Enter
 Type "mkdir -p .vscode"
 Enter
-Type "struct generate-schema --output .vscode/struct-schema.json"
+Type "structkit generate-schema --output .vscode/struct-schema.json"
 Enter
 Sleep 2s
 
@@ -45,7 +45,7 @@ Sleep 2s
 
 Type "# Generate with remote content"
 Enter
-Type "struct generate remote-demo.yaml ./remote-project"
+Type "structkit generate remote-demo.yaml ./remote-project"
 Enter
 Sleep 3s
 
@@ -55,6 +55,6 @@ Type "ls -la remote-project/"
 Enter
 Sleep 2s
 
-Type "# Advanced features make STRUCT incredibly powerful!"
+Type "# Advanced features make StructKit incredibly powerful!"
 Enter
 Sleep 2s

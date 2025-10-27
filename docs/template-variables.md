@@ -2,7 +2,7 @@
 
 Template variables allow you to create dynamic content in your StructKit configurations. This page covers all aspects of working with variables.
 
-## Custom Delimiters (STRUCT)
+## Custom Delimiters (StructKit)
 
 StructKit uses custom Jinja2 delimiters to avoid conflicts with YAML and other content:
 

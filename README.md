@@ -57,7 +57,7 @@ files:
   - README.md:
       content: |
         # {{@ project_name @}}
-        Generated with STRUCT
+        Generated with StructKit
   - .gitignore:
       file: github://github/gitignore/main/Python.gitignore
 
@@ -101,7 +101,7 @@ Our comprehensive documentation is organized into the following sections:
 
 ### 👩‍💻 Development
 
-- **[Development Setup](docs/development.md)** - Contributing to STRUCT
+- **[Development Setup](docs/development.md)** - Contributing to StructKit
 - **[Known Issues](docs/known-issues.md)** - Current limitations and workarounds
 
 ### 📖 Resources

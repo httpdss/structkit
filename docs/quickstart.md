@@ -63,11 +63,11 @@ structkit list
 This shows all built-in structures you can use.
 
 !!! tip "Auto-Completion"
-    If you've enabled [auto-completion](completion.md), you can press `Tab` after `structkit generate ` to see all available structures!
+    If you've enabled [auto-completion](completion.md), you can press `Tab` after `structkit generate` to see all available structures!
 
 ## First Example
 
-After installing STRUCT, try this simple example:
+After installing StructKit, try this simple example:
 
 ```sh
 structkit generate terraform/modules/generic ./my-terraform-module

@@ -2,7 +2,7 @@
 
 StructKit can seamlessly integrate with GitHub to automate the generation of project structures across repositories.
 
-## Automating STRUCT
+## Automating StructKit
 
 Combine GitHub Actions with StructKit to automate project structure generation in CI/CD pipelines. Trigger the process manually or automatically based on events like pull requests or pushes.
 

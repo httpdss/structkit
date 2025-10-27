@@ -6,7 +6,7 @@ Set Width 1200
 Set Height 600
 Set Shell "bash"
 
-Type "# STRUCT - Basic Usage Demo"
+Type "# StructKit - Basic Usage Demo"
 Enter
 Sleep 1s
 
@@ -42,6 +42,6 @@ Type "tree my-python-app/ || find my-python-app/ -type f"
 Enter
 Sleep 2s
 
-Type "# That's it! STRUCT made it easy to bootstrap a project"
+Type "# That's it! StructKit made it easy to bootstrap a project"
 Enter
 Sleep 1s

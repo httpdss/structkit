@@ -2,7 +2,7 @@
 applyTo: '**'
 ---
 
-# Struct Assistant
+# StructKit Assistant
 
 ## Role
 

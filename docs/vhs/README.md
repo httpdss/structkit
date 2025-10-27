@@ -1,6 +1,6 @@
 # StructKit VHS Demo Tapes
 
-This directory contains [VHS](https://github.com/charmbracelet/vhs) tape files for creating animated GIF demonstrations of STRUCT's features. These tapes showcase various use cases and capabilities of the StructKit tool.
+This directory contains [VHS](https://github.com/charmbracelet/vhs) tape files for creating animated GIF demonstrations of StructKit's features. These tapes showcase various use cases and capabilities of the StructKit tool.
 
 ## 🎬 Available Tapes
 
@@ -418,4 +418,4 @@ When StructKit features change:
 
 ---
 
-These demonstrations provide comprehensive coverage of STRUCT's capabilities, from basic usage to advanced features like multiple mappings files, remote content fetching, and schema generation.
+These demonstrations provide comprehensive coverage of StructKit's capabilities, from basic usage to advanced features like multiple mappings files, remote content fetching, and schema generation.

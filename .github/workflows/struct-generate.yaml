@@ -14,7 +14,7 @@ on:
         required: false
         default: '.'
       args:
-        description: 'Additional arguments to pass to STRUCT'
+        description: 'Additional arguments to pass to StructKit'
         type: string
         required: false
         default: ''

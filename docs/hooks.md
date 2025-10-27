@@ -77,7 +77,7 @@ pre_hooks:
 post_hooks:
   - git init
   - git add .
-  - git commit -m "Initial commit from STRUCT"
+  - git commit -m "Initial commit from StructKit"
   - echo "Git repository initialized"
 
 files:
@@ -86,7 +86,7 @@ files:
   - README.md:
       content: |
         # {{@ project_name @}}
-        Generated with STRUCT
+        Generated with StructKit
 ```
 
 ### Docker Setup
@@ -176,7 +176,7 @@ files:
 2. **Handle errors gracefully**: Check for tool availability in pre-hooks
 3. **Use absolute paths**: Hooks run in the target directory context
 4. **Log important actions**: Use echo statements for user feedback
-5. **Test independently**: Ensure hook commands work outside STRUCT
+5. **Test independently**: Ensure hook commands work outside StructKit
 6. **Consider dependencies**: Order hooks based on their requirements
 
 ## Error Handling

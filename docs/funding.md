@@ -1,4 +1,4 @@
-# Funding STRUCT
+# Funding StructKit
 
 StructKit is an open-source project that helps developers create consistent project structures and automate repetitive setup tasks. Your support helps us maintain and improve this tool for the entire community.
 

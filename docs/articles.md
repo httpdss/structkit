@@ -50,7 +50,7 @@ Deep dive into StructKit's templating system, covering advanced variable usage a
 
 ## Community Articles
 
-*Community contributions welcome! Submit a PR to add your STRUCT-related articles here.*
+*Community contributions welcome! Submit a PR to add your StructKit-related articles here.*
 
 ## Tutorials
 

@@ -113,6 +113,7 @@ examples/              # Example configurations
 ## 🔄 Development Workflow
 
 ### Branch Strategy
+
 - `main`: Production-ready code
 - `feature/*`: New features (e.g., `feature/display-variable-descriptions-116`)
 - `bugfix/*`: Bug fixes
@@ -120,7 +121,8 @@ examples/              # Example configurations
 - `docs/*`: Documentation updates
 
 ### Commit Message Convention
-```
+
+```text
 <type>(<scope>): <description>
 
 <body>
@@ -131,13 +133,15 @@ examples/              # Example configurations
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
 Examples:
-```
+
+```text
 feat(template): add variable description display in interactive mode
 fix(file-handling): resolve path resolution on Windows
 docs(api): update template variables documentation
 ```
 
 ### Pull Request Process
+
 1. Create feature branch from `main`
 2. Implement changes with tests
 3. Update documentation if needed
@@ -150,6 +154,7 @@ docs(api): update template variables documentation
 ## 🧪 Testing Guidelines
 
 ### Test Structure
+
 ```bash
 # Run all tests
 pytest tests/
@@ -165,17 +170,20 @@ pytest tests/test_template_renderer.py::test_prompt_with_description_display -v
 ```
 
 ### Test Categories
+
 - **Unit Tests**: Individual component testing
 - **Integration Tests**: Cross-component functionality
 - **Command Tests**: CLI command end-to-end testing
 - **Template Tests**: YAML configuration validation
 
 ### Test Data
+
 - Test fixtures in `tests/fixtures/`
 - Mock objects for external dependencies
 - Temporary files in `/tmp/` for file system tests
 
 ### Coverage Goals
+
 - Minimum 85% line coverage
 - All new features must include tests
 - Critical paths require 100% coverage
@@ -183,12 +191,14 @@ pytest tests/test_template_renderer.py::test_prompt_with_description_display -v
 ## 📝 Code Style & Standards
 
 ### Python Style
+
 - **PEP 8** compliance with line length of 100 characters
 - **Type hints** for all public functions
 - **Docstrings** for all modules, classes, and public functions
 - **F-strings** for string formatting
 
 ### Code Quality Tools
+
 ```bash
 # Linting
 flake8 structkit/
@@ -201,12 +211,14 @@ pre-commit run --all-files
 ```
 
 ### Variable Naming
+
 - `snake_case` for variables and functions
 - `UPPER_CASE` for constants
 - Descriptive names over abbreviations
 - Prefix private methods with underscore
 
 ### Error Handling
+
 - Use specific exception types
 - Provide helpful error messages
 - Log errors with appropriate levels
@@ -215,12 +227,14 @@ pre-commit run --all-files
 ## 🚀 Release Process
 
 ### Version Numbering
+
 - Semantic versioning: `MAJOR.MINOR.PATCH`
 - `MAJOR`: Breaking changes
 - `MINOR`: New features, backward compatible
 - `PATCH`: Bug fixes
 
 ### Release Checklist
+
 1. Update `CHANGELOG.md`
 2. Bump version in `setup.py`
 3. Run full test suite
@@ -230,6 +244,7 @@ pre-commit run --all-files
 7. GitHub Actions handles PyPI publication
 
 ### Release Notes
+
 - Categorize changes: Added, Changed, Fixed, Removed
 - Include migration notes for breaking changes
 - Reference GitHub issues and PRs
@@ -238,6 +253,7 @@ pre-commit run --all-files
 ## 🔧 Common Tasks
 
 ### Adding a New Command
+
 1. Create new file in `structkit/commands/`
 2. Inherit from `Command` base class
 3. Implement `__init__` with argument parsing
@@ -246,12 +262,14 @@ pre-commit run --all-files
 6. Add tests in `tests/test_commands.py`
 
 ### Adding New Template Filters
+
 1. Implement filter function in `structkit/filters.py`
 2. Add to `custom_filters` dict in `template_renderer.py`
 3. Document in `docs/template-variables.md`
 4. Add tests in `tests/test_filters.py`
 
 ### Creating Built-in Structures
+
 1. Create YAML file in `structkit/contribs/`
 2. Follow naming convention: `project-type.yaml`
 3. Include comprehensive variable definitions
@@ -282,6 +300,7 @@ pre-commit run --all-files
 - Verify all dependencies installed: `pip install -r requirements.txt`
 
 ### Debug Mode
+
 ```bash
 # Enable debug logging
 export STRUCTKIT_LOG_LEVEL=DEBUG
@@ -295,6 +314,7 @@ structkit generate config.yaml --output console
 ```
 
 ### Log Analysis
+
 - Logs include timestamps and severity levels
 - File operations logged with full paths
 - Template rendering logged with variable values
@@ -326,16 +346,19 @@ structkit generate config.yaml --output console
 ## ⚡ Performance Considerations
 
 ### Template Rendering
+
 - Templates compiled once and cached
 - Variable resolution optimized for common cases
 - Large files streamed rather than loaded in memory
 
 ### File Operations
+
 - Batch operations where possible
 - Minimal filesystem stat calls
 - Progress indicators for long operations
 
 ### Memory Usage
+
 - File contents not held in memory unnecessarily
 - Generator patterns for large datasets
 - Proper cleanup of temporary resources
@@ -343,17 +366,20 @@ structkit generate config.yaml --output console
 ## 🔐 Security Guidelines
 
 ### Input Validation
+
 - All user inputs validated and sanitized
 - Path traversal protection in file operations
 - YAML parsing with safe loader only
 
 ### External Content
+
 - HTTPS required for remote content
 - Validate SSL certificates
 - Timeout limits for network operations
 - Size limits for downloaded content
 
 ### Secrets Handling
+
 - Never log sensitive information
 - Environment variables for API keys
 - Mask secrets in error messages
@@ -362,18 +388,21 @@ structkit generate config.yaml --output console
 ## 📚 Documentation Standards
 
 ### Code Documentation
+
 - Docstrings follow Google style
 - Type hints for all parameters and returns
 - Examples in docstrings for complex functions
 - Inline comments for non-obvious logic
 
 ### User Documentation
+
 - Step-by-step tutorials with examples
 - Reference documentation for all features
 - Troubleshooting guides with common solutions
 - Migration guides for breaking changes
 
 ### API Documentation
+
 - Auto-generated from docstrings
 - Include usage examples
 - Document exceptions and error conditions
@@ -382,6 +411,7 @@ structkit generate config.yaml --output console
 ## 📦 Dependencies & Tools
 
 ### Core Dependencies
+
 - `Jinja2`: Template engine
 - `PyYAML`: YAML parsing
 - `requests`: HTTP client
@@ -389,6 +419,7 @@ structkit generate config.yaml --output console
 - `google-cloud-storage`: GCS integration
 
 ### Development Dependencies
+
 - `pytest`: Testing framework
 - `coverage`: Code coverage
 - `flake8`: Linting
@@ -396,11 +427,13 @@ structkit generate config.yaml --output console
 - `mkdocs`: Documentation
 
 ### Optional Dependencies
+
 - `openai`: AI integration
 - `anthropic`: Claude integration
 - `fastapi`: MCP server support
 
 ### Dependency Management
+
 - Pin major versions in `requirements.txt`
 - Regular security updates
 - Remove unused dependencies
@@ -409,18 +442,21 @@ structkit generate config.yaml --output console
 ## 📊 Monitoring & Observability
 
 ### Metrics Collection
+
 - Command execution times
 - File operation success rates
 - Template rendering performance
 - Error rates by category
 
 ### Logging Strategy
+
 - Structured logging with JSON format
 - Different log levels for different audiences
 - Correlation IDs for tracing requests
 - Log rotation and retention policies
 
 ### Health Checks
+
 - Basic functionality verification
 - External service connectivity
 - Resource availability checks
@@ -429,35 +465,41 @@ structkit generate config.yaml --output console
 ## 🐙 Issue & Work Management
 
 ### GitHub MCP for Issues
+
 This project uses **GitHub** for issue tracking and work management. All issue-related queries and work management should use the GitHub MCP tools, **not Jira**.
 
 ### Common GitHub MCP Operations
 
 #### List Issues
+
 ```bash
 # Use the GitHub MCP to list all open issues
 list_issues owner:httpdss repo:structkit state:open
 ```
 
 #### Get Issue Details
+
 ```bash
 # Get details for a specific issue number
 get_issue owner:httpdss repo:structkit issue_number:100
 ```
 
 #### Create an Issue
+
 ```bash
 # Create a new issue
 create_issue owner:httpdss repo:structkit title:"Issue Title" body:"Issue description"
 ```
 
 #### Search Issues
+
 ```bash
 # Search for issues by keyword or status
 search_issues query:"keyword" owner:httpdss repo:struct
 ```
 
 ### Issue Workflow
+
 1. **Browse Issues**: Use `list_issues` to see current open issues
 2. **Get Details**: Use `get_issue` to understand specific issue requirements
 3. **Comment**: Use `add_issue_comment` to provide updates
@@ -468,6 +510,7 @@ search_issues query:"keyword" owner:httpdss repo:struct
 ## 📝 Notes & TODOs
 
 ### Future Enhancements
+
 - [ ] Plugin system for custom commands
 - [ ] GUI interface for non-technical users
 - [ ] Integration with more cloud providers
@@ -475,6 +518,7 @@ search_issues query:"keyword" owner:httpdss repo:struct
 - [ ] Performance profiling dashboard
 
 ### Known Limitations
+
 - Large file handling could be optimized
 - Windows path handling has edge cases
 - Some template features not well documented

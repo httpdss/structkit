@@ -1,6 +1,6 @@
 # File Handling
 
-STRUCT provides flexible options for handling files and managing permissions.
+StructKit provides flexible options for handling files and managing permissions.
 
 ## File Properties
 
@@ -68,7 +68,7 @@ files:
 
 ## Remote File Protocols
 
-STRUCT supports multiple protocols for fetching remote content (with caching and robust fallbacks):
+StructKit supports multiple protocols for fetching remote content (with caching and robust fallbacks):
 
 ### HTTP/HTTPS
 
@@ -80,11 +80,11 @@ files:
 
 ### GitHub Protocols
 
-STRUCT optimizes single-file fetches from GitHub by preferring `raw.githubusercontent.com` when possible and falling back to `git clone/pull` if necessary. You can control behavior with environment variables:
+StructKit optimizes single-file fetches from GitHub by preferring `raw.githubusercontent.com` when possible and falling back to `git clone/pull` if necessary. You can control behavior with environment variables:
 
-- `STRUCT_HTTP_TIMEOUT` (seconds, default 10)
-- `STRUCT_HTTP_RETRIES` (default 2)
-- `STRUCT_DENY_NETWORK=1` to skip HTTP attempts and use git fallback directly.
+- `STRUCTKIT_HTTP_TIMEOUT` (seconds, default 10)
+- `STRUCTKIT_HTTP_RETRIES` (default 2)
+- `STRUCTKIT_DENY_NETWORK=1` to skip HTTP attempts and use git fallback directly.
 
 #### Standard GitHub
 
@@ -130,7 +130,7 @@ files:
 
 ## File Handling Strategies
 
-Control how STRUCT handles existing files with the `--file-strategy` option:
+Control how StructKit handles existing files with the `--file-strategy` option:
 
 ### Available Strategies
 
@@ -144,13 +144,13 @@ Control how STRUCT handles existing files with the `--file-strategy` option:
 
 ```sh
 # Skip existing files
-struct generate --file-strategy=skip my-config.yaml ./output
+structkit generate --file-strategy=skip my-config.yaml ./output
 
 # Backup existing files
-struct generate --file-strategy=backup --backup=/tmp/backup my-config.yaml ./output
+structkit generate --file-strategy=backup --backup=/tmp/backup my-config.yaml ./output
 
 # Rename existing files
-struct generate --file-strategy=rename my-config.yaml ./output
+structkit generate --file-strategy=rename my-config.yaml ./output
 ```
 
 > **Note**: The `file://` protocol is automatically added for `.yaml` files, so these examples work with or without the explicit protocol.

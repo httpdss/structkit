@@ -47,30 +47,30 @@ mkdir example
 cd example/
 touch structure.yaml
 vim structure.yaml # copy the content from the example folder
-struct generate structure.yaml .
+structkit generate structure.yaml .
 ```
 
-> Note: The `file://` protocol is automatically added for `.yaml` files, so `structure.yaml` and `file://structure.yaml` work identically. Additionally, if your file is named `.struct.yaml` in the current directory and you want to generate into the current directory, you can just run `struct generate`.
+> Note: The `file://` protocol is automatically added for `.yaml` files, so `structure.yaml` and `file://structure.yaml` work identically. Additionally, if your file is named `.struct.yaml` in the current directory and you want to generate into the current directory, you can just run `structkit generate`.
 
 ## Discovering Available Structures
 
 Before generating, see what structures are available:
 
 ```sh
-struct list
+structkit list
 ```
 
 This shows all built-in structures you can use.
 
 !!! tip "Auto-Completion"
-    If you've enabled [auto-completion](completion.md), you can press `Tab` after `struct generate ` to see all available structures!
+    If you've enabled [auto-completion](completion.md), you can press `Tab` after `structkit generate ` to see all available structures!
 
 ## First Example
 
 After installing STRUCT, try this simple example:
 
 ```sh
-struct generate terraform/modules/generic ./my-terraform-module
+structkit generate terraform/modules/generic ./my-terraform-module
 ```
 
 This will create a new terraform module structure in the `./my-terraform-module` directory.
@@ -78,7 +78,7 @@ This will create a new terraform module structure in the `./my-terraform-module`
 Or try a simple project structure:
 
 ```sh
-struct generate project/nodejs ./my-node-app
+structkit generate project/nodejs ./my-node-app
 ```
 
 ## Bootstrap a new project
@@ -86,10 +86,10 @@ struct generate project/nodejs ./my-node-app
 Start with a minimal .struct.yaml:
 
 ```sh
-struct init
+structkit init
 ```
 
-This writes a basic .struct.yaml with hooks, a README, and a reference to the run-struct workflow.
+This writes a basic .struct.yaml with hooks, a README, and a reference to the run-structkit workflow.
 
 ## Next Steps
 

@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = struct_module
+source = structkit
 
 [report]
 omit =

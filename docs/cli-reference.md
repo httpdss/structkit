@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-struct {info,validate,generate,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,list,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -30,7 +30,7 @@ Show information about a structure definition.
 **Usage:**
 
 ```sh
-struct info [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] structure_definition
+structkit info [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] structure_definition
 ```
 
 **Arguments:**
@@ -45,7 +45,7 @@ Validate the YAML configuration file.
 **Usage:**
 
 ```sh
-struct validate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] yaml_file
+structkit validate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] yaml_file
 ```
 
 **Arguments:**
@@ -59,7 +59,7 @@ Generate the project structure.
 **Usage:**
 
 ```sh
-struct generate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-n INPUT_STORE] [-d] [--diff] [-v VARS] [-b BACKUP] [-f {overwrite,skip,append,rename,backup}] [-p GLOBAL_SYSTEM_PROMPT] [--non-interactive] [--mappings-file MAPPINGS_FILE] [-o {console,file}] [structure_definition] [base_path]
+structkit generate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-n INPUT_STORE] [-d] [--diff] [-v VARS] [-b BACKUP] [-f {overwrite,skip,append,rename,backup}] [-p GLOBAL_SYSTEM_PROMPT] [--non-interactive] [--mappings-file MAPPINGS_FILE] [-o {console,file}] [structure_definition] [base_path]
 ```
 
 Defaults when omitted:
@@ -68,7 +68,7 @@ Defaults when omitted:
 
 Example:
 ```sh
-struct generate
+structkit generate
 ```
 
 **Arguments:**
@@ -94,7 +94,7 @@ List available structures.
 **Usage:**
 
 ```sh
-struct list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
+structkit list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
 ```
 
 **Arguments:**
@@ -108,7 +108,7 @@ Generate JSON schema for available structures.
 **Usage:**
 
 ```sh
-struct generate-schema [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-o OUTPUT]
+structkit generate-schema [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-o OUTPUT]
 ```
 
 **Arguments:**
@@ -123,7 +123,7 @@ Manage shell completions for struct.
 Usage:
 
 ```sh
-struct completion install [bash|zsh|fish]
+structkit completion install [bash|zsh|fish]
 ```
 
 - If no shell is provided, the command attempts to auto-detect your current shell and prints the exact commands to generate and install static completion files via shtab.
@@ -136,14 +136,14 @@ Initialize a basic .struct.yaml in the target directory.
 Usage:
 
 ```sh
-struct init [path]
+structkit init [path]
 ```
 
 - Creates a .struct.yaml if it does not exist.
 - Includes:
   - pre_hooks/post_hooks with echo commands
   - files with a README.md placeholder
-  - folders referencing github/workflows/run-struct at ./
+  - folders referencing github/workflows/run-structkit at ./
 - Non-destructive: if .struct.yaml already exists, it is not overwritten and a message is printed.
 
 ## Examples
@@ -153,7 +153,7 @@ struct init [path]
 Generate with default structure (.struct.yaml) into current directory:
 
 ```sh
-struct generate
+structkit generate
 ```
 
 ### Basic Structure Generation
@@ -161,13 +161,13 @@ struct generate
 Generate a structure using a built-in definition:
 
 ```sh
-struct generate python-basic ./my-project
+structkit generate python-basic ./my-project
 ```
 
 Generate from a custom YAML file:
 
 ```sh
-struct generate file://my-structure.yaml ./output-dir
+structkit generate file://my-structure.yaml ./output-dir
 ```
 
 ### Using Custom Structures
@@ -175,7 +175,7 @@ struct generate file://my-structure.yaml ./output-dir
 Generate with custom structure path:
 
 ```sh
-struct generate -s ~/custom-structures python-api ./my-api
+structkit generate -s ~/custom-structures python-api ./my-api
 ```
 
 ### Template Variables
@@ -183,7 +183,7 @@ struct generate -s ~/custom-structures python-api ./my-api
 Pass template variables to the structure:
 
 ```sh
-struct generate -v "project_name=MyApp,author=John Doe" file://structure.yaml ./output
+structkit generate -v "project_name=MyApp,author=John Doe" file://structure.yaml ./output
 ```
 
 ### Dry Run
@@ -191,7 +191,7 @@ struct generate -v "project_name=MyApp,author=John Doe" file://structure.yaml ./
 Test structure generation without creating files:
 
 ```sh
-struct generate -d file://structure.yaml ./output
+structkit generate -d file://structure.yaml ./output
 ```
 
 ### File Strategies
@@ -200,10 +200,10 @@ Handle existing files with different strategies:
 
 ```sh
 # Skip existing files
-struct generate -f skip file://structure.yaml ./output
+structkit generate -f skip file://structure.yaml ./output
 
 # Backup existing files
-struct generate -f backup -b ./backup file://structure.yaml ./output
+structkit generate -f backup -b ./backup file://structure.yaml ./output
 ```
 
 ### Console Output
@@ -211,7 +211,7 @@ struct generate -f backup -b ./backup file://structure.yaml ./output
 Output to console instead of creating files:
 
 ```sh
-struct generate -o console file://structure.yaml ./output
+structkit generate -o console file://structure.yaml ./output
 ```
 
 ### Validation
@@ -219,7 +219,7 @@ struct generate -o console file://structure.yaml ./output
 Validate a YAML configuration before generation:
 
 ```sh
-struct validate my-structure.yaml
+structkit validate my-structure.yaml
 ```
 
 ### List Available Structures
@@ -227,13 +227,13 @@ struct validate my-structure.yaml
 List all built-in structures:
 
 ```sh
-struct list
+structkit list
 ```
 
 List structures from custom path:
 
 ```sh
-struct list -s ~/custom-structures
+structkit list -s ~/custom-structures
 ```
 
 ### Get Structure Information
@@ -241,7 +241,7 @@ struct list -s ~/custom-structures
 Get detailed information about a structure:
 
 ```sh
-struct info python-basic
+structkit info python-basic
 ```
 
 ### Generate Schema
@@ -249,5 +249,5 @@ struct info python-basic
 Generate JSON schema and save to file:
 
 ```sh
-struct generate-schema -o schema.json
+structkit generate-schema -o schema.json
 ```

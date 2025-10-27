@@ -1,6 +1,6 @@
-# STRUCT Documentation
+# StructKit Documentation
 
-Welcome to the comprehensive documentation for STRUCT - the Automated Project Structure Generator.
+Welcome to the comprehensive documentation for StructKit - the Automated Project Structure Generator.
 
 ## 📚 Documentation Sections
 

@@ -1,1 +1,1 @@
-recursive-include struct_module/contribs *
+recursive-include structkit/contribs *

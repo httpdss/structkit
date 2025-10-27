@@ -108,7 +108,7 @@ docs/
 
 ## 🏗️ Contributing New Structures
 
-STRUCT includes a collection of contrib structures in `structkit/contribs/`. To add a new structure:
+StructKit includes a collection of contrib structures in `structkit/contribs/`. To add a new structure:
 
 1. **Create a new YAML file** in the appropriate subdirectory
 2. **Follow naming conventions**: use lowercase with hyphens
@@ -131,7 +131,7 @@ STRUCT includes a collection of contrib structures in `structkit/contribs/`. To 
 When reporting bugs, please include:
 
 - **OS and Python version**
-- **STRUCT version** (`struct --version`)
+- **StructKit version** (`structkit --version`)
 - **Complete error message** or traceback
 - **Steps to reproduce** the issue
 - **Expected vs actual behavior**

@@ -1,10 +1,10 @@
 # Template Variables
 
-Template variables allow you to create dynamic content in your STRUCT configurations. This page covers all aspects of working with variables.
+Template variables allow you to create dynamic content in your StructKit configurations. This page covers all aspects of working with variables.
 
 ## Custom Delimiters (STRUCT)
 
-STRUCT uses custom Jinja2 delimiters to avoid conflicts with YAML and other content:
+StructKit uses custom Jinja2 delimiters to avoid conflicts with YAML and other content:
 
 - Variables: `{{@` and `@}}`
 - Blocks: `{%@` and `@%}`
@@ -59,14 +59,14 @@ files:
 
 ## Default Variables
 
-STRUCT provides these built-in variables:
+StructKit provides these built-in variables:
 
 - `file_name`: The name of the file being processed
 - `file_directory`: The directory containing the file being processed
 
 ## Interactive Variables
 
-Define variables that prompt users for input. When running in interactive mode, STRUCT will display the variable's description to help users understand what value is expected:
+Define variables that prompt users for input. When running in interactive mode, StructKit will display the variable's description to help users understand what value is expected:
 
 ```yaml
 variables:
@@ -104,7 +104,7 @@ For variables without descriptions, a more compact format is used:
 
 **Note**: Variable names appear in **bold** in actual terminal output for better readability.
 
-**Contextual Icons**: STRUCT automatically selects appropriate icons based on variable names and types:
+**Contextual Icons**: StructKit automatically selects appropriate icons based on variable names and types:
 - 🚀 Project/app names
 - 🌍 Environment/deployment variables
 - 🔌 Ports/network settings
@@ -126,7 +126,7 @@ For variables without descriptions, a more compact format is used:
 
 ### Validation and Defaults
 
-Interactive enum selection: when a variable defines `enum` and you are in interactive mode, STRUCT will display numbered choices and accept either the number or the exact value. Press Enter to accept the default (if any).
+Interactive enum selection: when a variable defines `enum` and you are in interactive mode, StructKit will display numbered choices and accept either the number or the exact value. Press Enter to accept the default (if any).
 
 Example prompt:
 
@@ -164,7 +164,7 @@ variables:
 
 ## Custom Jinja2 Filters and Globals
 
-STRUCT includes custom filters for common tasks:
+StructKit includes custom filters for common tasks:
 
 ### `uuid()` (global)
 

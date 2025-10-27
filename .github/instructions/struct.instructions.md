@@ -6,7 +6,7 @@ applyTo: '**'
 
 ## Role
 
-You are an expert assistant that generates valid `.struct.yaml` files for the [STRUCT tool](https://github.com/httpdss/struct), which automates project structure generation from YAML configuration.
+You are an expert assistant that generates valid `.struct.yaml` files for the [StructKit tool](https://github.com/httpdss/struct), which automates project structure generation from YAML configuration.
 
 ## Defining the `.struct.yaml` file
 
@@ -29,10 +29,10 @@ files:
 
 ### Defining folders
 
-The `folders` key is used to define folders that are created. Each folder path should include a `struct` key with a list of struct files to call. Optionally, you can define the value of a variable using the `with:` key.
-The list of struct files available can be taken from all the files defined inside `structkit/contribs/`.
-Remember the name of the struct file is the path to the file without the `.yaml` extension.
-Read from the struct file to kown the variables that can be used.
+The `folders` key is used to define folders that are created. Each folder path should include a `struct` key with a list of structkit files to call. Optionally, you can define the value of a variable using the `with:` key.
+The list of structkit files available can be taken from all the files defined inside `structkit/contribs/`.
+Remember the name of the structkit file is the path to the file without the `.yaml` extension.
+Read from the structkit file to kown the variables that can be used.
 
 ```yaml
 folders:
@@ -48,7 +48,7 @@ folders:
 
 ### Defining variables
 
-The `variables` key is used to define variables that can be used in the struct files. Each variable should have a description, type, and optional default value.
+The `variables` key is used to define variables that can be used in the structkit files. Each variable should have a description, type, and optional default value.
 
 ```yaml
 variables:
@@ -63,15 +63,15 @@ variables:
 - Follow the JSON Schema definition provided in the references.
 - Use valid keys: `files`, `folders`, and `variables`.
 - if you want to define files, use the `files:` key, and a list of file paths that are created. each file path should have a content key.
-- if you want to define folders, use the `folders:` key, and a list of folder paths that are created. each folder path should have a list of folder paths and each folder path needs to have a list of struct keys. also if you want to define the value of a variable then you should use the `with:` key.
-- Follow the conventions from the STRUCT README provided in the references.
+- if you want to define folders, use the `folders:` key, and a list of folder paths that are created. each folder path should have a list of folder paths and each folder path needs to have a list of structkit keys. also if you want to define the value of a variable then you should use the `with:` key.
+- Follow the conventions from the StructKit README provided in the references.
 - Include content blocks under `content:` using pipe notation (`|`) when needed.
 - Use `permissions`, `skip`, or `skip_if_exists` if specified. This is used only for the `files` key.
 - Use `file:` to reference the content of a file or `content:` to define the content of the file.
-- Use `struct:` to define the list of struct files to call for a folder.
-- When defining the list of struct files you want to use, make sure to query the `structure name` to know what to use. this will be at ../../docs/structures.md.
+- Use `struct:` to define the list of structkit files to call for a folder.
+- When defining the list of structkit files you want to use, make sure to query the `structure name` to know what to use. this will be at ../../docs/structures.md.
 - Optionally, use Jinja2 custom filters such as `| latest_release`, `| default_branch`, or `| slugify`.
-- before creating a file from scratch, check that there is no struct contrib available that can be used to create the file.
+- before creating a file from scratch, check that there is no structkit contrib available that can be used to create the file.
 
 ## Output
 
@@ -89,6 +89,6 @@ Always return YAML that is syntactically correct and validated against the provi
 
 ## References
 
-- [STRUCT json schema](../../struct-schema.json)
-- [STRUCT README](../../README.md)
+- [StructKit json schema](../../struct-schema.json)
+- [StructKit README](../../README.md)
 - [Structures available in contribs](../../doc/structures.md)

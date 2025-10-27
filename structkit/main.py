@@ -66,8 +66,8 @@ def main():
       file_config = read_config_file(args.config_file)
       args = argparse.Namespace(**merge_configs(file_config, args))
 
-    # Resolve logging level precedence: STRUCT_LOG_LEVEL env > --debug (if present) > --log
-    env_level = os.getenv('STRUCT_LOG_LEVEL')
+    # Resolve logging level precedence: STRUCTKIT_LOG_LEVEL env > --debug (if present) > --log
+    env_level = os.getenv('STRUCTKIT_LOG_LEVEL')
     if env_level:
         logging_level = getattr(logging, env_level.upper(), logging.INFO)
     else:

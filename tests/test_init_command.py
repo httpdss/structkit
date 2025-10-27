@@ -2,7 +2,7 @@ import argparse
 import os
 from unittest.mock import patch
 
-from structkit.commands.init import InitCommand, BASIC_STRUCT_YAML
+from structkit.commands.init import InitCommand, BASIC_STRUCTKIT_YAML
 
 
 def test_init_creates_struct_yaml(tmp_path):

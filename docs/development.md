@@ -1,6 +1,6 @@
 # Development Setup
 
-This guide will help you set up a development environment for contributing to STRUCT.
+This guide will help you set up a development environment for contributing to StructKit.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ pip install -e .
 ### 4. Verify Installation
 
 ```sh
-struct --help
+structkit --help
 ```
 
 ## Development Workflow
@@ -178,7 +178,7 @@ pytest tests/integration/
 ### Enable Debug Logging
 
 ```sh
-struct --log=DEBUG generate my-config.yaml ./output
+structkit --log=DEBUG generate my-config.yaml ./output
 ```
 
 ### Use Python Debugger
@@ -190,7 +190,7 @@ import pdb; pdb.set_trace()
 ```
 
 ```sh
-struct --log=DEBUG generate my-config.yaml ./output
+structkit --log=DEBUG generate my-config.yaml ./output
 ```
 
 ## Contributing Guidelines

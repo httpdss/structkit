@@ -1,5 +1,5 @@
 """
-MCP Server implementation for the struct tool using FastMCP stdio transport.
+MCP Server implementation for the structkit tool using FastMCP stdio transport.
 
 This module provides MCP (Model Context Protocol) support for:
 1. Listing available structures

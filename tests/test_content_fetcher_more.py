@@ -273,7 +273,7 @@ def test_github_raw_fetch_retries_then_fallback_to_git(monkeypatch, tmp_path):
     monkeypatch.setattr(subprocess, "run", fake_run)
 
     # Speed up retries/backoff by setting retries=0 via env
-    monkeypatch.setenv("STRUCT_HTTP_RETRIES", "0")
+    monkeypatch.setenv("STRUCTKIT_HTTP_RETRIES", "0")
 
     out = cf.fetch_content("githubhttps://owner/repo/main/path/to/file.txt")
     assert out == "GIT_DATA"
@@ -286,11 +286,11 @@ def test_github_deny_network_uses_git(monkeypatch, tmp_path):
     file_full = repo_dir / "path.txt"
 
     # Deny network
-    monkeypatch.setenv("STRUCT_DENY_NETWORK", "1")
+    monkeypatch.setenv("STRUCTKIT_DENY_NETWORK", "1")
 
     # HTTP must not be called
     def bad_get(url, timeout=None):
-        raise AssertionError("HTTP should not be invoked when STRUCT_DENY_NETWORK=1")
+        raise AssertionError("HTTP should not be invoked when STRUCTKIT_DENY_NETWORK=1")
     monkeypatch.setattr("structkit.content_fetcher.requests.get", bad_get)
 
     def fake_run(args, check):

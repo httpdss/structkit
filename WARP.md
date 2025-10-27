@@ -1,6 +1,6 @@
-# WARP.md - STRUCT Project Guide
+# WARP.md - StructKit Project Guide
 
-> This file serves as a comprehensive guide for developers working with the STRUCT project. It contains project-specific conventions, development workflows, and institutional knowledge.
+> This file serves as a comprehensive guide for developers working with the StructKit project. It contains project-specific conventions, development workflows, and institutional knowledge.
 
 ## 📋 Table of Contents
 
@@ -24,7 +24,7 @@
 ## 🎯 Project Overview
 
 ### Mission
-STRUCT simplifies project organization by creating consistent file and folder structures tailored to specific needs. It enhances productivity and maintains uniformity across projects through YAML-based configuration files.
+StructKit simplifies project organization by creating consistent file and folder structures tailored to specific needs. It enhances productivity and maintains uniformity across projects through YAML-based configuration files.
 
 ### Key Features
 - **YAML-Based Configuration**: Simple, readable project structure definitions
@@ -70,7 +70,7 @@ export OPENAI_API_KEY="your-api-key-here"
 export GITHUB_TOKEN="your-github-token"
 
 # Optional: Logging level
-export STRUCT_LOG_LEVEL="DEBUG"
+export STRUCTKIT_LOG_LEVEL="DEBUG"
 ```
 
 ### IDE Configuration
@@ -265,7 +265,7 @@ pre-commit run --all-files
 2. Follow naming convention: `project-type.yaml`
 3. Include comprehensive variable definitions
 4. Add example in `docs/examples/`
-5. Update `struct list` output
+5. Update `structkit list` output
 
 ## 🐛 Troubleshooting
 
@@ -290,14 +290,14 @@ pre-commit run --all-files
 ### Debug Mode
 ```bash
 # Enable debug logging
-export STRUCT_LOG_LEVEL=DEBUG
-struct generate config.yaml --log DEBUG
+export STRUCTKIT_LOG_LEVEL=DEBUG
+structkit generate config.yaml --log DEBUG
 
 # Dry run mode for testing
-struct generate config.yaml ./output --dry-run
+structkit generate config.yaml ./output --dry-run
 
 # Console output for inspection
-struct generate config.yaml --output console
+structkit generate config.yaml --output console
 ```
 
 ### Log Analysis
@@ -439,19 +439,19 @@ This project uses **GitHub** for issue tracking and work management. All issue-r
 #### List Issues
 ```bash
 # Use the GitHub MCP to list all open issues
-list_issues owner:httpdss repo:struct state:open
+list_issues owner:httpdss repo:structkit state:open
 ```
 
 #### Get Issue Details
 ```bash
 # Get details for a specific issue number
-get_issue owner:httpdss repo:struct issue_number:100
+get_issue owner:httpdss repo:structkit issue_number:100
 ```
 
 #### Create an Issue
 ```bash
 # Create a new issue
-create_issue owner:httpdss repo:struct title:"Issue Title" body:"Issue description"
+create_issue owner:httpdss repo:structkit title:"Issue Title" body:"Issue description"
 ```
 
 #### Search Issues

@@ -24,7 +24,7 @@ class StructMCPServer:
     """FastMCP-based MCP Server for struct tool operations."""
 
     def __init__(self):
-        self.app = FastMCP("struct-mcp-server", version="1.0.0")
+        self.app = FastMCP("struct-mcp-server", version="2.8.0")
         self.logger = logging.getLogger(__name__)
         self._register_tools()
 

@@ -3,8 +3,8 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "struct"
-version = "2.8.1"
+name = "structkit"
+version = "3.0.0"
 description = "A structured data processing tool"
 readme = "README.md"
 license = {text = "MIT"}
@@ -45,8 +45,8 @@ gcs = [
     "google-api-core>=2.11.0",
 ]
 cloud = [
-    "struct[s3]",
-    "struct[gcs]"
+    "structkit[s3]",
+    "structkit[gcs]"
 ]
 dev = [
     "pytest>=7.0.0",
@@ -57,18 +57,18 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/httpdss/struct"
-Repository = "https://github.com/httpdss/struct.git"
+Homepage = "https://github.com/httpdss/structkit"
+Repository = "https://github.com/httpdss/structkit.git"
 
 [project.scripts]
-struct = "struct_module.main:main"
+structkit = "structkit.main:main"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]  # Look for packages in root directory
-include = ["struct_module*"]
+include = ["structkit*"]
 
 [tool.setuptools.package-data]
-struct_module = ["contribs/*.yaml"]
+structkit = ["contribs/*.yaml"]

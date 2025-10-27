@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from struct_module.commands.generate import GenerateCommand
+from structkit.commands.generate import GenerateCommand
 
 
 def _ensure_store(tmp_path):

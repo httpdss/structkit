@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock, call
-from struct_module.commands.generate import GenerateCommand
+from structkit.commands.generate import GenerateCommand
 import argparse
 
 @pytest.fixture

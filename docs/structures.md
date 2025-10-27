@@ -1,4 +1,4 @@
-# List of Structures in `struct_module/contribs`
+# List of Structures in `structkit/contribs`
 
 ## Ansible Playbook
 
@@ -151,7 +151,7 @@
 - **Description**: Contains the structure for a GitHub security API prompt.
 - **Structure name**: `github/prompt/security-api`
 
-## Github struct prompt
+## Github structkit prompt
 
 - **File**: `github/prompt/struct.yaml`
 - **Description**: Defines the structure for a Struct prompt in GitHub.

@@ -7,7 +7,7 @@ Set Width 1400
 Set Height 800
 Set Shell "bash"
 
-Type "# STRUCT YAML Configuration Demo"
+Type "# StructKit YAML Configuration Demo"
 Enter
 Sleep 1s
 
@@ -23,7 +23,7 @@ Type "      content: |"
 Enter
 Type "        # My Project"
 Enter
-Type "        Generated with STRUCT"
+Type "        Generated with StructKit"
 Enter
 Type "  - .gitignore:"
 Enter
@@ -55,10 +55,10 @@ Type "cat my-custom-project/README.md"
 Enter
 Sleep 2s
 
-Type "# YAML configuration makes STRUCT highly flexible!"
+Type "# YAML configuration makes StructKit highly flexible!"
 Enter
 Sleep 2s
 Sleep 2s
 
-Type "# YAML configuration makes STRUCT highly flexible!" Enter
+Type "# YAML configuration makes StructKit highly flexible!" Enter
 Sleep 2s

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from struct_module.template_renderer import TemplateRenderer
+from structkit.template_renderer import TemplateRenderer
 
 @pytest.fixture
 def renderer():

@@ -1,7 +1,7 @@
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "STRUCT",
+  "name": "StructKit",
   "applicationCategory": "DeveloperApplication",
   "applicationSubCategory": "Code Generator",
   "description": "Powerful, flexible tool for automating project structure creation through YAML configurations. Generate consistent project layouts, boilerplate code, and configurations with template variables.",
@@ -56,8 +56,8 @@
   "installUrl": "https://httpdss.github.io/struct/docs/installation/",
   "supportingData": {
     "@type": "Dataset",
-    "name": "STRUCT Documentation",
-    "description": "Complete documentation and examples for STRUCT",
+    "name": "StructKit Documentation",
+    "description": "Complete documentation and examples for StructKit",
     "url": "https://httpdss.github.io/struct/docs/"
   }
 }

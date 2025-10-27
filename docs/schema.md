@@ -1,6 +1,6 @@
 # YAML Schema Reference
 
-STRUCT provides JSON schema validation to ensure your YAML configuration files are correctly structured. This helps catch errors early and provides IDE support with autocompletion.
+StructKit provides JSON schema validation to ensure your YAML configuration files are correctly structured. This helps catch errors early and provides IDE support with autocompletion.
 
 ## Schema Location
 
@@ -40,7 +40,7 @@ If you have custom structures, generate a schema that includes them:
 
 ```sh
 # Generate schema with custom structures
-struct generate-schema -s /path/to/custom/structures -o my-schema.json
+structkit generate-schema -s /path/to/custom/structures -o my-schema.json
 
 # Use in VS Code settings
 {
@@ -137,7 +137,7 @@ post_hooks:
 
 ```sh
 # Validate a configuration file
-struct validate my-config.yaml
+structkit validate my-config.yaml
 ```
 
 ### Programmatic Validation
@@ -176,7 +176,7 @@ files:
 ### Missing Required Properties
 
 ```yaml
-# ❌ Wrong - struct property missing
+# ❌ Wrong - structkit property missing
 folders:
   - src/:
       with:
@@ -251,7 +251,7 @@ With schema validation enabled, you get:
 
 ### Validation Errors
 
-1. Use `struct validate` command for detailed error messages
+1. Use `structkit validate` command for detailed error messages
 2. Check schema documentation for required properties
 3. Verify YAML syntax is correct
 4. Ensure structure names exist in your installation
@@ -262,4 +262,4 @@ With schema validation enabled, you get:
 2. Consider schema caching in your IDE
 3. Limit schema complexity for large configurations
 
-This schema system ensures your STRUCT configurations are valid and provides a better development experience through IDE integration.
+This schema system ensures your StructKit configurations are valid and provides a better development experience through IDE integration.

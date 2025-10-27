@@ -1,4 +1,4 @@
-// STRUCT Advanced Interactive Components - Phase 2
+// StructKit Advanced Interactive Components - Phase 2
 
 class StructSite {
   constructor() {
@@ -76,7 +76,7 @@ class StructSite {
       },
       {
         title: 'Basic Usage Demo',
-        content: 'See how to generate project structures with STRUCT',
+        content: 'See how to generate project structures with StructKit',
         section: 'demos',
         keywords: ['demo', 'usage', 'example', 'generate'],
       },
@@ -263,7 +263,7 @@ class StructSite {
     ];
 
     showcaseContainer.innerHTML = `
-      <h3 class="showcase-title">Built with STRUCT</h3>
+      <h3 class="showcase-title">Built with StructKit</h3>
       <div class="showcase-grid">
         ${projects.map(project => `
           <div class="showcase-card">

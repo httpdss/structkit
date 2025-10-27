@@ -12,31 +12,31 @@
     <!-- Demo Images -->
     <image:image>
       <image:loc>https://httpdss.github.io/struct/demos/basic-usage.gif</image:loc>
-      <image:caption>STRUCT Basic Usage Demo</image:caption>
-      <image:title>Basic Project Generation with STRUCT</image:title>
+      <image:caption>StructKit Basic Usage Demo</image:caption>
+      <image:title>Basic Project Generation with StructKit</image:title>
     </image:image>
 
     <image:image>
       <image:loc>https://httpdss.github.io/struct/demos/yaml-config.gif</image:loc>
-      <image:caption>STRUCT YAML Configuration Demo</image:caption>
+      <image:caption>StructKit YAML Configuration Demo</image:caption>
       <image:title>YAML Configuration Creation</image:title>
     </image:image>
 
     <image:image>
       <image:loc>https://httpdss.github.io/struct/demos/mappings-demo.gif</image:loc>
-      <image:caption>STRUCT Mappings Demo</image:caption>
+      <image:caption>StructKit Mappings Demo</image:caption>
       <image:title>External Mappings Usage</image:title>
     </image:image>
 
     <image:image>
       <image:loc>https://httpdss.github.io/struct/demos/remote-content.gif</image:loc>
-      <image:caption>STRUCT Remote Content Demo</image:caption>
+      <image:caption>StructKit Remote Content Demo</image:caption>
       <image:title>Remote Content Fetching</image:title>
     </image:image>
 
     <image:image>
       <image:loc>https://httpdss.github.io/struct/demos/advanced-features.gif</image:loc>
-      <image:caption>STRUCT Advanced Features Demo</image:caption>
+      <image:caption>StructKit Advanced Features Demo</image:caption>
       <image:title>Advanced Features and Hooks</image:title>
     </image:image>
   </url>

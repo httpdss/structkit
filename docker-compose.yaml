@@ -1,9 +1,9 @@
 services:
-  struct-dry-run:
+  structkit-dry-run:
     build: .
     volumes:
       - .:/app
-    entrypoint: ["python", "struct_module/main.py"]
+    entrypoint: ["python", "structkit/main.py"]
     env_file:
       - .env
     command: [
@@ -17,11 +17,11 @@ services:
       "/app/example/structure.yaml",
       "/app/example_project"
     ]
-  struct-test:
+  structkit-test:
     build: .
     volumes:
       - .:/app
-    entrypoint: ["python", "struct_module/main.py"]
+    entrypoint: ["python", "structkit/main.py"]
     env_file:
       - .env
     command: [

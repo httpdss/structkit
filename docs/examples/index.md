@@ -1,6 +1,6 @@
 # Examples
 
-This page contains practical examples of STRUCT configurations for various use cases.
+This page contains practical examples of StructKit configurations for various use cases.
 
 ## Basic Examples
 
@@ -355,7 +355,7 @@ To use these examples:
 
 1. **Copy the YAML content** from any example above
 2. **Save it to a file** (e.g., `my-structure.yaml`)
-3. **Run struct generate** with your file:
+3. **Run structkit generate** with your file:
 
 ```bash
 # Create your structure file
@@ -364,14 +364,14 @@ cat > my-structure.yaml << 'EOF'
 EOF
 
 # Generate your project
-struct generate file://my-structure.yaml ./my-project
+structkit generate file://my-structure.yaml ./my-project
 ```
 
 ### Quick Start with Template Variables
 
 ```bash
 # Generate with custom variables
-struct generate -v "project_name=MyApp,author=John Doe" file://my-structure.yaml ./my-project
+structkit generate -v "project_name=MyApp,author=John Doe" file://my-structure.yaml ./my-project
 ```
 
 ## Contributing Examples

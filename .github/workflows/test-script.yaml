@@ -42,7 +42,7 @@ jobs:
       shell: bash
       run: |
         echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
-        pytest --cov=struct_module --cov-branch --cov-report=xml -v --md-report --md-report-flavor gfm --md-report-exclude-outcomes passed skipped xpassed --md-report-output "$REPORT_OUTPUT" --pyargs tests
+        pytest --cov=structkit --cov-branch --cov-report=xml -v --md-report --md-report-flavor gfm --md-report-exclude-outcomes passed skipped xpassed --md-report-output "$REPORT_OUTPUT" --pyargs tests
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5

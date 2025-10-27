@@ -1,12 +1,12 @@
 # Articles and Resources
 
-Collection of articles, tutorials, and external resources about STRUCT.
+Collection of articles, tutorials, and external resources about StructKit.
 
 ## Official Articles
 
-### [Defining User Prompts on STRUCT: Harnessing GPT-4.1 for Scalable Project Scaffolding](https://medium.com/@httpdss/defining-user-prompts-on-struct-harnessing-gpt-4-1-for-scalable-project-scaffolding-e6d3b4ec4701)
+### [Defining User Prompts on StructKit: Harnessing GPT-4.1 for Scalable Project Scaffolding](https://medium.com/@httpdss/defining-user-prompts-on-struct-harnessing-gpt-4-1-for-scalable-project-scaffolding-e6d3b4ec4701)
 
-Learn how to leverage GPT-4.1 to create intelligent project scaffolding with STRUCT. This article covers advanced prompting techniques and AI-driven project generation.
+Learn how to leverage GPT-4.1 to create intelligent project scaffolding with StructKit. This article covers advanced prompting techniques and AI-driven project generation.
 
 **Topics covered:**
 
@@ -15,9 +15,9 @@ Learn how to leverage GPT-4.1 to create intelligent project scaffolding with STR
 - GPT-4.1 integration patterns
 - Scalable scaffolding strategies
 
-### [Unlocking Developer Productivity with STRUCT: The Ultimate Open-Source Tool for Automated Project Structures](https://blog.devops.dev/unlocking-developer-productivity-with-struct-the-ultimate-open-source-tool-for-automated-project-8bca9b5f40f9)
+### [Unlocking Developer Productivity with StructKit: The Ultimate Open-Source Tool for Automated Project Structures](https://blog.devops.dev/unlocking-developer-productivity-with-struct-the-ultimate-open-source-tool-for-automated-project-8bca9b5f40f9)
 
-A comprehensive overview of STRUCT's capabilities and how it can boost developer productivity through automation.
+A comprehensive overview of StructKit's capabilities and how it can boost developer productivity through automation.
 
 **Topics covered:**
 
@@ -26,9 +26,9 @@ A comprehensive overview of STRUCT's capabilities and how it can boost developer
 - Open-source benefits
 - Real-world use cases
 
-### [Automating Project Structures with STRUCT and GitHub Actions](https://medium.com/@httpdss/automating-project-structures-with-struct-and-github-actions-64e09c40c11e)
+### [Automating Project Structures with StructKit and GitHub Actions](https://medium.com/@httpdss/automating-project-structures-with-struct-and-github-actions-64e09c40c11e)
 
-Discover how to integrate STRUCT with GitHub Actions for automated project setup and maintenance across repositories.
+Discover how to integrate StructKit with GitHub Actions for automated project setup and maintenance across repositories.
 
 **Topics covered:**
 
@@ -37,9 +37,9 @@ Discover how to integrate STRUCT with GitHub Actions for automated project setup
 - Repository management
 - Workflow triggers
 
-### [Advanced STRUCT Tips: Working with Template Variables and Jinja2 Filters](https://medium.com/@httpdss/advanced-struct-tips-working-with-template-variables-and-jinja2-filters-b239bf3145e4)
+### [Advanced StructKit Tips: Working with Template Variables and Jinja2 Filters](https://medium.com/@httpdss/advanced-struct-tips-working-with-template-variables-and-jinja2-filters-b239bf3145e4)
 
-Deep dive into STRUCT's templating system, covering advanced variable usage and custom Jinja2 filters.
+Deep dive into StructKit's templating system, covering advanced variable usage and custom Jinja2 filters.
 
 **Topics covered:**
 
@@ -50,7 +50,7 @@ Deep dive into STRUCT's templating system, covering advanced variable usage and 
 
 ## Community Articles
 
-*Community contributions welcome! Submit a PR to add your STRUCT-related articles here.*
+*Community contributions welcome! Submit a PR to add your StructKit-related articles here.*
 
 ## Tutorials
 
@@ -89,11 +89,11 @@ Deep dive into STRUCT's templating system, covering advanced variable usage and 
 
 ## Presentations and Talks
 
-*Conference presentations and community talks about STRUCT will be listed here.*
+*Conference presentations and community talks about StructKit will be listed here.*
 
 ## Research and Academic Papers
 
-*Academic research involving STRUCT or related concepts will be referenced here.*
+*Academic research involving StructKit or related concepts will be referenced here.*
 
 ## External Tools and Integrations
 
@@ -104,7 +104,7 @@ Deep dive into STRUCT's templating system, covering advanced variable usage and 
 
 ### CI/CD Integrations
 
-- **GitHub Actions**: Pre-built actions for STRUCT workflows
+- **GitHub Actions**: Pre-built actions for StructKit workflows
 - **GitLab CI**: Integration examples and templates
 - **Jenkins**: Pipeline integration patterns
 
@@ -175,7 +175,7 @@ We welcome contributions to this resource collection! Here's how you can help:
 
 ## Newsletter and Updates
 
-Stay updated with the latest STRUCT developments:
+Stay updated with the latest StructKit developments:
 
 - **GitHub Releases**: Watch the repository for release notifications
 - **Community Updates**: Follow project maintainers on social media

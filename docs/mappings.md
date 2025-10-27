@@ -4,7 +4,7 @@ You can provide a mappings YAML file to inject key-value maps into your template
 
 ## What are Mappings?
 
-Mappings are external data files that provide structured key-value pairs for use in your STRUCT templates. They allow you to:
+Mappings are external data files that provide structured key-value pairs for use in your StructKit templates. They allow you to:
 
 - Separate data from templates
 - Share common values across multiple structures
@@ -122,7 +122,7 @@ variables:
 
 ## Using Mappings in the `with` Clause
 
-You can assign values from mappings directly in the `with` clause for folder struct calls:
+You can assign values from mappings directly in the `with` clause for folder structkit calls:
 
 ```yaml
 folders:
@@ -147,8 +147,8 @@ Use the `--mappings-file` argument with the `generate` command:
 
 ```sh
 # Both commands work identically - file:// is automatically added for .yaml files
-struct generate --mappings-file ./mymap.yaml my-struct.yaml .
-struct generate --mappings-file ./mymap.yaml file://my-struct.yaml .
+structkit generate --mappings-file ./mymap.yaml my-struct.yaml .
+structkit generate --mappings-file ./mymap.yaml file://my-struct.yaml .
 ```
 
 ### Multiple Mappings Files
@@ -156,7 +156,7 @@ struct generate --mappings-file ./mymap.yaml file://my-struct.yaml .
 You can specify multiple mappings files that will be merged in order:
 
 ```sh
-struct generate \
+structkit generate \
   --mappings-file ./common-mappings.yaml \
   --mappings-file ./env-specific-mappings.yaml \
   my-struct.yaml .
@@ -172,7 +172,7 @@ struct generate \
 **Example with environment variable:**
 
 ```sh
-struct generate \
+structkit generate \
   --mappings-file ./mappings/common.yaml \
   --mappings-file ./mappings/${ENVIRONMENT}.yaml \
   infrastructure.yaml \
@@ -291,7 +291,7 @@ folders:
 
 ## Error Handling
 
-If a mapping key doesn't exist, STRUCT will show an error:
+If a mapping key doesn't exist, StructKit will show an error:
 
 ```yaml
 files:

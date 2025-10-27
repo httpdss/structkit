@@ -18,7 +18,7 @@ RUN pip install argcomplete
 COPY . .
 
 # Register the script for auto-completion
-RUN echo 'eval "$(register-python-argcomplete struct)"' >> /etc/bash.bashrc
+RUN echo 'eval "$(register-python-argcomplete structkit)"' >> /etc/bash.bashrc
 
 # Run your script when the container launches
-ENTRYPOINT ["python", "struct_module/main.py"]
+ENTRYPOINT ["python", "structkit/main.py"]

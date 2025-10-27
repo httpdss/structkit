@@ -4,11 +4,11 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from struct_module.commands.generate import GenerateCommand
-from struct_module.commands.info import InfoCommand
-from struct_module.commands.list import ListCommand
-from struct_module.commands.mcp import MCPCommand
-from struct_module.commands.validate import ValidateCommand
+from structkit.commands.generate import GenerateCommand
+from structkit.commands.info import InfoCommand
+from structkit.commands.list import ListCommand
+from structkit.commands.mcp import MCPCommand
+from structkit.commands.validate import ValidateCommand
 
 
 @pytest.fixture

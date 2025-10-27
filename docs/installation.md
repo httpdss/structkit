@@ -7,7 +7,7 @@ tags:
 
 ## Using pip
 
-Install STRUCT with pip:
+Install StructKit with pip:
 
 ```sh
 pip install git+https://github.com/httpdss/struct.git
@@ -22,7 +22,7 @@ Clone the repository and install locally. See the [Development](development.md) 
 
 ## Using Docker
 
-Run STRUCT without installing, using Docker:
+Run StructKit without installing, using Docker:
 
 ```sh
 docker run -v $(pwd):/workdir -u $(id -u):$(id -g) ghcr.io/httpdss/struct:main generate file:///workdir/example/structure.yaml /workdir/example_output

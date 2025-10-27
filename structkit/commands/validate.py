@@ -1,7 +1,7 @@
 import os
 import yaml
 from dotenv import load_dotenv
-from struct_module.commands import Command
+from structkit.commands import Command
 
 load_dotenv()
 

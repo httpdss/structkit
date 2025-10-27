@@ -62,9 +62,8 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: twine upload dist/* --skip-existing
 
-      - name: Create release note
-        if: github.event_name == 'release'
+      - name: Put pypi url on job summary
         run: |
-          echo "✅ Package published to PyPI successfully!"
-          echo "Version: ${{ github.event.release.tag_name }}"
-          echo "PyPI URL: https://pypi.org/project/struct/"
+          echo "## PyPI Package Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The package has been published to [PyPI](https://pypi.org/project/structkit/)." >> $GITHUB_STEP_SUMMARY

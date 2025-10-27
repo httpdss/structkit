@@ -85,7 +85,7 @@ To define comments you can use the comment start notation `{#@` and end comment 
 
 If you don't provide a default value for a variable, the script will prompt you to enter the value interactively.
 
-The struct defined should define the variable on a specific section of the YAML file. For example:
+The structkit defined should define the variable on a specific section of the YAML file. For example:
 
 ```yaml
 variables:

@@ -1,12 +1,12 @@
-# Funding STRUCT
+# Funding StructKit
 
-STRUCT is an open-source project that helps developers create consistent project structures and automate repetitive setup tasks. Your support helps us maintain and improve this tool for the entire community.
+StructKit is an open-source project that helps developers create consistent project structures and automate repetitive setup tasks. Your support helps us maintain and improve this tool for the entire community.
 
 ## 💰 Support Options
 
 ### GitHub Sponsors
 
-The easiest way to support STRUCT development is through GitHub Sponsors:
+The easiest way to support StructKit development is through GitHub Sponsors:
 
 - **[Sponsor @httpdss on GitHub](https://github.com/sponsors/httpdss)**
 
@@ -22,7 +22,7 @@ GitHub Sponsors allows for recurring monthly contributions or one-time donations
 
 For ongoing support with additional perks:
 
-- **[Support STRUCT on Patreon](https://patreon.com/structproject)**
+- **[Support StructKit on Patreon](https://patreon.com/structproject)**
 
 Patreon supporters get access to:
 
@@ -39,7 +39,7 @@ For one-time contributions:
 
 ## 🤝 Alternative Ways to Support
 
-If financial contribution isn't possible, you can still support STRUCT:
+If financial contribution isn't possible, you can still support StructKit:
 
 ### Code Contributions
 
@@ -52,7 +52,7 @@ If financial contribution isn't possible, you can still support STRUCT:
 
 - Answer questions in GitHub Discussions
 - Help other users in issues
-- Share STRUCT on social media
+- Share StructKit on social media
 - Write blog posts or tutorials
 
 ### Feedback and Testing
@@ -64,4 +64,4 @@ If financial contribution isn't possible, you can still support STRUCT:
 
 ---
 
-Every contribution, no matter the size, helps make STRUCT better for everyone. Thank you for your support! 🎉
+Every contribution, no matter the size, helps make StructKit better for everyone. Thank you for your support! 🎉

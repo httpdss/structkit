@@ -1,4 +1,4 @@
-// STRUCT Static Site - Main JavaScript
+// StructKit Static Site - Main JavaScript
 
 // Initialize all components when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {

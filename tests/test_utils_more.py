@@ -6,7 +6,7 @@ import types
 import yaml
 import pytest
 
-from struct_module import utils
+from structkit import utils
 
 
 def test_read_config_file(tmp_path):

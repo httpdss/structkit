@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from struct_module.input_store import InputStore
+from structkit.input_store import InputStore
 
 @pytest.fixture
 def input_store(tmp_path):

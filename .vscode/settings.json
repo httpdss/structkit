@@ -1,0 +1,8 @@
+{
+    "yaml.schemas": {
+        "file:///home/kenny/.vscode-server/extensions/atlassian.atlascode-4.0.6/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
+        "file:///home/kenny/.vscode-server/extensions/httpdss.vscode-struct-0.1.0/schemas/struct-schema.json": [
+            "*.struct.yaml"
+        ]
+    }
+}

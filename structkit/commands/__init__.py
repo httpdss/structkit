@@ -1,5 +1,5 @@
 import logging
-from struct_module.completers import log_level_completer
+from structkit.completers import log_level_completer
 
 # Base command class
 class Command:

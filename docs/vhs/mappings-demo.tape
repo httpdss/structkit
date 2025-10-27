@@ -7,7 +7,7 @@ Set Width 1400
 Set Height 800
 Set Shell "bash"
 
-Type "# STRUCT Mappings Demo"
+Type "# StructKit Mappings Demo"
 Enter
 Sleep 1s
 

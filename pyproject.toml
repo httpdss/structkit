@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "structkit"
-version = "1.0.0"
+version = "2.8.1"
 description = "A structured data processing tool"
 readme = "README.md"
 license = {text = "MIT"}

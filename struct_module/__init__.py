@@ -1,2 +1,6 @@
-# Struct Module
-__version__ = '1.0.0'
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version('struct')
+except PackageNotFoundError:
+    __version__ = "unknown"

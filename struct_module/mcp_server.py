@@ -18,13 +18,14 @@ from fastmcp import FastMCP
 
 from struct_module.commands.generate import GenerateCommand
 from struct_module.commands.validate import ValidateCommand
+from struct_module import __version__
 
 
 class StructMCPServer:
     """FastMCP-based MCP Server for struct tool operations."""
 
     def __init__(self):
-        self.app = FastMCP("structkit-mcp-server", version="1.0.0")
+        self.app = FastMCP("structkit-mcp-server", version=__version__)
         self.logger = logging.getLogger(__name__)
         self._register_tools()
 

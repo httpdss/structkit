@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://httpdss.github.io/struct/sitemap.xml
+Sitemap: https://httpdss.github.io/structkit/sitemap.xml
 
 # Disallow crawling of demo source files
 Disallow: /demos/*.tape

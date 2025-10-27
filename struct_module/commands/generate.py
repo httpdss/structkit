@@ -17,7 +17,7 @@ class GenerateCommand(Command):
     structure_arg.completer = structures_completer
     parser.add_argument('base_path', nargs='?', default='.', type=str, help='Base path where the structure will be created (default: current directory)')
     parser.add_argument('-s', '--structures-path', type=str, help='Path to structure definitions')
-    parser.add_argument('-n', '--input-store', type=str, help='Path to the input store', default='/tmp/struct/input.json')
+    parser.add_argument('-n', '--input-store', type=str, help='Path to the input store', default='/tmp/structkit/input.json')
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
     parser.add_argument('-v', '--vars', type=str, help='Template variables in the format KEY1=value1,KEY2=value2')

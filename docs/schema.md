@@ -7,7 +7,7 @@ STRUCT provides JSON schema validation to ensure your YAML configuration files a
 The official schema is available at:
 
 ```text
-https://raw.githubusercontent.com/httpdss/struct/main/struct-schema.json
+https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json
 ```
 
 ## IDE Configuration
@@ -20,7 +20,7 @@ https://raw.githubusercontent.com/httpdss/struct/main/struct-schema.json
 ```json
 {
   "yaml.schemas": {
-    "https://raw.githubusercontent.com/httpdss/struct/main/struct-schema.json": ".struct.yaml"
+    "https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json": ".struct.yaml"
   }
 }
 ```
@@ -31,7 +31,7 @@ This provides validation and autocompletion for all `.struct.yaml` files.
 
 1. Go to **Settings** → **Languages & Frameworks** → **Schemas and DTDs** → **JSON Schema Mappings**
 2. Click **+** to add a new mapping
-3. Set **Schema file or URL** to: `https://raw.githubusercontent.com/httpdss/struct/main/struct-schema.json`
+3. Set **Schema file or URL** to: `https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json`
 4. Set **File path pattern** to: `*.struct.yaml`
 
 ## Generating Custom Schema
@@ -215,7 +215,7 @@ You can extend the base schema for custom validation:
   "$schema": "http://json-schema.org/draft-07/schema#",
   "allOf": [
     {
-      "$ref": "https://raw.githubusercontent.com/httpdss/struct/main/struct-schema.json"
+      "$ref": "https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json"
     },
     {
       "properties": {

@@ -1,8 +1,8 @@
 site_name: STRUCT Documentation
 site_description: Automated Project Structure Generator
-site_url: https://httpdss.github.io/struct/
-repo_url: https://github.com/httpdss/struct
-repo_name: httpdss/struct
+site_url: https://httpdss.github.io/structkit/
+repo_url: https://github.com/httpdss/structkit
+repo_name: httpdss/structkit
 
 theme:
   name: material
@@ -105,4 +105,4 @@ extra_css:
   - stylesheets/extra.css
 
 extra:
-  homepage: https://httpdss.github.io/struct/
+  homepage: https://httpdss.github.io/structkit/

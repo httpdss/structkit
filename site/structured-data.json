@@ -9,7 +9,7 @@
   "programmingLanguage": "Python",
   "downloadUrl": "https://github.com/httpdss/struct",
   "codeRepository": "https://github.com/httpdss/struct",
-  "url": "https://httpdss.github.io/struct/",
+  "url": "https://httpdss.github.io/structkit/",
   "author": {
     "@type": "Organization",
     "name": "httpdss",
@@ -41,7 +41,7 @@
   },
   "softwareVersion": "1.0",
   "releaseNotes": "Initial release with YAML-based project structure generation",
-  "screenshot": "https://httpdss.github.io/struct/demos/basic-usage.gif",
+  "screenshot": "https://httpdss.github.io/structkit/demos/basic-usage.gif",
   "featureList": [
     "YAML-Based Configuration",
     "Template Variables with Jinja2",
@@ -53,11 +53,11 @@
     "Cross-platform Support"
   ],
   "requirements": "Python 3.8+",
-  "installUrl": "https://httpdss.github.io/struct/docs/installation/",
+  "installUrl": "https://httpdss.github.io/structkit/docs/installation/",
   "supportingData": {
     "@type": "Dataset",
     "name": "STRUCT Documentation",
     "description": "Complete documentation and examples for STRUCT",
-    "url": "https://httpdss.github.io/struct/docs/"
+    "url": "https://httpdss.github.io/structkit/docs/"
   }
 }

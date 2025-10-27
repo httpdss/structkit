@@ -9,7 +9,7 @@ tags:
 
 ## Quick Start Using Docker
 
-1. Create a YAML configuration file for your project structure. [See sample configuration here](https://github.com/httpdss/struct/blob/main/example/structure.yaml).
+1. Create a YAML configuration file for your project structure. [See sample configuration here](https://github.com/httpdss/structkit/blob/main/example/structure.yaml).
 2. Run the following command to generate the project structure:
 
 ```sh

@@ -132,7 +132,7 @@ class StructMCPServer:
         args.file_strategy = "overwrite"
         args.global_system_prompt = None
         args.non_interactive = True
-        args.input_store = "/tmp/struct/input.json"
+        args.input_store = "/tmp/structkit/input.json"
         args.diff = False
         args.log = "INFO"
         args.config_file = None

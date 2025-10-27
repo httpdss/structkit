@@ -2,7 +2,7 @@
 
 ![STRUCT Logo](./docs/assets/github-hero.gif)
 
-[![codecov](https://codecov.io/github/httpdss/struct/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/struct)
+[![codecov](https://codecov.io/github/httpdss/structkit/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/struct)
 ![GitHub issues](https://img.shields.io/github/issues/httpdss/struct)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/httpdss/struct)
 ![GitHub stars](https://img.shields.io/github/stars/httpdss/struct?style=social)
@@ -119,7 +119,7 @@ Our comprehensive documentation is organized into the following sections:
 ## 🤝 Community
 
 - **[Contributing Guidelines](docs/development.md#contributing-guidelines)** - How to contribute
-- **[GitHub Discussions](https://github.com/httpdss/struct/discussions)** - Community support
+- **[GitHub Discussions](https://github.com/httpdss/structkit/discussions)** - Community support
 - **[Articles & Tutorials](docs/articles.md)** - Learning resources
 
 ## 📜 License
@@ -132,4 +132,4 @@ If STRUCT helps your workflow, consider supporting the project: [patreon/structp
 
 ---
 
-**📚 [Complete Documentation](docs/index.md)** | **🐛 [Report Issues](https://github.com/httpdss/struct/issues)** | **💬 [Discussions](https://github.com/httpdss/struct/discussions)**
+**📚 [Complete Documentation](docs/index.md)** | **🐛 [Report Issues](https://github.com/httpdss/structkit/issues)** | **💬 [Discussions](https://github.com/httpdss/structkit/discussions)**

@@ -669,14 +669,14 @@ variables:
         description:
           'Ask questions, share ideas, and get help from other StructKit users',
         action: 'Join Discussion',
-        link: 'https://github.com/httpdss/struct/discussions',
+        link: 'https://github.com/httpdss/structkit/discussions',
       },
       {
         icon: 'fas fa-book',
         title: 'Documentation',
         description: 'Comprehensive guides, tutorials, and API documentation',
         action: 'Read Docs',
-        link: 'https://httpdss.github.io/struct/docs/',
+        link: 'https://httpdss.github.io/structkit/docs/',
       },
       {
         icon: 'fas fa-heart',
@@ -708,7 +708,7 @@ variables:
     try {
       const [repoResponse, contributorsResponse] = await Promise.all([
         fetch('https://api.github.com/repos/httpdss/struct'),
-        fetch('https://api.github.com/repos/httpdss/struct/contributors')
+        fetch('https://api.github.com/repos/httpdss/structkit/contributors')
       ]);
 
       const repo = await repoResponse.json();

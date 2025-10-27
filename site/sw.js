@@ -2,25 +2,25 @@
 
 const CACHE_NAME = 'struct-site-v1';
 const STATIC_CACHE_URLS = [
-  '/struct/',
-  '/struct/index.html',
-  '/struct/css/main.css',
-  '/struct/css/components.css',
-  '/struct/css/animations.css',
-  '/struct/css/advanced.css',
-  '/struct/js/main.js',
-  '/struct/js/advanced.js',
-  '/struct/images/favicon.svg',
+  '/structkit/',
+  '/structkit/index.html',
+  '/structkit/css/main.css',
+  '/structkit/css/components.css',
+  '/structkit/css/animations.css',
+  '/structkit/css/advanced.css',
+  '/structkit/js/main.js',
+  '/structkit/js/advanced.js',
+  '/structkit/images/favicon.svg',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
 ];
 
 const DEMO_CACHE_URLS = [
-  '/struct/demos/basic-usage.gif',
-  '/struct/demos/yaml-config.gif',
-  '/struct/demos/mappings-demo.gif',
-  '/struct/demos/remote-content.gif',
-  '/struct/demos/advanced-features.gif',
+  '/structkit/demos/basic-usage.gif',
+  '/structkit/demos/yaml-config.gif',
+  '/structkit/demos/mappings-demo.gif',
+  '/structkit/demos/remote-content.gif',
+  '/structkit/demos/advanced-features.gif',
 ];
 
 // Install event - cache static assets

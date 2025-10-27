@@ -61,7 +61,7 @@ jobs:
           echo "Package version: $PACKAGE_VERSION"
 
           # Go to github releases to get latest tag
-          LATEST_TAG=$(curl -s https://api.github.com/repos/httpdss/struct/releases/latest | grep 'tag_name' | cut -d\" -f4)
+          LATEST_TAG=$(curl -s https://api.github.com/repos/httpdss/structkit/releases/latest | grep 'tag_name' | cut -d\" -f4)
           echo "Latest tag: $LATEST_TAG"
 
           if [ "$PACKAGE_VERSION" != "$LATEST_TAG" ]; then
@@ -116,4 +116,4 @@ jobs:
         run: |
           echo "✅ Package published to PyPI successfully!"
           echo "Version: ${{ github.event.release.tag_name }}"
-          echo "PyPI URL: https://pypi.org/project/struct/"
+          echo "PyPI URL: https://pypi.org/project/structkit/"

@@ -129,8 +129,8 @@ class StructSite {
       // Fetch comprehensive GitHub data
       const [repoData, contributorsData, releasesData] = await Promise.all([
         fetch('https://api.github.com/repos/httpdss/struct').then(r => r.json()),
-        fetch('https://api.github.com/repos/httpdss/struct/contributors').then(r => r.json()),
-        fetch('https://api.github.com/repos/httpdss/struct/releases/latest').then(r => r.json())
+        fetch('https://api.github.com/repos/httpdss/structkit/contributors').then(r => r.json()),
+        fetch('https://api.github.com/repos/httpdss/structkit/releases/latest').then(r => r.json())
       ]);
 
       // Update with comprehensive stats
@@ -202,7 +202,7 @@ class StructSite {
     if (!contributorsContainer) return;
 
     try {
-      const contributors = await fetch('https://api.github.com/repos/httpdss/struct/contributors')
+      const contributors = await fetch('https://api.github.com/repos/httpdss/structkit/contributors')
         .then(r => r.json());
 
       contributorsContainer.innerHTML = `
@@ -221,7 +221,7 @@ class StructSite {
             </div>
           `).join('')}
         </div>
-        <a href="https://github.com/httpdss/struct/graphs/contributors" target="_blank" class="btn btn-ghost">
+        <a href="https://github.com/httpdss/structkit/graphs/contributors" target="_blank" class="btn btn-ghost">
           View All Contributors →
         </a>
       `;
@@ -413,7 +413,7 @@ class StructSite {
 
     // Initialize service worker if supported
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/struct/sw.js').catch((err) => {
+      navigator.serviceWorker.register('/structkit/sw.js').catch((err) => {
         console.log('ServiceWorker registration failed:', err);
       });
     }

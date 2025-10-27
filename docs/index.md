@@ -44,5 +44,5 @@ Welcome to the comprehensive documentation for STRUCT - the Automated Project St
 ## 🤝 Community
 
 - [Contributing Guidelines](contributing.md)
-- [License](https://github.com/httpdss/struct/blob/main/LICENSE)
+- [License](https://github.com/httpdss/structkit/blob/main/LICENSE)
 - [Funding](funding.md)

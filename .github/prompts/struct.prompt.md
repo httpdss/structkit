@@ -83,5 +83,5 @@ Always return YAML that is syntactically correct and validated against the provi
 
 ## References
 
-- [STRUCT json schema](https://raw.githubusercontent.com/httpdss/struct/refs/heads/main/struct-schema.json)
-- [STRUCT README](https://raw.githubusercontent.com/httpdss/struct/refs/heads/main/README.md)
+- [STRUCT json schema](https://raw.githubusercontent.com/httpdss/structkit/refs/heads/main/struct-schema.json)
+- [STRUCT README](https://raw.githubusercontent.com/httpdss/structkit/refs/heads/main/README.md)

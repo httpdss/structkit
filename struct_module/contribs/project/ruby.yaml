@@ -61,7 +61,7 @@ files:
             - 'public/assets/*'
             - 'public/packs
   - LICENSE:
-      file: https://raw.githubusercontent.com/httpdss/struct/main/LICENSE
+      file: https://raw.githubusercontent.com/httpdss/structkit/main/LICENSE
   - README.md:
       content: |
         # Generic App

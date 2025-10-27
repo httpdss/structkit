@@ -102,7 +102,7 @@ def test_fileitem_append_logs_message(tmp_path, caplog):
 
 
 def test_mcp_get_structure_info_rich_rendering(tmp_path):
-    # Create a temp YAML structure with folders/struct/with
+    # Create a temp YAML structure with folders/structkit/with
     yaml_path = tmp_path / 'my-struct.yaml'
     yaml_path.write_text(
         """

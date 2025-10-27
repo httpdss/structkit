@@ -16,7 +16,7 @@ on:
 
 jobs:
   generate:
-    uses: httpdss/struct/.github/workflows/struct-generate.yaml@main
+    uses: httpdss/structkit/.github/workflows/struct-generate.yaml@main
     secrets:
       token: ${{ secrets.STRUCT_RUN_TOKEN }}
 ```

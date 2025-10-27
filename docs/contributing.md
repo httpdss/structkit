@@ -206,8 +206,8 @@ This project follows the [Contributor Covenant Code of Conduct](https://www.cont
 If you need help contributing:
 
 1. Check existing [documentation](index.md)
-2. Search [existing issues](https://github.com/httpdss/struct/issues)
+2. Search [existing issues](https://github.com/httpdss/structkit/issues)
 3. Create a new issue with the `question` label
-4. Join our [GitHub Discussions](https://github.com/httpdss/struct/discussions)
+4. Join our [GitHub Discussions](https://github.com/httpdss/structkit/discussions)
 
 Thank you for contributing to STRUCT! 🎉

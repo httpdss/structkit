@@ -6,7 +6,7 @@ SUPPORTED_SHELLS = ["bash", "zsh", "fish"]
 class CompletionCommand(Command):
   def __init__(self, parser):
     super().__init__(parser)
-    parser.description = "Manage CLI shell completions for struct (shtab-generated)"
+    parser.description = "Manage CLI shell completions for structkit (shtab-generated)"
     sub = parser.add_subparsers(dest="action")
 
     install = sub.add_parser("install", help="Print the commands to enable completion for your shell")

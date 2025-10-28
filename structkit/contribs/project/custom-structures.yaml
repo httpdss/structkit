@@ -1,10 +1,10 @@
 files:
   - README.md:
       content: |
-        # Custom Struct Structures
+        # Custom StructKit Structures
   - custom-mappings.yaml:
       content: |
-        # Custom Struct Mappings
+        # Custom StructKit Mappings
         # This file defines custom mappings for the Struct.
         mappings:
           aws_account_ids:

@@ -49,7 +49,7 @@ Type "EOF"
 Enter
 Sleep 2s
 
-Type "# Now VSCode will provide autocompletion for struct names!"
+Type "# Now VSCode will provide autocompletion for structkit names!"
 Enter
 Type "# when you type 'struct:' in a .struct.yaml file"
 Enter

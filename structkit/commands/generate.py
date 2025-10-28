@@ -300,7 +300,7 @@ class GenerateCommand(Command):
           self.logger.info(f"📁 Created folder: {folder_path}")
           summary["folders"] += 1
 
-        # check if content has struct value
+        # check if content has structkit value
         if 'struct' in content:
           self.logger.info(f"Generating structure")
           self.logger.info(f"  Folder: {folder}")

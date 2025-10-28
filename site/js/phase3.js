@@ -38,14 +38,14 @@ class StructPhase3 {
             code: 'structkit generate config.yaml ./output'
           },
           {
-            title: 'struct validate',
+            title: 'structkit validate',
             description: 'Validate YAML configuration file',
-            code: 'struct validate config.yaml'
+            code: 'structkit validate config.yaml'
           },
           {
-            title: 'struct list',
+            title: 'structkit list',
             description: 'List available structure templates',
-            code: 'struct list'
+            code: 'structkit list'
           }
         ]
       },
@@ -156,13 +156,13 @@ structkit generate config.yaml ./output --dry-run`
           },
           {
             type: 'CMD',
-            name: 'struct validate',
+            name: 'structkit validate',
             description: 'Validate YAML configuration syntax and structure',
             code: `# Validate configuration
-struct validate config.yaml
+structkit validate config.yaml
 
 # Validate with verbose output
-struct validate config.yaml --verbose`
+structkit validate config.yaml --verbose`
           }
         ]
       },

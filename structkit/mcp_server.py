@@ -22,7 +22,7 @@ from structkit import __version__
 
 
 class StructMCPServer:
-    """FastMCP-based MCP Server for struct tool operations."""
+    """FastMCP-based MCP Server for structkit tool operations."""
 
     def __init__(self):
         self.app = FastMCP("structkit-mcp-server", version=__version__)

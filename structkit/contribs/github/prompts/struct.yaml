@@ -1,7 +1,7 @@
 files:
   - .github/prompts/struct.prompt.md:
       content: |
-        # Struct Assistant
+        # StructKit Assistant
 
         ## Role
 

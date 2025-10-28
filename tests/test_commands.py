@@ -66,7 +66,7 @@ def test_with_value_renders_jinja2_with_mappings():
             "devops": "devops-team"
         }
     }
-    # Simulate a 'with' dict as in the folder struct logic
+    # Simulate a 'with' dict as in the folder structkit logic
     with_dict = {"team": "{{@ mappings.teams.devops @}}"}
     template_vars = {}
     renderer = TemplateRenderer(

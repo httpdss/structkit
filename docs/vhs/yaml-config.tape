@@ -35,7 +35,7 @@ Sleep 3s
 
 Type "# Validate the configuration"
 Enter
-Type "struct validate my-project.yaml"
+Type "structkit validate my-project.yaml"
 Enter
 Sleep 2s
 

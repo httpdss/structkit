@@ -154,7 +154,7 @@
 ## Github structkit prompt
 
 - **File**: `github/prompt/struct.yaml`
-- **Description**: Defines the structure for a Struct prompt in GitHub.
+- **Description**: Defines the structure for a StructKit prompt in GitHub.
 - **Structure name**: `github/prompt/struct`
 
 ## Kubernetes Manifests

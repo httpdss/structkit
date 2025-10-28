@@ -30,14 +30,14 @@ class AdvancedSearch {
           'generate project structure yaml configuration template variables',
       },
       {
-        title: 'struct validate',
+        title: 'structkit validate',
         description: 'Validate YAML configuration syntax and structure',
         category: 'Commands',
         url: '#api-preview',
         content: 'validate yaml configuration syntax structure check',
       },
       {
-        title: 'struct list',
+        title: 'structkit list',
         description: 'List available structure templates',
         category: 'Commands',
         url: '#api-preview',

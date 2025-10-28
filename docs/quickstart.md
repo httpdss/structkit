@@ -27,7 +27,7 @@ docker run \
 docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
-  ghcr.io/httpdss/struct:alpine generate \
+  ghcr.io/httpdss/structkit:alpine generate \
   file:///workdir/example/structure.yaml \
   /workdir/example_output
 ```

@@ -3,3 +3,4 @@ flake8
 pytest-md-report
 pre-commit
 pytest-cov
+mypy

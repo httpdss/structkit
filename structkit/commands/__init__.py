@@ -1,6 +1,7 @@
 import logging
 from structkit.completers import log_level_completer
 
+
 # Base command class
 class Command:
     def __init__(self, parser):

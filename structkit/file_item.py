@@ -1,5 +1,4 @@
 # FILE: file_item.py
-import requests
 import os
 import shutil
 import logging
@@ -10,6 +9,7 @@ from structkit.content_fetcher import ContentFetcher
 from structkit.model_wrapper import ModelWrapper
 
 load_dotenv()
+
 
 class FileItem:
     def __init__(self, properties):
@@ -55,7 +55,12 @@ class FileItem:
 
         user_prompt = self.user_prompt
         if existing_content:
-          user_prompt += f"\n\nCurrent file content (if any):\n```\n{existing_content}\n```\n\nPlease modify existing content so that it meets the new requirements. Your output should be plain text, without any code blocks or formatting. Do not include any explanations or comments. Just provide the final content of the file."
+          user_prompt += (
+            f"\n\nCurrent file content (if any):\n```\n{existing_content}\n```\n\n"
+            "Please modify existing content so that it meets the new requirements. "
+            "Your output should be plain text, without any code blocks or formatting. "
+            "Do not include any explanations or comments. Just provide the final content of the file."
+          )
 
         self.logger.debug(f"Using system prompt: {system_prompt}")
         self.logger.debug(f"Using user prompt: {user_prompt}")

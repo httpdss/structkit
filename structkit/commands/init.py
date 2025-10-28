@@ -26,6 +26,7 @@ BASIC_STRUCTKIT_YAML = textwrap.dedent(
     """
 ).lstrip()
 
+
 class InitCommand(Command):
   def __init__(self, parser):
     super().__init__(parser)

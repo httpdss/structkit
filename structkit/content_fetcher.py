@@ -21,6 +21,7 @@ try:
 except ImportError:
   gcs_available = False
 
+
 class ContentFetcher:
   def __init__(self, cache_dir=None):
     self.logger = logging.getLogger(__name__)

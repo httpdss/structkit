@@ -10,7 +10,7 @@ tags:
 Install StructKit with pip:
 
 ```sh
-pip install git+https://github.com/httpdss/structkit.git
+pip install structkit
 ```
 
 !!! tip "Enable Auto-Completion"

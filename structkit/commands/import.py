@@ -1,6 +1,5 @@
 from structkit.commands import Command
-import os
-import yaml
+
 
 # Import command class
 # This class is responsible for importing a structure definition given a file path. It will create the structure in the base path provided.
@@ -15,7 +14,6 @@ class ImportCommand(Command):
     self.logger.info(f"Importing structure from {args.import_from} to {args.output_path}")
 
     self._import_structure(args)
-
 
   def _import_structure(self, args):
     raise NotImplementedError("This method needs to be implemented")

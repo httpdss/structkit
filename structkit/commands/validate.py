@@ -1,9 +1,9 @@
-import os
 import yaml
 from dotenv import load_dotenv
 from structkit.commands import Command
 
 load_dotenv()
+
 
 # Validate command class
 class ValidateCommand(Command):
@@ -33,7 +33,6 @@ class ValidateCommand(Command):
       self._validate_structure_config(config.get('structure') or config.get('files', []))
       self._validate_folders_config(config.get('folders', []))
       self._validate_variables_config(config.get('variables', []))
-
 
     # Validate the 'folders' key in the configuration file
     # folders should be defined as a list of dictionaries
@@ -65,7 +64,6 @@ class ValidateCommand(Command):
             if 'with' in content and not isinstance(content['with'], dict):
               raise ValueError(f"The 'with' value for '{name}' must be a dictionary.")
 
-
     # Validate the 'variables' key in the configuration file
     # variables should be defined as a list of dictionaries
     # each dictionary should have a 'name' key and optionall 'default' value
@@ -96,7 +94,6 @@ class ValidateCommand(Command):
               raise ValueError(f"Invalid type for '{name}'. Must be 'string', 'number' or 'boolean'.")
             if 'default' in content and content['type'] == 'boolean' and not isinstance(content['default'], bool):
               raise ValueError(f"Invalid default value for '{name}'. Must be a boolean.")
-
 
     def _validate_structure_config(self, structure):
       if not isinstance(structure, list):

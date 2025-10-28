@@ -3,6 +3,7 @@ import os
 
 SUPPORTED_SHELLS = ["bash", "zsh", "fish"]
 
+
 class CompletionCommand(Command):
   def __init__(self, parser):
     super().__init__(parser)

@@ -1,9 +1,7 @@
 from structkit.commands import Command
 import os
-import yaml
 import asyncio
-from structkit.file_item import FileItem
-from structkit.utils import project_path
+
 
 # List command class
 class ListCommand(Command):
@@ -16,7 +14,7 @@ class ListCommand(Command):
     parser.set_defaults(func=self.execute)
 
   def execute(self, args):
-    self.logger.info(f"Listing available structures")
+    self.logger.info("Listing available structures")
     if args.mcp:
       self._list_structures_mcp(args)
     else:

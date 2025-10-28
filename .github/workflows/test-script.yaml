@@ -36,6 +36,11 @@ jobs:
       run: flake8 --max-line-length=200 .
       continue-on-error: true
 
+    - name: Type check with mypy
+      run: |
+        mypy structkit tests
+      continue-on-error: true
+
     - name: Run tests
       env:
         REPORT_OUTPUT: md_report.md

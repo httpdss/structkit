@@ -1,7 +1,6 @@
 # FILE: template_renderer.py
 import logging
 import os
-import sys
 from jinja2 import Environment, meta
 from structkit.filters import (
   get_latest_release,
@@ -18,6 +17,7 @@ from structkit.filters import (
 )
 from structkit.input_store import InputStore
 from structkit.utils import get_current_repo
+
 
 class TemplateRenderer:
     def __init__(self, config_variables, input_store, non_interactive, mappings=None):
@@ -89,7 +89,6 @@ class TemplateRenderer:
           if env_key and os.environ.get(env_key) is not None:
             defaults[name] = os.environ.get(env_key)
       return defaults
-
 
     def render_template(self, content, vars):
       # Inject mappings into the template context

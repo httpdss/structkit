@@ -1,6 +1,7 @@
 import json
 import os
 
+
 class InputStore:
 
   def __init__(self, input_file):

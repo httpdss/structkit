@@ -22,9 +22,9 @@ Type "source .venv/bin/activate"
 Enter
 Sleep 1s
 
-Type "# Install StructKit from GitHub"
+Type "# Install StructKit"
 Enter
-Type "pip install git+https://github.com/httpdss/structkit.git"
+Type "pip install structkit"
 Enter
 Sleep 5s
 

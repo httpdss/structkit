@@ -19,6 +19,7 @@ except Exception:  # pragma: no cover - optional at runtime
 
 load_dotenv()
 
+
 def get_parser():
     parser = argparse.ArgumentParser(
       description="Generate project structure from YAML configuration.",
@@ -51,6 +52,7 @@ def get_parser():
 
     return parser
 
+
 def main():
     parser = get_parser()
 
@@ -80,6 +82,7 @@ def main():
     configure_logging(level=logging_level, log_file=getattr(args, 'log_file', None))
 
     args.func(args)
+
 
 if __name__ == "__main__":
     main()

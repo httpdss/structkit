@@ -283,6 +283,7 @@ class StructMCPServer:
             fastmcp_log_level: Log level for FastMCP internals (e.g., DEBUG, INFO)
         """
         loop = asyncio.get_running_loop()
+
         def _run():
             # Apply FastMCP-specific logger level if provided
             if fastmcp_log_level:

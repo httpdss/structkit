@@ -53,6 +53,11 @@ on:
         type: string
         required: false
         default: 'structures'
+      version:
+        description: 'StructKit version to install'
+        type: string
+        required: false
+        default: 'main'
     secrets:
       token:
         description: 'GitHub token'
@@ -70,9 +75,16 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install StructKit
+      - name: Install StructKit (latest)
+        if: ${{ inputs.version == 'main' }}
         run: |
           pip install git+https://github.com/httpdss/structkit.git
+          structkit -h
+
+      - name: Install StructKit (specific version)
+        if: ${{ inputs.version != 'main' }}
+        run: |
+          pip install structkit==${{ inputs.version }}
           structkit -h
 
       - name: Install custom structures

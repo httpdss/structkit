@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from structkit.commands import Command
 from structkit.mcp_server import StructMCPServer
 
@@ -9,24 +8,23 @@ class MCPCommand(Command):
     def __init__(self, parser):
         super().__init__(parser)
         parser.description = "MCP (Model Context Protocol) using FastMCP transports (stdio, http, sse)"
-        parser.add_argument('--server', action='store_true',
-                          help='Start the MCP server')
-        parser.add_argument('--transport', choices=['stdio', 'http', 'sse'], default='stdio',
-                          help='Transport protocol for the MCP server (default: stdio)')
+        parser.add_argument('--server', action='store_true', help='Start the MCP server')
+        parser.add_argument('--transport', choices=['stdio', 'http', 'sse'], default='stdio', help='Transport protocol for the MCP server (default: stdio)')
         # HTTP/SSE options
         parser.add_argument('--host', type=str, default='127.0.0.1', help='Host to bind for HTTP/SSE transports')
         parser.add_argument('--port', type=int, default=8000, help='Port to bind for HTTP/SSE transports')
         parser.add_argument('--path', type=str, default='/mcp', help='Endpoint path for HTTP/SSE transports')
-        parser.add_argument('--uvicorn-log-level', dest='uvicorn_log_level', type=str, default=None,
-                          help='Log level for the HTTP server (e.g., info, warning, error)')
-        parser.add_argument('--stateless-http', action='store_true', default=None,
-                          help='Use stateless HTTP mode (HTTP transport only)')
-        parser.add_argument('--no-banner', dest='show_banner', action='store_false', default=True,
-                          help='Disable FastMCP startup banner')
+        parser.add_argument('--uvicorn-log-level', dest='uvicorn_log_level', type=str, default=None, help='Log level for the HTTP server (e.g., info, warning, error)')
+        parser.add_argument('--stateless-http', action='store_true', default=None, help='Use stateless HTTP mode (HTTP transport only)')
+        parser.add_argument('--no-banner', dest='show_banner', action='store_false', default=True, help='Disable FastMCP startup banner')
         # Debugging options
         parser.add_argument('--debug', action='store_true', help='Enable debug mode (sets structkit and FastMCP loggers to DEBUG by default)')
-        parser.add_argument('--fastmcp-log-level', dest='fastmcp_log_level', type=str, default=None,
-                          help='Log level for FastMCP internals (e.g., DEBUG, INFO). Overrides --debug for FastMCP if provided')
+        parser.add_argument(
+            '--fastmcp-log-level',
+            dest='fastmcp_log_level',
+            type=str,
+            default=None,
+            help='Log level for FastMCP internals (e.g., DEBUG, INFO). Overrides --debug for FastMCP if provided')
         parser.set_defaults(func=self.execute)
 
     def execute(self, args):

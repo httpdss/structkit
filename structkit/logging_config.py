@@ -2,6 +2,7 @@
 import logging
 import colorlog
 
+
 def configure_logging(level=logging.INFO, log_file=None):
     """Configure logging with colorlog."""
     handler = colorlog.StreamHandler()

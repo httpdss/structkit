@@ -4,8 +4,10 @@ import asyncio
 
 from structkit.commands import Command
 
+
 # Info command class for exposing information about the structure
 class InfoCommand(Command):
+
     def __init__(self, parser):
       super().__init__(parser)
       parser.description = "Show information about the package or structure definition"
@@ -45,7 +47,7 @@ class InfoCommand(Command):
       print(f"   📌 Description: {config.get('description', 'No description')}\n")
 
       if config.get('files'):
-        print(f"   📌 Files:")
+        print("   📌 Files:")
         for item in config.get('files', []):
           for name, content in item.items():
             print(f"       - {name} ")
@@ -54,7 +56,7 @@ class InfoCommand(Command):
             #   print(f"       {line}")
 
       if config.get('folders'):
-        print(f"   📌 Folders:")
+        print("   📌 Folders:")
         for folder in config.get('folders', []):
           print(f"     - {folder}")
           # print(f"     - {folder}: {folder.get('struct', 'No structure')}")

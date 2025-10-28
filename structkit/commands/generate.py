@@ -8,6 +8,7 @@ from structkit.template_renderer import TemplateRenderer
 
 import subprocess
 
+
 # Generate command class
 class GenerateCommand(Command):
   def __init__(self, parser):
@@ -22,7 +23,13 @@ class GenerateCommand(Command):
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
     parser.add_argument('-v', '--vars', type=str, help='Template variables in the format KEY1=value1,KEY2=value2')
     parser.add_argument('-b', '--backup', type=str, help='Path to the backup folder')
-    parser.add_argument('-f', '--file-strategy', type=str, choices=['overwrite', 'skip', 'append', 'rename', 'backup'], default='overwrite', help='Strategy for handling existing files').completer = file_strategy_completer
+    parser.add_argument(
+      '-f',
+      '--file-strategy',
+      type=str,
+      choices=['overwrite', 'skip', 'append', 'rename', 'backup'],
+      default='overwrite',
+      help='Strategy for handling existing files').completer = file_strategy_completer
     parser.add_argument('-p', '--global-system-prompt', type=str, help='Global system prompt for OpenAI')
     parser.add_argument('--non-interactive', action='store_true', help='Run the command in non-interactive mode')
     parser.add_argument('--mappings-file', type=str, action='append',
@@ -113,7 +120,7 @@ class GenerateCommand(Command):
         return yaml.safe_load(f)
 
   def execute(self, args):
-    self.logger.info(f"Generating structure")
+    self.logger.info("Generating structure")
     self.logger.info(f"  Structure definition: {args.structure_definition}")
     self.logger.info(f"  Base path: {args.base_path}")
 
@@ -167,8 +174,6 @@ class GenerateCommand(Command):
   def _create_structure(self, args, mappings=None, summary=None, print_summary=True):
     if isinstance(args, dict):
         args = argparse.Namespace(**args)
-    this_file = os.path.dirname(os.path.realpath(__file__))
-    contribs_path = os.path.join(this_file, "..", "contribs")
 
     config = self._load_yaml_config(args.structure_definition, args.structures_path)
     if config is None:
@@ -302,9 +307,9 @@ class GenerateCommand(Command):
 
         # check if content has structkit value
         if 'struct' in content:
-          self.logger.info(f"Generating structure")
+          self.logger.info("Generating structure")
           self.logger.info(f"  Folder: {folder}")
-          self.logger.info(f"  Struct(s):")
+          self.logger.info("  Struct(s):")
           if isinstance(content['struct'], list):
             # iterate over the list of structures
             for struct in content['struct']:

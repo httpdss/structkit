@@ -33,7 +33,7 @@ class CompletionCommand(Command):
       print("python -m pip install shtab")
       print("\n# Generate static bash completion for 'struct':")
       print("mkdir -p ~/.local/share/bash-completion/completions")
-      print("structkit --print-completion bash > ~/.local/share/bash-completion/completions/struct")
+      print("structkit --print-completion bash > ~/.local/share/bash-completion/completions/structkit")
       print("\n# Apply now (or open a new shell):")
       print("source ~/.bashrc")
 
@@ -42,7 +42,7 @@ class CompletionCommand(Command):
       print("python -m pip install shtab")
       print("\n# Generate static zsh completion for 'struct':")
       print("mkdir -p ~/.zfunc")
-      print("structkit --print-completion zsh > ~/.zfunc/_struct")
+      print("structkit --print-completion zsh > ~/.zfunc/_structkit")
       print("\n# Ensure zsh loads user functions/completions (append to ~/.zshrc if needed):")
       print('echo "fpath=(~/.zfunc $fpath)" >> ~/.zshrc')
       print('echo "autoload -U compinit && compinit" >> ~/.zshrc')
@@ -54,9 +54,9 @@ class CompletionCommand(Command):
       print("python -m pip install shtab")
       print("\n# Generate static fish completion for 'struct':")
       print('mkdir -p ~/.config/fish/completions')
-      print('structkit --print-completion fish > ~/.config/fish/completions/struct.fish')
+      print('structkit --print-completion fish > ~/.config/fish/completions/structkit.fish')
       print("\n# Apply now:")
-      print("fish -c 'source ~/.config/fish/completions/struct.fish'")
+      print("fish -c 'source ~/.config/fish/completions/structkit.fish'")
 
     else:
       self.logger.error(f"Unsupported shell: {shell}. Supported: {', '.join(SUPPORTED_SHELLS)}")

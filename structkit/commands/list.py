@@ -60,7 +60,7 @@ class ListCommand(Command):
     for structure in sorted_list:
       print(f" - {structure}")
 
-    print("\nUse 'struct generate' to generate the structure")
+    print("\nUse 'structkit generate' to generate the structure")
     print("Note: Structures with '+' sign are custom structures")
 
   def _list_structures_mcp(self, args):

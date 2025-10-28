@@ -22,7 +22,7 @@ class AdvancedSearch {
     this.searchIndex = [
       // Commands
       {
-        title: 'struct generate',
+        title: 'structkit generate',
         description: 'Generate project structure from YAML configuration',
         category: 'Commands',
         url: '#api-preview',

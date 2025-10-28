@@ -33,9 +33,9 @@ class StructPhase3 {
         icon: 'fas fa-terminal',
         items: [
           {
-            title: 'struct generate',
+            title: 'structkit generate',
             description: 'Generate project structure from configuration',
-            code: 'struct generate config.yaml ./output'
+            code: 'structkit generate config.yaml ./output'
           },
           {
             title: 'struct validate',
@@ -143,16 +143,16 @@ class StructPhase3 {
         methods: [
           {
             type: 'CMD',
-            name: 'struct generate',
+            name: 'structkit generate',
             description: 'Generate project structure from YAML configuration',
             code: `# Basic usage
-struct generate config.yaml ./output
+structkit generate config.yaml ./output
 
 # With variables
-struct generate config.yaml ./output --var project_name="MyProject"
+structkit generate config.yaml ./output --var project_name="MyProject"
 
 # Dry run
-struct generate config.yaml ./output --dry-run`
+structkit generate config.yaml ./output --dry-run`
           },
           {
             type: 'CMD',

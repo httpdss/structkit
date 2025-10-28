@@ -8,10 +8,10 @@ BASIC_STRUCTKIT_YAML = textwrap.dedent(
     # Edit as needed to customize your project bootstrap
 
     pre_hooks:
-      - echo "Starting struct generation"
+      - echo "Starting structkit generation"
 
     post_hooks:
-      - echo "Struct generation completed"
+      - echo "Structkit generation completed"
 
     files:
       - README.md: |

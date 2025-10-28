@@ -89,7 +89,7 @@ Sleep 2s
 
 Type "# Generate for development environment"
 Enter
-Type "struct generate multi-mapping-project.yaml ./dev-app"
+Type "structkit generate multi-mapping-project.yaml ./dev-app"
 Enter
 Sleep 3s
 

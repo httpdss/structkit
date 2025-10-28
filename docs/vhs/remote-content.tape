@@ -39,7 +39,7 @@ Sleep 2s
 
 Type "# Generate project with remote content"
 Enter
-Type "struct generate remote-example.yaml ./remote-demo"
+Type "structkit generate remote-example.yaml ./remote-demo"
 Enter
 Sleep 4s
 

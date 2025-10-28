@@ -57,7 +57,7 @@ Sleep 2s
 
 Type "# Generate project for backend team"
 Enter
-Type "struct generate project-with-mapping.yaml ./backend-project"
+Type "structkit generate project-with-mapping.yaml ./backend-project"
 Enter
 Sleep 3s
 

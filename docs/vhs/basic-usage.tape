@@ -14,7 +14,7 @@ Type "# First, let's see what structures are available"
 Enter
 Sleep 500ms
 
-Type "struct list"
+Type "structkit list"
 Enter
 Sleep 2s
 
@@ -22,7 +22,7 @@ Type "# Let's generate a simple Python project"
 Enter
 Sleep 500ms
 
-Type "struct generate project/python ./my-python-app"
+Type "structkit generate project/python ./my-python-app"
 Enter
 Sleep 3s
 

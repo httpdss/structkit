@@ -13,7 +13,7 @@ Sleep 1s
 
 Type "# Generate JSON schema for VSCode autocompletion"
 Enter
-Type "struct generate-schema"
+Type "structkit generate-schema"
 Enter
 Sleep 3s
 
@@ -21,7 +21,7 @@ Type "# Save schema to a file for VSCode"
 Enter
 Type "mkdir -p .vscode"
 Enter
-Type "struct generate-schema --output .vscode/struct-plugins.schema.json"
+Type "structkit generate-schema --output .vscode/struct-plugins.schema.json"
 Enter
 Sleep 2s
 

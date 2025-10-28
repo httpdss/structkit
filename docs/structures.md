@@ -109,7 +109,7 @@
 - **Description**: Contains the structure for a GitHub Actions workflow to draft releases.
 - **Structure name**: `github/workflows/release-drafter`
 
-## GitHub Run Struct Workflow
+## GitHub Run StructKit Workflow
 
 - **File**: `github/workflows/run-struct.yaml`
 - **Description**: Defines the structure for a GitHub Actions workflow to run Struct.

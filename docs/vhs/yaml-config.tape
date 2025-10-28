@@ -41,7 +41,7 @@ Sleep 2s
 
 Type "# Generate the project"
 Enter
-Type "struct generate my-project.yaml ./my-custom-project"
+Type "structkit generate my-project.yaml ./my-custom-project"
 Enter
 Sleep 3s
 

@@ -17,7 +17,7 @@ jobs:
 
       - name: Install StructKit
         run: |
-          pip install git+https://github.com/httpdss/struct.git
+          pip install git+https://github.com/httpdss/structkit.git
           structkit -h
 
       - name: Run StructKit

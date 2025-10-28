@@ -24,7 +24,7 @@ Sleep 1s
 
 Type "# Install StructKit from GitHub"
 Enter
-Type "pip install git+https://github.com/httpdss/struct.git"
+Type "pip install git+https://github.com/httpdss/structkit.git"
 Enter
 Sleep 5s
 

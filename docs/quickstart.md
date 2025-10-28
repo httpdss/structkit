@@ -42,7 +42,7 @@ Inside the container:
 
 ```sh
 apk add python-pip git vim
-pip install git+https://github.com/httpdss/struct.git
+pip install git+https://github.com/httpdss/structkit.git
 mkdir example
 cd example/
 touch structure.yaml

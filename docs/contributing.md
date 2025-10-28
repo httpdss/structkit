@@ -23,7 +23,7 @@ Thank you for your interest in contributing to StructKit! We welcome contributio
 Clone the repository:
 
 ```bash
-git clone https://github.com/httpdss/struct.git
+git clone https://github.com/httpdss/structkit.git
 cd struct
 ```
 

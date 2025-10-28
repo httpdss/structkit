@@ -13,7 +13,7 @@ This guide will help you set up a development environment for contributing to St
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/httpdss/struct.git
+git clone https://github.com/httpdss/structkit.git
 cd struct
 ```
 

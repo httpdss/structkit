@@ -28,7 +28,7 @@
 
 ```bash
 # Install via pip
-pip install git+https://github.com/httpdss/struct.git
+pip install git+https://github.com/httpdss/structkit.git
 
 # Or run with Docker
 docker run -v $(pwd):/workdir ghcr.io/httpdss/struct:main generate my-config.yaml ./output

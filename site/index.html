@@ -232,10 +232,10 @@
             <div class="code-block">
               <button class="copy-button">Copy</button>
               <pre><code># Install from GitHub
-pip install git+https://github.com/httpdss/struct.git
+pip install git+https://github.com/httpdss/structkit.git
 
 # Verify installation
-struct --version</code></pre>
+structkit --version</code></pre>
             </div>
             <p class="text-secondary mt-4">
               Requires Python 3.8+ and pip. This is the recommended installation method for most users.
@@ -246,10 +246,10 @@ struct --version</code></pre>
             <div class="code-block">
               <button class="copy-button">Copy</button>
               <pre><code># Pull and run with Docker
-docker run -v $(pwd):/workdir ghcr.io/httpdss/struct:main generate my-config.yaml ./output
+docker run -v $(pwd):/workdir ghcr.io/httpdss/structkit:main generate my-config.yaml ./output
 
 # Create an alias for easier usage
-alias struct='docker run -v $(pwd):/workdir ghcr.io/httpdss/struct:main'</code></pre>
+alias structkit='docker run -v $(pwd):/workdir ghcr.io/httpdss/structkit:main'</code></pre>
             </div>
             <p class="text-secondary mt-4">
               Perfect for CI/CD environments and when you don't want to install Python locally.
@@ -260,8 +260,8 @@ alias struct='docker run -v $(pwd):/workdir ghcr.io/httpdss/struct:main'</code><
             <div class="code-block">
               <button class="copy-button">Copy</button>
               <pre><code># Clone the repository
-git clone https://github.com/httpdss/struct.git
-cd struct
+git clone https://github.com/httpdss/structkit.git
+cd structkit
 
 # Install in development mode
 pip install -e .

@@ -118,7 +118,7 @@ files:
 **Workaround**: Use the `-u $(id -u):$(id -g)` option when running Docker:
 
 ```sh
-docker run -v $(pwd):/workdir -u $(id -u):$(id -g) ghcr.io/httpdss/struct:main generate file://config.yaml .
+docker run -v $(pwd):/workdir -u $(id -u):$(id -g) ghcr.io/httpdss/structkit:main generate file://config.yaml .
 ```
 
 **Status**: Docker behavior

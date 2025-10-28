@@ -16,7 +16,7 @@ tags:
 docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
-  ghcr.io/httpdss/struct:main generate \
+  ghcr.io/httpdss/structkit:main generate \
   file:///workdir/example/structure.yaml \
   /workdir/example_output
 ```

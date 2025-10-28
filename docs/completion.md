@@ -167,7 +167,7 @@ When running StructKit in Docker, completion won't work directly. However, you c
 ```sh
 #!/bin/bash
 # struct-wrapper.sh
-docker run --rm -v $(pwd):/workdir ghcr.io/httpdss/struct:main "$@"
+docker run --rm -v $(pwd):/workdir ghcr.io/httpdss/structkit:main "$@"
 ```
 
 Then set up completion for the wrapper:

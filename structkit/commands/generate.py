@@ -17,7 +17,13 @@ class GenerateCommand(Command):
     structure_arg = parser.add_argument('structure_definition', nargs='?', default='.struct.yaml', type=str, help='Path to the YAML configuration file (default: .struct.yaml)')
     structure_arg.completer = structures_completer
     parser.add_argument('base_path', nargs='?', default='.', type=str, help='Base path where the structure will be created (default: current directory)')
-    parser.add_argument('-s', '--structures-path', type=str, help='Path to structure definitions')
+    parser.add_argument(
+      '-s',
+      '--structures-path',
+      type=str,
+      help='Path to structure definitions',
+      default=os.getenv('STRUCTKIT_STRUCTURES_PATH')
+    )
     parser.add_argument('-n', '--input-store', type=str, help='Path to the input store', default='/tmp/structkit/input.json')
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
@@ -120,16 +126,13 @@ class GenerateCommand(Command):
         return yaml.safe_load(f)
 
   def execute(self, args):
+    # Log when using STRUCTKIT_STRUCTURES_PATH environment variable
+    if args.structures_path and args.structures_path == os.getenv('STRUCTKIT_STRUCTURES_PATH'):
+      self.logger.info(f"Using STRUCTKIT_STRUCTURES_PATH: {args.structures_path}")
+
     self.logger.info("Generating structure")
     self.logger.info(f"  Structure definition: {args.structure_definition}")
     self.logger.info(f"  Base path: {args.base_path}")
-
-    # Resolve structures_path precedence: CLI arg > STRUCTKIT_STRUCTURES_PATH env > None
-    if not args.structures_path:
-      env_structures_path = os.getenv('STRUCTKIT_STRUCTURES_PATH')
-      if env_structures_path:
-        args.structures_path = env_structures_path
-        self.logger.info(f"Using STRUCTKIT_STRUCTURES_PATH: {env_structures_path}")
 
     # Load mappings if provided
     mappings = {}

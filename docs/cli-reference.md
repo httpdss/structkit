@@ -26,7 +26,13 @@ These options are available for all commands:
 The following environment variables can be used to configure default values for CLI arguments:
 
 - `STRUCTKIT_LOG_LEVEL`: Set the default logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Overridden by the `--log` flag.
-- `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used when the `--structures-path` flag is not provided.
+- `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used as the default value for the `--structures-path` flag when not explicitly provided. When set, the CLI will log an info message indicating that this environment variable is being used.
+
+**Precedence:**
+
+1. Explicit `--structures-path` CLI flag (highest priority)
+2. `STRUCTKIT_STRUCTURES_PATH` environment variable
+3. Default system paths (lowest priority)
 
 **Example:**
 
@@ -37,6 +43,10 @@ export STRUCTKIT_STRUCTURES_PATH=~/custom-structures
 # Now you can omit the -s flag
 structkit generate python-basic ./my-project
 # Equivalent to: structkit generate -s ~/custom-structures python-basic ./my-project
+
+# CLI flag takes precedence over environment variable
+structkit generate -s /another/path python-basic ./my-project
+# This will use /another/path, not ~/custom-structures
 ```
 
 ## Commands
@@ -93,7 +103,7 @@ structkit generate
 
 - `structure_definition` (optional): Path to the YAML configuration file (default: `.struct.yaml`).
 - `base_path` (optional): Base path where the structure will be created (default: `.`).
-- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can also be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable (CLI flag takes precedence).
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable. When using the environment variable (and no explicit CLI flag), an info-level log message will be emitted indicating which path is being used.
 - `-n INPUT_STORE, --input-store INPUT_STORE`: Path to the input store.
 - `-d, --dry-run`: Perform a dry run without creating any files or directories.
 - `--diff`: Show unified diffs for files that would be created/modified (works with `--dry-run` and in `-o console` mode).

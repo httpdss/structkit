@@ -124,6 +124,13 @@ class GenerateCommand(Command):
     self.logger.info(f"  Structure definition: {args.structure_definition}")
     self.logger.info(f"  Base path: {args.base_path}")
 
+    # Resolve structures_path precedence: CLI arg > STRUCTKIT_STRUCTURES_PATH env > None
+    if not args.structures_path:
+      env_structures_path = os.getenv('STRUCTKIT_STRUCTURES_PATH')
+      if env_structures_path:
+        args.structures_path = env_structures_path
+        self.logger.info(f"Using STRUCTKIT_STRUCTURES_PATH: {env_structures_path}")
+
     # Load mappings if provided
     mappings = {}
     if getattr(args, 'mappings_file', None):

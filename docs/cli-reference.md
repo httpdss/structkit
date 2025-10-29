@@ -21,6 +21,24 @@ These options are available for all commands:
 - `-c CONFIG_FILE, --config-file CONFIG_FILE`: Path to a configuration file.
 - `-i LOG_FILE, --log-file LOG_FILE`: Path to a log file.
 
+## Environment Variables
+
+The following environment variables can be used to configure default values for CLI arguments:
+
+- `STRUCTKIT_LOG_LEVEL`: Set the default logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Overridden by the `--log` flag.
+- `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used when the `--structures-path` flag is not provided.
+
+**Example:**
+
+```sh
+# Set a default structures path
+export STRUCTKIT_STRUCTURES_PATH=~/custom-structures
+
+# Now you can omit the -s flag
+structkit generate python-basic ./my-project
+# Equivalent to: structkit generate -s ~/custom-structures python-basic ./my-project
+```
+
 ## Commands
 
 ### `info`
@@ -75,7 +93,7 @@ structkit generate
 
 - `structure_definition` (optional): Path to the YAML configuration file (default: `.struct.yaml`).
 - `base_path` (optional): Base path where the structure will be created (default: `.`).
-- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can also be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable (CLI flag takes precedence).
 - `-n INPUT_STORE, --input-store INPUT_STORE`: Path to the input store.
 - `-d, --dry-run`: Perform a dry run without creating any files or directories.
 - `--diff`: Show unified diffs for files that would be created/modified (works with `--dry-run` and in `-o console` mode).

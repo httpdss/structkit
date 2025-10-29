@@ -130,6 +130,10 @@ class GenerateCommand(Command):
     self.logger.info(f"  Structure definition: {args.structure_definition}")
     self.logger.info(f"  Base path: {args.base_path}")
 
+    # Log if using STRUCTKIT_STRUCTURES_PATH environment variable
+    if args.structures_path and os.getenv('STRUCTKIT_STRUCTURES_PATH') == args.structures_path:
+      self.logger.info(f"Using STRUCTKIT_STRUCTURES_PATH: {args.structures_path}")
+
     # Load mappings if provided
     mappings = {}
     if getattr(args, 'mappings_file', None):

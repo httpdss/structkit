@@ -12,7 +12,10 @@ class InfoCommand(Command):
       super().__init__(parser)
       parser.description = "Show information about the package or structure definition"
       parser.add_argument('structure_definition', type=str, help='Name of the structure definition')
-      parser.add_argument('-s', '--structures-path', type=str, help='Path to structure definitions')
+      parser.add_argument(
+        '-s', '--structures-path', type=str, help='Path to structure definitions',
+        default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
+      )
       parser.add_argument('--mcp', action='store_true', help='Enable MCP (Model Context Protocol) integration')
 
       parser.set_defaults(func=self.execute)

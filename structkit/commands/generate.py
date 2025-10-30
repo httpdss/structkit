@@ -22,7 +22,7 @@ class GenerateCommand(Command):
       '--structures-path',
       type=str,
       help='Path to structure definitions',
-      default=os.getenv('STRUCTKIT_STRUCTURES_PATH')
+      default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
     parser.add_argument('-n', '--input-store', type=str, help='Path to the input store', default='/tmp/structkit/input.json')
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')

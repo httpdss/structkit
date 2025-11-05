@@ -241,9 +241,9 @@ generate_structure:
       - output/
   only:
     - main
-  environment:
-    - STRUCTKIT_NON_INTERACTIVE: "true"
-    - STRUCTKIT_FILE_STRATEGY: "backup"
+  variables:
+    STRUCTKIT_NON_INTERACTIVE: "true"
+    STRUCTKIT_FILE_STRATEGY: "backup"
 ```
 
 ## Best Practices
@@ -272,9 +272,8 @@ This should not happen - CLI arguments always take precedence. If you're experie
 
 ### Boolean environment variables not working correctly
 
-For `STRUCTKIT_NON_INTERACTIVE`, only `true`, `1`, and `yes` (case-insensitive) are recognized as true values. All other values are treated as false, including:
+For `STRUCTKIT_NON_INTERACTIVE`, only `true`, `1`, and `yes` (case-insensitive, e.g., `"True"`, `"TRUE"`, `"YeS"`) are recognized as true values. All other values are treated as false, including:
 - `"true "` (with trailing space)
-- `"True"` in mixed case
 - `"on"` or `"enable"`
 
 Use one of the recognized values for reliable behavior.

@@ -200,7 +200,8 @@ services:
 
 ## CI/CD Pipeline Integration
 
-**GitHub Actions Example:**
+### GitHub Actions - Basic Example
+
 ```yaml
 name: Generate Project Structure
 
@@ -229,21 +230,49 @@ jobs:
           path: generated-project/
 ```
 
-**GitLab CI Example:**
+### GitHub Actions - Advanced Example with Custom Structures
+
 ```yaml
-generate_structure:
-  image: python:3.11
-  script:
-    - pip install structkit
-    - structkit generate my-structure ./output
-  artifacts:
-    paths:
-      - output/
-  only:
-    - main
-  variables:
-    STRUCTKIT_NON_INTERACTIVE: "true"
-    STRUCTKIT_FILE_STRATEGY: "backup"
+name: Generate with Custom Structures
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      STRUCTKIT_NON_INTERACTIVE: "true"
+      STRUCTKIT_LOG_LEVEL: DEBUG
+      STRUCTKIT_OUTPUT_MODE: console
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install StructKit
+        run: pip install structkit
+
+      - name: Generate default structure
+        run: structkit generate python-basic ./my-project
+
+      - name: Generate with custom backup strategy
+        env:
+          STRUCTKIT_BACKUP_PATH: ./backups
+          STRUCTKIT_FILE_STRATEGY: backup
+        run: structkit generate terraform-module ./my-infrastructure
+
+      - name: Create summary
+        run: |
+          echo "## Generated Structures" >> $GITHUB_STEP_SUMMARY
+          echo "- Python project generated" >> $GITHUB_STEP_SUMMARY
+          echo "- Terraform module generated" >> $GITHUB_STEP_SUMMARY
 ```
 
 ## Best Practices

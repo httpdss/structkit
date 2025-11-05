@@ -90,7 +90,7 @@ def test_generate_schema_command_init(parser):
     assert 'output' in actions
 
     # Check help text
-    assert actions['structures_path'].help == 'Path to structure definitions'
+    assert actions['structures_path'].help == 'Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)'
     assert actions['output'].help == 'Output file path for the schema (default: stdout)'
 
 

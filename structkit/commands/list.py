@@ -9,7 +9,7 @@ class ListCommand(Command):
     super().__init__(parser)
     parser.description = "List available structures"
     parser.add_argument(
-      '-s', '--structures-path', type=str, help='Path to structure definitions',
+      '-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
     parser.add_argument('--names-only', action='store_true', help='Print only structure names, one per line (for shell completion)')

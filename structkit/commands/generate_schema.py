@@ -7,7 +7,7 @@ class GenerateSchemaCommand(Command):
     def __init__(self, parser):
         super().__init__(parser)
         parser.description = "Generate JSON schema for available structures"
-        parser.add_argument('-s', '--structures-path', type=str, help='Path to structure definitions')
+        parser.add_argument('-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)', default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None))
         parser.add_argument('-o', '--output', type=str, help='Output file path for the schema (default: stdout)')
         parser.set_defaults(func=self.execute)
 

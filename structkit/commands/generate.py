@@ -21,27 +21,27 @@ class GenerateCommand(Command):
       '-s',
       '--structures-path',
       type=str,
-      help='Path to structure definitions',
+      help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
-    parser.add_argument('-n', '--input-store', type=str, help='Path to the input store', default='/tmp/structkit/input.json')
+    parser.add_argument('-n', '--input-store', type=str, help='Path to the input store (env: STRUCTKIT_INPUT_STORE)', default=os.getenv('STRUCTKIT_INPUT_STORE', '/tmp/structkit/input.json'))
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
     parser.add_argument('-v', '--vars', type=str, help='Template variables in the format KEY1=value1,KEY2=value2')
-    parser.add_argument('-b', '--backup', type=str, help='Path to the backup folder')
+    parser.add_argument('-b', '--backup', type=str, help='Path to the backup folder (env: STRUCTKIT_BACKUP_PATH)', default=os.getenv('STRUCTKIT_BACKUP_PATH', None))
     parser.add_argument(
       '-f',
       '--file-strategy',
       type=str,
       choices=['overwrite', 'skip', 'append', 'rename', 'backup'],
-      default='overwrite',
-      help='Strategy for handling existing files').completer = file_strategy_completer
-    parser.add_argument('-p', '--global-system-prompt', type=str, help='Global system prompt for OpenAI')
-    parser.add_argument('--non-interactive', action='store_true', help='Run the command in non-interactive mode')
+      default=os.getenv('STRUCTKIT_FILE_STRATEGY', 'overwrite'),
+      help='Strategy for handling existing files (env: STRUCTKIT_FILE_STRATEGY)').completer = file_strategy_completer
+    parser.add_argument('-p', '--global-system-prompt', type=str, help='Global system prompt for OpenAI (env: STRUCTKIT_GLOBAL_SYSTEM_PROMPT)', default=os.getenv('STRUCTKIT_GLOBAL_SYSTEM_PROMPT', None))
+    parser.add_argument('--non-interactive', action='store_true', help='Run the command in non-interactive mode (env: STRUCTKIT_NON_INTERACTIVE)', default=os.getenv('STRUCTKIT_NON_INTERACTIVE', '').lower() in ('true', '1', 'yes'))
     parser.add_argument('--mappings-file', type=str, action='append',
                         help='Path to a YAML file containing mappings to be used in templates (can be specified multiple times)')
     parser.add_argument('-o', '--output', type=str,
-                        choices=['console', 'file'], default='file', help='Output mode')
+                        choices=['console', 'file'], default=os.getenv('STRUCTKIT_OUTPUT_MODE', 'file'), help='Output mode (env: STRUCTKIT_OUTPUT_MODE)')
     parser.set_defaults(func=self.execute)
 
   def _parse_template_vars(self, vars_str):

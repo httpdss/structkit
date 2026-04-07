@@ -22,6 +22,42 @@
 - **✅ Validation & Schema** - Built-in YAML validation and IDE support
 - **🤖 MCP Integration** - Model Context Protocol support for AI-assisted development workflows
 
+## 🤔 Why structkit?
+
+Project scaffolding tools exist in most ecosystems, but structkit solves problems the others don't.
+
+### The problem with copy-paste and "golden repos"
+
+Most teams start with a "just copy the reference project" approach. This works until:
+- The reference repo falls out of date
+- Different teams diverge on standards
+- Onboarding a new engineer takes half a day of tribal knowledge transfer
+- A security baseline change means updating 20 repos manually
+
+### How structkit is different
+
+| Feature | cookiecutter | copier | **structkit** |
+|---|---|---|---|
+| Remote content (GitHub, S3, GCS, HTTP) | ❌ | ❌ | ✅ |
+| AI / MCP integration | ❌ | ❌ | ✅ |
+| Pre/post generation hooks | ✅ | ✅ | ✅ |
+| Dry run mode | ❌ | ✅ | ✅ |
+| YAML-first (no template repo required) | ❌ | ❌ | ✅ |
+| Multiple file conflict strategies | ❌ | ✅ | ✅ |
+| IDE schema validation | ❌ | ❌ | ✅ |
+
+**Key differentiators:**
+
+- **Remote-first content:** Reference your organization's canonical CI template from GitHub directly in your structkit config. When the template updates, all new projects get the update — no copy-paste maintenance.
+- **AI-native via MCP:** structkit ships a Model Context Protocol server. Your AI assistant can generate project scaffolds from natural language, using your templates as the source of truth.
+- **YAML-first:** Define structures directly in YAML. No need to manage a separate template repository.
+
+### Who uses structkit?
+
+- **Platform / DevEx teams** enforcing org-wide project standards across all services
+- **DevOps engineers** generating consistent Terraform modules, K8s manifests, and CI pipelines
+- **Individual developers** tired of recreating the same boilerplate across projects
+
 ## 🚀 Quick Start
 
 ### Installation

@@ -2,10 +2,10 @@
 
 ![StructKit Logo](./docs/assets/github-hero.gif)
 
-[![codecov](https://codecov.io/github/httpdss/structkit/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/struct)
-![GitHub issues](https://img.shields.io/github/issues/httpdss/struct)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/httpdss/struct)
-![GitHub stars](https://img.shields.io/github/stars/httpdss/struct?style=social)
+[![codecov](https://codecov.io/github/httpdss/structkit/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/structkit)
+![GitHub issues](https://img.shields.io/github/issues/httpdss/structkit)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/httpdss/structkit)
+![GitHub stars](https://img.shields.io/github/stars/httpdss/structkit?style=social)
 
 **StructKit** is a powerful, flexible tool for automating project structure creation through YAML configurations. Generate consistent project layouts, boilerplate code, and configurations with template variables, remote content fetching, and intelligent file handling.
 

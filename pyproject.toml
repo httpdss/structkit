@@ -5,13 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "structkit"
 version = "3.0.0"
-description = "A structured data processing tool"
+description = "YAML-first project scaffolding tool with remote content fetching, AI/MCP integration, and DevOps automation"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "httpdss"}]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -19,9 +20,29 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Environment :: Console",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
 ]
 requires-python = ">=3.8"
-keywords = ["data", "structure", "processing"]
+keywords = [
+    "project-scaffolding",
+    "project-template",
+    "scaffolding",
+    "cookiecutter-alternative",
+    "copier-alternative",
+    "yaml-template",
+    "code-generation",
+    "devops",
+    "mcp",
+    "model-context-protocol",
+    "devex",
+    "platform-engineering",
+    "project-structure",
+    "boilerplate",
+]
 
 dependencies = [
     "PyYAML>=6.0",

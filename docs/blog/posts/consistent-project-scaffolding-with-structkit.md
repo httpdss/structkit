@@ -95,4 +95,8 @@ Full documentation: [structkit docs](https://httpdss.github.io/structkit/)
 
 ---
 
+**Read next:** [structkit vs cookiecutter vs copier: Which Project Scaffolding Tool Is Right for You?](../structkit-vs-cookiecutter-vs-copier.md)
+
+---
+
 *structkit is open source (MIT) and actively developed. Star us on [GitHub](https://github.com/httpdss/structkit) and join the [Discussions](https://github.com/httpdss/structkit/discussions).*

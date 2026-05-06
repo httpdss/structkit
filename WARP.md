@@ -151,6 +151,11 @@ docs(api): update template variables documentation
 7. Link related issues: "Closes #123"
 8. Request review from maintainers
 
+### Warp Agent Behavior
+
+- Do NOT include Warp conversation links, plan links, or any Warp-specific references in PR descriptions, commit messages, or any other user-visible content.
+- Do NOT add co-author lines referencing Warp or `oz-agent@warp.dev` to commit messages.
+
 ## 🧪 Testing Guidelines
 
 ### Test Structure

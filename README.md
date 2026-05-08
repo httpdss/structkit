@@ -20,6 +20,7 @@
 - **🪝 Automation Hooks** - Pre and post-generation shell commands
 - **🎯 Dry Run Mode** - Preview changes before applying them
 - **✅ Validation & Schema** - Built-in YAML validation and IDE support
+- **📈 Dependency Graphs** - Visualize nested structure relationships as text, JSON, or Mermaid diagrams
 - **🤖 MCP Integration** - Model Context Protocol support for AI-assisted development workflows
 
 ## 🤔 Why structkit?
@@ -81,6 +82,9 @@ structkit list
 
 # Validate a configuration
 structkit validate my-config.yaml
+
+# Visualize nested structure dependencies
+structkit graph project/python --format mermaid
 
 # Start MCP server for AI integration
 structkit mcp --server

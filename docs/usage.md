@@ -4,6 +4,7 @@ Run the script with the following command using one of the following subcommands
 
 - `generate`: Generate the project structure based on the YAML configuration.
 - `generate-schema`: Generate JSON schema for available structure templates.
+- `graph`: Visualize nested structure dependencies.
 - `validate`: Validate the YAML configuration file.
 - `info`: Display information about the script and its dependencies.
 - `list`: List the available structs
@@ -91,6 +92,48 @@ structkit generate \
 - `--file-strategy`: Choose how to handle existing files (overwrite, skip, append, rename, backup)
 - `--log-file`: Write logs to specified file
 - `--mappings-file`: Provide external mappings file (can be used multiple times)
+
+## Graph Command
+
+The `graph` command follows `folders[].struct` references so you can inspect how structures compose one another. It accepts a built-in structure name, a local YAML file, or `--all` to include every available structure.
+
+### Text output
+
+```sh
+structkit graph project/python
+```
+
+Example output:
+
+```text
+project/python
+└── github/workflows/run-struct
+```
+
+### JSON output
+
+```sh
+structkit graph --all --format json
+```
+
+JSON output includes `roots`, `nodes`, `edges`, `missing`, and `cycles` fields so automation can consume dependency data directly.
+
+### Mermaid output
+
+```sh
+structkit graph terraform/apps/generic --format mermaid
+```
+
+Paste the output into Markdown or documentation systems that support Mermaid:
+
+```mermaid
+graph TD
+  n_app["app"] --> n_library["library"]
+  classDef missing fill:#ffe6e6,stroke:#cc0000,color:#660000
+  classDef cycle fill:#fff4cc,stroke:#d19a00,color:#5c3b00
+```
+
+Use `-s, --structures-path` to include custom structures in resolution and graph output. Missing references are reported in text/JSON output and drawn with a dashed `missing` edge in Mermaid. Cycles are reported explicitly and highlighted with the Mermaid `cycle` class.
 
 ## Generate Schema Command
 

@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-structkit {info,validate,generate,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,list,search,graph,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -128,6 +128,34 @@ structkit list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
 **Arguments:**
 
 - `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions.
+
+### `graph`
+
+Visualize `folders[].struct` dependencies between structure definitions.
+
+**Usage:**
+
+```sh
+structkit graph [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--all] [--format {text,json,mermaid}] [structure_definition]
+```
+
+**Arguments:**
+
+- `structure_definition` (optional): Structure name or local YAML file to graph. Required unless `--all` is provided.
+- `--all`: Graph all available structures.
+- `--format {text,json,mermaid}`: Output format (default: `text`).
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions.
+
+Examples:
+
+```sh
+structkit graph project/python
+structkit graph terraform/apps/generic --format mermaid
+structkit graph --all --format json
+structkit graph -s ~/custom-structures service/api
+```
+
+The graph command reports missing references and dependency cycles. Mermaid output starts with `graph TD` and can be pasted into compatible Markdown documentation.
 
 ### `generate-schema`
 

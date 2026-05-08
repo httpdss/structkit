@@ -8,6 +8,7 @@ from structkit.commands.info import InfoCommand
 from structkit.commands.validate import ValidateCommand
 from structkit.commands.list import ListCommand
 from structkit.commands.search import SearchCommand
+from structkit.commands.graph import GraphCommand
 from structkit.commands.generate_schema import GenerateSchemaCommand
 from structkit.commands.mcp import MCPCommand
 from structkit.logging_config import configure_logging
@@ -36,6 +37,7 @@ def get_parser():
     GenerateCommand(subparsers.add_parser('generate', help='Generate the project structure'))
     ListCommand(subparsers.add_parser('list', help='List available structures'))
     SearchCommand(subparsers.add_parser('search', help='Search available structures by keyword'))
+    GraphCommand(subparsers.add_parser('graph', help='Visualize structure dependencies'))
     GenerateSchemaCommand(subparsers.add_parser('generate-schema', help='Generate JSON schema for available structures'))
     MCPCommand(subparsers.add_parser('mcp', help='MCP (Model Context Protocol) support'))
 

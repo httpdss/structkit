@@ -6,6 +6,7 @@ from structkit.utils import read_config_file, merge_configs
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.info import InfoCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.commands.lint import LintCommand
 from structkit.commands.list import ListCommand
 from structkit.commands.search import SearchCommand
 from structkit.commands.generate_schema import GenerateSchemaCommand
@@ -33,6 +34,7 @@ def get_parser():
 
     InfoCommand(subparsers.add_parser('info', help='Show information about the package'))
     ValidateCommand(subparsers.add_parser('validate', help='Validate the YAML configuration file'))
+    LintCommand(subparsers.add_parser('lint', help='Lint YAML structure definitions for quality issues'))
     GenerateCommand(subparsers.add_parser('generate', help='Generate the project structure'))
     ListCommand(subparsers.add_parser('list', help='List available structures'))
     SearchCommand(subparsers.add_parser('search', help='Search available structures by keyword'))

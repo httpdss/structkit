@@ -80,6 +80,43 @@ structkit validate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] yaml_file
 
 - `yaml_file`: Path to the YAML configuration file.
 
+### `lint`
+
+Lint one or more StructKit YAML definitions for quality checks that are stricter than syntactic validation. The command reports warnings and errors with file paths and context. It exits with status code `1` when one or more lint errors are found, and exits `0` when only warnings or no issues are found.
+
+**Usage:**
+
+```sh
+structkit lint [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--all] [--json] [targets ...]
+```
+
+**Arguments:**
+
+- `targets`: YAML file paths, `file://` YAML URLs, or bundled/custom structure names. Multiple targets are supported.
+- `--all`: Lint all bundled contrib structures, plus custom structures when `--structures-path` is supplied.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions.
+- `--json`: Print machine-readable JSON with a summary and issue list.
+
+**Lint rules:**
+
+- Missing top-level `description` (warning).
+- Variables referenced in StructKit templates but not declared (error).
+- Declared variables that are never referenced (warning).
+- Duplicate file or folder entries (error).
+- Unsafe hooks, such as destructive shell patterns (error), and suspicious hooks, such as `curl | bash`, `sudo`, `eval`, or `chmod 777` (warning).
+- GitHub remote URLs that do not appear pinned to a stable tag, release, or commit SHA (warning).
+- Invalid entry names that are absolute paths or escape with `..` (error), and unusual name characters (warning).
+
+**Examples:**
+
+```sh
+structkit lint .struct.yaml
+structkit lint structkit/contribs/project/python.yaml
+structkit lint project/python
+structkit lint --all
+structkit lint .struct.yaml --json
+```
+
 ### `generate`
 
 Generate the project structure.

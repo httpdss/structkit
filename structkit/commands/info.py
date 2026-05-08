@@ -3,6 +3,7 @@ import yaml
 import asyncio
 
 from structkit.commands import Command
+from structkit.sources import SourceConfigError, resolve_structures_path
 
 
 # Info command class for exposing information about the structure
@@ -16,6 +17,7 @@ class InfoCommand(Command):
         '-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
         default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
       )
+      parser.add_argument('--source', type=str, help='Named source containing the structure definition')
       parser.add_argument('--mcp', action='store_true', help='Enable MCP (Model Context Protocol) integration')
 
       parser.set_defaults(func=self.execute)
@@ -33,11 +35,16 @@ class InfoCommand(Command):
         with open(args.structure_definition[7:], 'r') as f:
           config = yaml.safe_load(f)
       else:
-        if args.structures_path is None:
+        try:
+          effective_structures_path, structure_definition = resolve_structures_path(args, args.structure_definition)
+        except SourceConfigError as e:
+          self.logger.error(f"❗ {e}")
+          return
+        if effective_structures_path is None:
           this_file = os.path.dirname(os.path.realpath(__file__))
-          file_path = os.path.join(this_file, "..", "contribs", f"{args.structure_definition}.yaml")
+          file_path = os.path.join(this_file, "..", "contribs", f"{structure_definition}.yaml")
         else:
-          file_path = os.path.join(args.structures_path, f"{args.structure_definition}.yaml")
+          file_path = os.path.join(effective_structures_path, f"{structure_definition}.yaml")
         # show error if file is not found
         if not os.path.exists(file_path):
           self.logger.error(f"❗ File not found: {file_path}")

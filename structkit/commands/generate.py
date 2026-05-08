@@ -5,6 +5,7 @@ import argparse
 from structkit.file_item import FileItem
 from structkit.completers import file_strategy_completer, structures_completer
 from structkit.template_renderer import TemplateRenderer
+from structkit.sources import SourceConfigError, resolve_structures_path
 
 import subprocess
 
@@ -24,6 +25,7 @@ class GenerateCommand(Command):
       help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
+    parser.add_argument('--source', type=str, help='Named source containing the structure definition')
     parser.add_argument('-n', '--input-store', type=str, help='Path to the input store (env: STRUCTKIT_INPUT_STORE)', default=os.getenv('STRUCTKIT_INPUT_STORE', '/tmp/structkit/input.json'))
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
@@ -161,6 +163,13 @@ class GenerateCommand(Command):
 
     # Load config to check for hooks
     config = None
+    try:
+      effective_structures_path, structure_definition = resolve_structures_path(args, args.structure_definition)
+    except SourceConfigError as e:
+      self.logger.error(f"❗ {e}")
+      return
+    args.structures_path = effective_structures_path
+    args.structure_definition = structure_definition
     config = self._load_yaml_config(args.structure_definition, args.structures_path)
     if config is None:
       return

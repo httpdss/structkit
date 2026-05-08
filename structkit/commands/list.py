@@ -1,4 +1,5 @@
 from structkit.commands import Command
+from structkit.sources import SourceConfigError, resolve_structures_path
 import os
 import asyncio
 
@@ -12,6 +13,7 @@ class ListCommand(Command):
       '-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
+    parser.add_argument('--source', type=str, help='Named source to list')
     parser.add_argument('--names-only', action='store_true', help='Print only structure names, one per line (for shell completion)')
     parser.add_argument('--mcp', action='store_true', help='Enable MCP (Model Context Protocol) integration')
     parser.set_defaults(func=self.execute)
@@ -27,8 +29,14 @@ class ListCommand(Command):
     this_file = os.path.dirname(os.path.realpath(__file__))
     contribs_path = os.path.join(this_file, "..", "contribs")
 
-    if args.structures_path:
-      final_path = args.structures_path
+    try:
+      effective_structures_path, _ = resolve_structures_path(args)
+    except SourceConfigError as e:
+      self.logger.error(f"❗ {e}")
+      return
+
+    if effective_structures_path:
+      final_path = effective_structures_path
       paths_to_list = [final_path, contribs_path]
     else:
       paths_to_list = [contribs_path]

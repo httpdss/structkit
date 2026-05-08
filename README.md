@@ -21,6 +21,7 @@
 - **🎯 Dry Run Mode** - Preview changes before applying them
 - **✅ Validation & Schema** - Built-in YAML validation and IDE support
 - **🤖 MCP Integration** - Model Context Protocol support for AI-assisted development workflows
+- **📚 Named Sources** - Save, inspect, validate, and reuse custom structure directories
 
 ## 🤔 Why structkit?
 
@@ -78,6 +79,11 @@ structkit generate terraform-module ./my-terraform-module
 
 # List available structures
 structkit list
+
+# Save and use a custom structures source
+structkit sources add company ~/templates
+structkit list --source company
+structkit generate company/project/python ./app
 
 # Validate a configuration
 structkit validate my-config.yaml

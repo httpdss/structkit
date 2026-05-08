@@ -2,6 +2,7 @@ import os
 import yaml
 
 from structkit.commands import Command
+from structkit.sources import SourceConfigError, resolve_structures_path
 
 
 class SearchCommand(Command):
@@ -22,6 +23,11 @@ class SearchCommand(Command):
             default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None),
         )
         parser.add_argument(
+            '--source',
+            type=str,
+            help='Named source to search',
+        )
+        parser.add_argument(
             '--names-only',
             action='store_true',
             help='Print only matching structure names, one per line (for scripting)',
@@ -36,8 +42,14 @@ class SearchCommand(Command):
         this_file = os.path.dirname(os.path.realpath(__file__))
         contribs_path = os.path.join(this_file, '..', 'contribs')
 
-        if args.structures_path:
-            paths_to_search = [(args.structures_path, False), (contribs_path, True)]
+        try:
+            effective_structures_path, _ = resolve_structures_path(args)
+        except SourceConfigError as e:
+            self.logger.error(f"❗ {e}")
+            return
+
+        if effective_structures_path:
+            paths_to_search = [(effective_structures_path, False), (contribs_path, True)]
         else:
             paths_to_search = [(contribs_path, True)]
 

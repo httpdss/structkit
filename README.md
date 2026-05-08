@@ -19,6 +19,7 @@
 - **🛡️ Smart File Handling** - Multiple strategies for managing existing files (overwrite, skip, backup, etc.)
 - **🪝 Automation Hooks** - Pre and post-generation shell commands
 - **🎯 Dry Run Mode** - Preview changes before applying them
+- **🔎 Structure Explanations** - Inspect nested structures, variables, hooks, remote references, and conflict behavior before generation
 - **✅ Validation & Schema** - Built-in YAML validation and IDE support
 - **🤖 MCP Integration** - Model Context Protocol support for AI-assisted development workflows
 
@@ -73,6 +74,9 @@ docker run -v $(pwd):/workdir ghcr.io/httpdss/structkit:main generate my-config.
 ### Basic Usage
 
 ```bash
+# Explain a Terraform module structure without writing files
+structkit explain terraform/modules/generic
+
 # Generate a Terraform module structure
 structkit generate terraform-module ./my-terraform-module
 

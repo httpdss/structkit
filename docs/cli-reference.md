@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-structkit {info,validate,generate,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,explain,list,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -115,6 +115,37 @@ structkit generate
 - `--mappings-file MAPPINGS_FILE`: Path to a YAML file containing mappings to be used in templates (can be specified multiple times).
 - `-o {console,file}, --output {console,file}`: Output mode.
 
+### `explain`
+
+Explain how a structure definition resolves before generation. This is structure-focused: it lists the files and folders that would be generated, nested structures referenced by `folders[].struct`, remote file references, declared variables and resolved values, hooks that would be present, and the configured conflict behavior. It does not create files or folders, fetch remote content, generate prompt-based content, or execute hooks.
+
+Use `generate --dry-run` when you want a generation-style preview of file operations and diffs. Use `explain` when you want to inspect the structure graph and metadata before any generation work happens.
+
+**Usage:**
+
+```sh
+structkit explain [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-v VARS] [--json] [-o {text,json}] [-f {overwrite,skip,append,rename,backup}] [--mappings-file MAPPINGS_FILE] [structure_definition] [base_path]
+```
+
+**Arguments:**
+
+- `structure_definition` (optional): Built-in structure name or path to a YAML structure file (default: `.struct.yaml`).
+- `base_path` (optional): Base path used to resolve generated paths (default: `.`).
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions.
+- `-v VARS, --vars VARS`: Template variables in the format KEY1=value1,KEY2=value2; shown in the explanation with resolved defaults.
+- `--json`: Output the explanation as JSON.
+- `-o {text,json}, --output {text,json}`: Output format (default: `text`).
+- `-f {overwrite,skip,append,rename,backup}, --file-strategy {overwrite,skip,append,rename,backup}`: File conflict strategy to explain.
+- `--mappings-file MAPPINGS_FILE`: Path to a YAML mappings file for resolving `with` values and templates (can be specified multiple times).
+
+**Examples:**
+
+```sh
+structkit explain terraform/modules/generic
+structkit explain ./my-struct.yaml --vars project_name=demo
+structkit explain project/python --json
+```
+
 ### `list`
 
 List available structures.
@@ -213,6 +244,16 @@ Pass template variables to the structure:
 ```sh
 structkit generate -v "project_name=MyApp,author=John Doe" file://structure.yaml ./output
 ```
+
+### Explaining Structure Resolution
+
+Preview the structure graph, variables, hooks, remote file references, and conflict behavior without writing files or executing hooks:
+
+```sh
+structkit explain project/python --json
+```
+
+`explain` is different from `generate --dry-run`: `explain` focuses on resolving and describing the structure definition, while `generate --dry-run` follows the generation path to preview file operations.
 
 ### Dry Run
 

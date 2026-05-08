@@ -5,6 +5,7 @@ from structkit.commands.info import InfoCommand
 from structkit.commands.validate import ValidateCommand
 from structkit.commands.list import ListCommand
 from structkit.commands.generate_schema import GenerateSchemaCommand
+from structkit.commands.vars import VarsCommand
 import argparse
 import json
 import os
@@ -520,3 +521,100 @@ def test_multiple_mappings_files():
         }
 
         assert merged_mappings == expected_mappings
+
+# Tests for VarsCommand
+def test_vars_command_text_output(tmp_path, capsys):
+    yaml_file = tmp_path / "structure.yaml"
+    yaml_file.write_text("""
+variables:
+  - project_name:
+      description: Project name
+      type: string
+      default: MyProject
+  - api_token:
+      help: API token
+      type: string
+      required: true
+""")
+    command = VarsCommand(parser := argparse.ArgumentParser())
+    args = parser.parse_args([str(yaml_file)])
+
+    command.execute(args)
+
+    output = capsys.readouterr().out
+    assert "Variables for" in output
+    assert "project_name" in output
+    assert "string" in output
+    assert "MyProject" in output
+    assert "optional" in output
+    assert "api_token" in output
+    assert "required" in output
+    assert "API token" in output
+
+
+def test_vars_command_json_output(tmp_path, capsys):
+    yaml_file = tmp_path / "structure.yaml"
+    yaml_file.write_text("""
+variables:
+  - enabled:
+      description: Enable feature
+      type: boolean
+      default: true
+      required: true
+""")
+    command = VarsCommand(parser := argparse.ArgumentParser())
+    args = parser.parse_args([str(yaml_file), '--json'])
+
+    command.execute(args)
+
+    output = capsys.readouterr().out
+    assert json.loads(output) == [
+        {
+            "name": "enabled",
+            "type": "boolean",
+            "default": True,
+            "description": "Enable feature",
+            "required": True,
+        }
+    ]
+
+
+def test_vars_command_no_variables(tmp_path, capsys):
+    yaml_file = tmp_path / "structure.yaml"
+    yaml_file.write_text("files: []\n")
+    command = VarsCommand(parser := argparse.ArgumentParser())
+    args = parser.parse_args([str(yaml_file)])
+
+    command.execute(args)
+
+    assert "No variables defined." in capsys.readouterr().out
+
+
+def test_vars_command_custom_structures_path(tmp_path, capsys):
+    structures_path = tmp_path / "structures"
+    structures_path.mkdir()
+    (structures_path / "custom.yaml").write_text("""
+variables:
+  - custom_name:
+      type: string
+      description: Custom variable
+""")
+    command = VarsCommand(parser := argparse.ArgumentParser())
+    args = parser.parse_args(['custom', '--structures-path', str(structures_path)])
+
+    command.execute(args)
+
+    output = capsys.readouterr().out
+    assert "custom_name" in output
+    assert "Custom variable" in output
+
+
+def test_vars_command_invalid_config_exits_nonzero(tmp_path):
+    yaml_file = tmp_path / "structure.yaml"
+    yaml_file.write_text("variables: invalid\n")
+    command = VarsCommand(parser := argparse.ArgumentParser())
+    args = parser.parse_args([str(yaml_file)])
+
+    with pytest.raises(SystemExit) as exc:
+        command.execute(args)
+    assert exc.value.code == 1

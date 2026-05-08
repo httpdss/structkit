@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-structkit {info,validate,generate,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,vars,list,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -114,6 +114,30 @@ structkit generate
 - `--non-interactive`: Run the command in non-interactive mode.
 - `--mappings-file MAPPINGS_FILE`: Path to a YAML file containing mappings to be used in templates (can be specified multiple times).
 - `-o {console,file}, --output {console,file}`: Output mode.
+
+### `vars`
+
+Inspect variables declared by a structure definition without generating files.
+
+**Usage:**
+
+```sh
+structkit vars [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--json] structure_definition
+```
+
+**Arguments:**
+
+- `structure_definition`: Built-in structure name, custom structure name, or local YAML file path. Local `.yaml` and `.yml` files can be passed directly, or with `file://`.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable.
+- `--json`: Print machine-readable JSON with each variable's name, type, default value, description/help text, and required status.
+
+Examples:
+
+```sh
+structkit vars project/python
+structkit vars ./my-struct.yaml --json
+structkit vars python-basic --structures-path ~/custom-structures
+```
 
 ### `list`
 

@@ -6,6 +6,7 @@ This module provides MCP (Model Context Protocol) support for:
 2. Getting detailed information about structures
 3. Generating structures with various options
 4. Validating structure configurations
+5. Inspecting structure variables
 """
 import asyncio
 import logging
@@ -18,6 +19,7 @@ from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.commands.vars import VarsCommand
 from structkit import __version__
 
 
@@ -193,6 +195,44 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+    def _get_structure_vars_logic(
+        self,
+        structure_name: Optional[str],
+        structures_path: Optional[str] = None,
+        output: str = "text",
+    ) -> str:
+        if not structure_name:
+            return "Error: structure_name is required"
+
+        import argparse
+        from io import StringIO
+        dummy_parser = argparse.ArgumentParser()
+        vars_command = VarsCommand(dummy_parser)
+
+        config = vars_command._load_yaml_config(structure_name, structures_path)
+        if config is None:
+            return f"❗ Structure not found or could not be loaded: {structure_name}"
+        if not isinstance(config, dict):
+            return "❗ Invalid structure config: top-level YAML content must be a mapping"
+
+        try:
+            variables = vars_command._normalize_variables(config.get('variables', []))
+        except ValueError as exc:
+            return f"❗ Invalid variables config: {exc}"
+
+        if output == "json":
+            import json
+            return json.dumps(variables, indent=2)
+
+        buf = StringIO()
+        old = sys.stdout
+        sys.stdout = buf
+        try:
+            vars_command._print_text(structure_name, variables)
+            return buf.getvalue().strip()
+        finally:
+            sys.stdout = old
+
     # =====================
     # FastMCP tool registration (maps to logic above)
     # =====================
@@ -213,6 +253,25 @@ class StructMCPServer:
             result = self._get_structure_info_logic(structure_name, structures_path)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: get_structure_info len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="get_structure_vars", description="Inspect variables declared by a specific structure")
+        async def get_structure_vars(
+            structure_name: str,
+            structures_path: Optional[str] = None,
+            output: str = "text",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: get_structure_vars args=%s",
+                {
+                    "structure_name": structure_name,
+                    "structures_path": structures_path,
+                    "output": output,
+                },
+            )
+            result = self._get_structure_vars_logic(structure_name, structures_path, output)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: get_structure_vars len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="generate_structure", description="Generate a project structure using specified definition and options")
@@ -325,6 +384,25 @@ class StructMCPServer:
         structures_path = params.get('structures_path')
 
         result_text = self._get_structure_info_logic(structure_name, structures_path)
+
+        # Mock MCP response structure
+        class MockContent:
+            def __init__(self, text):
+                self.text = text
+
+        class MockResult:
+            def __init__(self, content):
+                self.content = content
+
+        return MockResult([MockContent(result_text)])
+
+    async def _handle_get_structure_vars(self, params: Dict[str, Any]):
+        """Compatibility method for tests that expect MCP-style responses."""
+        structure_name = params.get('structure_name')
+        structures_path = params.get('structures_path')
+        output = params.get('output', 'text')
+
+        result_text = self._get_structure_vars_logic(structure_name, structures_path, output)
 
         # Mock MCP response structure
         class MockContent:

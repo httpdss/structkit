@@ -6,6 +6,7 @@ Run the script with the following command using one of the following subcommands
 - `generate-schema`: Generate JSON schema for available structure templates.
 - `validate`: Validate the YAML configuration file.
 - `info`: Display information about the script and its dependencies.
+- `vars`: Inspect variables declared by a structure definition without generating files.
 - `list`: List the available structs
 
 For more information, run the script with the `-h` or `--help` option (this is also available for each subcommand):
@@ -144,6 +145,19 @@ The file includes:
 - pre_hooks/post_hooks with echo commands
 - A README.md placeholder in files
 - A folders entry pointing to the github/workflows/run-structkit workflow at ./
+
+
+### Inspect Variables
+
+Use `structkit vars` to see the inputs a structure declares before running `generate`. The command supports built-in structures, custom structures via `--structures-path`, and local YAML files without creating any files.
+
+```sh
+structkit vars project/python
+structkit vars ./my-struct.yaml --json
+structkit vars python-basic --structures-path ~/custom-structures
+```
+
+Text output lists each variable's name, type, default value, description/help text, and whether it is required or optional. Use `--json` for CI and other machine-readable workflows.
 
 ### Validate Configuration
 

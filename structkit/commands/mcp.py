@@ -48,6 +48,7 @@ class MCPCommand(Command):
             print("\nMCP tools available:")
             print("  - list_structures: List all available structure definitions")
             print("  - get_structure_info: Get detailed information about a structure")
+            print("  - get_structure_vars: Inspect variables declared by a structure")
             print("  - generate_structure: Generate structures with various options")
             print("  - explain_structure: Explain structure resolution without side effects")
             print("  - validate_structure: Validate structure configuration files")

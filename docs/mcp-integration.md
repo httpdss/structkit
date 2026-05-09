@@ -69,7 +69,26 @@ Generate a project structure using specified definition and options.
 - `mappings` (optional): Variable mappings for template substitution
 - `structures_path` (optional): Custom path to structure definitions
 
-### 4. explain_structure
+### 4. get_structure_vars
+Inspect variables declared by a specific structure without generating files.
+
+```json
+{
+  "name": "get_structure_vars",
+  "arguments": {
+    "structure_name": "project/python",
+    "structures_path": "/path/to/custom/structures",  // optional
+    "output": "json"  // "text" or "json", optional
+  }
+}
+```
+
+**Parameters:**
+- `structure_name` (required): Name or local YAML path of the structure to inspect
+- `structures_path` (optional): Custom path to structure definitions
+- `output` (optional): Output format - "text" for aligned human-readable output or "json" for machine-readable output (default: "text")
+
+### 5. explain_structure
 Explain how a structure resolves without creating files, fetching remote content, generating prompt-based content, or executing hooks. This is useful when an AI assistant needs to inspect the structure graph before deciding whether to generate it.
 
 ```json
@@ -100,7 +119,7 @@ Explain how a structure resolves without creating files, fetching remote content
 - `file_strategy` (optional): Conflict strategy to explain: `overwrite`, `skip`, `append`, `rename`, or `backup` (default: `overwrite`)
 - `structures_path` (optional): Custom path to structure definitions
 
-### 5. validate_structure
+### 6. validate_structure
 Validate a structure configuration YAML file.
 
 ```json
@@ -417,6 +436,7 @@ Once connected, you can use these tools:
 - `list_structures` - Get all available structures
 - `get_structure_info` - Get details about a specific structure
 - `generate_structure` - Generate project structures
+- `get_structure_vars` - Inspect declared structure variables
 - `explain_structure` - Explain structure resolution without side effects
 - `validate_structure` - Validate YAML configuration files
 

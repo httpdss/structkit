@@ -80,6 +80,38 @@ structkit validate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] yaml_file
 
 - `yaml_file`: Path to the YAML configuration file.
 
+### `lint`
+
+Run stricter quality checks against one or more StructKit YAML files or structure names. `validate` checks whether a structure is syntactically usable; `lint` adds quality and safety checks that can flag risky, ambiguous, or inconsistent definitions.
+
+**Usage:**
+
+```sh
+structkit lint [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--all] [--json] [targets ...]
+```
+
+**Arguments:**
+
+- `targets`: One or more built-in structure names, custom structure names, or local `.yaml`/`.yml` files.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable.
+- `--all`: Lint all bundled contrib structures.
+- `--json`: Print machine-readable JSON containing `summary` counts and individual `issues`.
+
+**Rules and exit behavior:**
+
+- Errors: invalid YAML, missing targets, missing files, non-mapping top-level YAML, invalid variable/hook shapes, duplicate variables, duplicate file/folder entries, template syntax errors, undefined template variables, and clearly destructive hooks such as filesystem-root removal.
+- Warnings: missing top-level descriptions, declared variables that are never referenced, suspicious hooks, unpinned GitHub remote URLs, and variable naming convention issues.
+- The command exits with status `1` when one or more lint errors are found. Warnings alone do not cause a non-zero exit.
+
+Examples:
+
+```sh
+structkit lint .struct.yaml
+structkit lint structkit/contribs/project/python.yaml
+structkit lint --all
+structkit lint .struct.yaml --json
+```
+
 ### `generate`
 
 Generate the project structure.

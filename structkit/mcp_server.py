@@ -8,18 +8,20 @@ This module provides MCP (Model Context Protocol) support for:
 4. Validating structure configurations
 5. Inspecting structure variables
 6. Explaining structure resolution without generating files
+7. Linting structure definitions for quality and safety issues
 """
 import asyncio
 import logging
 import os
 import sys
 import yaml
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.commands.lint import LintCommand
 from structkit.commands.vars import VarsCommand
 from structkit.commands.explain import ExplainCommand
 from structkit import __version__
@@ -266,6 +268,31 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+
+    def _lint_structure_logic(
+        self,
+        targets: Optional[List[str]] = None,
+        structures_path: Optional[str] = None,
+        lint_all: bool = False,
+        output: str = "text",
+    ) -> str:
+        import argparse
+        dummy_parser = argparse.ArgumentParser()
+        lint_command = LintCommand(dummy_parser)
+        results = lint_command.lint(targets or [], structures_path=structures_path, lint_all=lint_all)
+        if output == "json":
+            import json
+            return json.dumps(results, indent=2)
+        from io import StringIO
+        buf = StringIO()
+        old = sys.stdout
+        sys.stdout = buf
+        try:
+            lint_command._print_text(results)
+            return buf.getvalue().strip()
+        finally:
+            sys.stdout = old
+
     # =====================
     # FastMCP tool registration (maps to logic above)
     # =====================
@@ -369,6 +396,28 @@ class StructMCPServer:
             )
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: generate_structure len={len(result)} preview=\n{preview}")
+            return result
+
+
+        @self.app.tool(name="lint_structure", description="Lint structure YAML files for quality and safety issues")
+        async def lint_structure(
+            targets: Optional[List[str]] = None,
+            structures_path: Optional[str] = None,
+            lint_all: bool = False,
+            output: str = "text",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: lint_structure args=%s",
+                {
+                    "targets": targets,
+                    "structures_path": structures_path,
+                    "lint_all": lint_all,
+                    "output": output,
+                },
+            )
+            result = self._lint_structure_logic(targets, structures_path, lint_all, output)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: lint_structure len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="validate_structure", description="Validate a structure configuration YAML file")
@@ -489,6 +538,25 @@ class StructMCPServer:
             params.get('vars'),
             params.get('output', 'text'),
             params.get('file_strategy', 'overwrite'),
+        )
+
+        class MockContent:
+            def __init__(self, text):
+                self.text = text
+
+        class MockResult:
+            def __init__(self, content):
+                self.content = content
+
+        return MockResult([MockContent(result_text)])
+
+    async def _handle_lint_structure(self, params: Dict[str, Any]):
+        """Compatibility method for tests that expect MCP-style responses."""
+        result_text = self._lint_structure_logic(
+            params.get('targets', []),
+            params.get('structures_path'),
+            params.get('lint_all', False),
+            params.get('output', 'text'),
         )
 
         class MockContent:

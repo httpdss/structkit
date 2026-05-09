@@ -25,6 +25,7 @@ class TestMCPIntegration(unittest.TestCase):
         tools = asyncio.run(self.server.app.list_tools())
         tool_names = [tool.name for tool in tools]
         self.assertIn('get_structure_vars', tool_names)
+        self.assertIn('lint_structure', tool_names)
 
     def test_list_structures_logic(self):
         text = self.server._list_structures_logic()
@@ -117,6 +118,36 @@ class TestMCPIntegration(unittest.TestCase):
                 data = json.loads(result.content[0].text)
                 self.assertEqual(data[0]['name'], 'enabled')
                 self.assertTrue(data[0]['default'])
+            finally:
+                os.unlink(f.name)
+
+
+    def test_lint_structure_logic_and_compat_handler(self):
+        text = self.server._lint_structure_logic([])
+        self.assertIn("Provide one or more YAML files", text)
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            yaml.dump({
+                'description': 'Test structure',
+                'files': [
+                    {'README.md': {'content': '# {{@ project_name @}}'}}
+                ],
+                'variables': [
+                    {'project_name': {'type': 'string', 'default': 'demo'}}
+                ]
+            }, f)
+            f.flush()
+            try:
+                json_text = self.server._lint_structure_logic([f.name], output='json')
+                data = json.loads(json_text)
+                self.assertEqual(data['summary']['errors'], 0)
+
+                result = asyncio.run(self.server._handle_lint_structure({
+                    'targets': [f.name],
+                    'output': 'json',
+                }))
+                data = json.loads(result.content[0].text)
+                self.assertEqual(data['summary']['files'], 1)
             finally:
                 os.unlink(f.name)
 

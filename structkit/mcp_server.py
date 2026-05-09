@@ -6,18 +6,29 @@ This module provides MCP (Model Context Protocol) support for:
 2. Getting detailed information about structures
 3. Generating structures with various options
 4. Validating structure configurations
+5. Managing named custom structure sources
 """
 import asyncio
 import logging
 import os
 import sys
 import yaml
+from types import SimpleNamespace
 from typing import Any, Dict, Optional
 
 from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.sources import (
+    SourceConfigError,
+    add_source as add_config_source,
+    get_source_path,
+    read_sources,
+    remove_source as remove_config_source,
+    resolve_structures_path,
+    validate_source as validate_config_source,
+)
 from structkit import __version__
 
 
@@ -32,13 +43,20 @@ class StructMCPServer:
     # =====================
     # Tool logic (transport-agnostic)
     # =====================
-    def _list_structures_logic(self, structures_path: Optional[str] = None) -> str:
+    def _list_structures_logic(self, structures_path: Optional[str] = None, source: Optional[str] = None) -> str:
         this_file = os.path.dirname(os.path.realpath(__file__))
         contribs_path = os.path.join(this_file, "contribs")
 
+        try:
+            effective_structures_path, _ = resolve_structures_path(
+                SimpleNamespace(structures_path=structures_path, source=source)
+            )
+        except SourceConfigError as e:
+            return f"❗ {e}"
+
         paths_to_list = [contribs_path]
-        if structures_path:
-            paths_to_list = [structures_path, contribs_path]
+        if effective_structures_path:
+            paths_to_list = [effective_structures_path, contribs_path]
 
         all_structures = set()
         for path in paths_to_list:
@@ -56,7 +74,12 @@ class StructMCPServer:
         result_text += "\n\nNote: Structures with '+' sign are custom structures"
         return result_text
 
-    def _get_structure_info_logic(self, structure_name: Optional[str], structures_path: Optional[str] = None) -> str:
+    def _get_structure_info_logic(
+        self,
+        structure_name: Optional[str],
+        structures_path: Optional[str] = None,
+        source: Optional[str] = None,
+    ) -> str:
         if not structure_name:
             return "Error: structure_name is required"
 
@@ -64,9 +87,15 @@ class StructMCPServer:
         if structure_name.startswith("file://") and structure_name.endswith(".yaml"):
             file_path = structure_name[7:]
         else:
+            try:
+                effective_structures_path, resolved_structure_name = resolve_structures_path(
+                    SimpleNamespace(structures_path=structures_path, source=source), structure_name
+                )
+            except SourceConfigError as e:
+                return f"❗ {e}"
             this_file = os.path.dirname(os.path.realpath(__file__))
-            base = structures_path or os.path.join(this_file, "contribs")
-            file_path = os.path.join(base, f"{structure_name}.yaml")
+            base = effective_structures_path or os.path.join(this_file, "contribs")
+            file_path = os.path.join(base, f"{resolved_structure_name}.yaml")
 
         if not os.path.exists(file_path):
             return f"❗ Structure not found: {file_path}"
@@ -119,6 +148,7 @@ class StructMCPServer:
         dry_run: bool = False,
         mappings: Optional[Dict[str, str]] = None,
         structures_path: Optional[str] = None,
+        source: Optional[str] = None,
     ) -> str:
         class Args:
             pass
@@ -128,6 +158,7 @@ class StructMCPServer:
         args.output = "console" if output == "console" else "file"
         args.dry_run = dry_run
         args.structures_path = structures_path
+        args.source = source
         args.vars = None
         args.mappings_file = None
         args.backup = None
@@ -167,6 +198,54 @@ class StructMCPServer:
                 return f"Dry run completed for structure '{structure_definition}' at '{base_path}'"
             return f"Structure '{structure_definition}' generated successfully at '{base_path}'"
 
+    def _list_sources_logic(self) -> str:
+        sources = read_sources()
+        if not sources:
+            return "No sources configured"
+
+        lines = ["📚 Configured structure sources\n"]
+        for name in sorted(sources):
+            lines.append(f" - {name}: {sources[name]}\n")
+        return "".join(lines).rstrip()
+
+    def _add_source_logic(self, name: Optional[str], path_or_url: Optional[str]) -> str:
+        if not name:
+            return "Error: name is required"
+        if not path_or_url:
+            return "Error: path_or_url is required"
+        try:
+            source_path = add_config_source(name, path_or_url)
+        except SourceConfigError as e:
+            return f"❗ {e}"
+        return f"Added source '{name}': {source_path}"
+
+    def _remove_source_logic(self, name: Optional[str]) -> str:
+        if not name:
+            return "Error: name is required"
+        try:
+            source_path = remove_config_source(name)
+        except SourceConfigError as e:
+            return f"❗ {e}"
+        return f"Removed source '{name}': {source_path}"
+
+    def _show_source_logic(self, name: Optional[str]) -> str:
+        if not name:
+            return "Error: name is required"
+        try:
+            source_path = get_source_path(name)
+        except SourceConfigError as e:
+            return f"❗ {e}"
+        return f"{name}: {source_path}"
+
+    def _validate_source_logic(self, name: Optional[str]) -> str:
+        if not name:
+            return "Error: name is required"
+        try:
+            source_path = validate_config_source(name)
+        except SourceConfigError as e:
+            return f"❗ {e}"
+        return f"Source '{name}' is valid: {source_path}"
+
     def _validate_structure_logic(self, yaml_file: Optional[str]) -> str:
         if not yaml_file:
             return "Error: yaml_file is required"
@@ -198,19 +277,23 @@ class StructMCPServer:
     # =====================
     def _register_tools(self):
         @self.app.tool(name="list_structures", description="List all available structure definitions")
-        async def list_structures(structures_path: Optional[str] = None) -> str:
-            self.logger.debug(f"MCP request: list_structures args={{'structures_path': {structures_path!r}}}")
-            result = self._list_structures_logic(structures_path)
+        async def list_structures(structures_path: Optional[str] = None, source: Optional[str] = None) -> str:
+            self.logger.debug(
+                f"MCP request: list_structures args={{'structures_path': {structures_path!r}, 'source': {source!r}}}"
+            )
+            result = self._list_structures_logic(structures_path, source)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: list_structures len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="get_structure_info", description="Get detailed information about a specific structure")
-        async def get_structure_info(structure_name: str, structures_path: Optional[str] = None) -> str:
+        async def get_structure_info(
+            structure_name: str, structures_path: Optional[str] = None, source: Optional[str] = None
+        ) -> str:
             self.logger.debug(
-                f"MCP request: get_structure_info args={{'structure_name': {structure_name!r}, 'structures_path': {structures_path!r}}}"
+                f"MCP request: get_structure_info args={{'structure_name': {structure_name!r}, 'structures_path': {structures_path!r}, 'source': {source!r}}}"
             )
-            result = self._get_structure_info_logic(structure_name, structures_path)
+            result = self._get_structure_info_logic(structure_name, structures_path, source)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: get_structure_info len={len(result)} preview=\n{preview}")
             return result
@@ -223,6 +306,7 @@ class StructMCPServer:
             dry_run: bool = False,
             mappings: Optional[Dict[str, str]] = None,
             structures_path: Optional[str] = None,
+            source: Optional[str] = None,
         ) -> str:
             self.logger.debug(
                 "MCP request: generate_structure args=%s",
@@ -233,6 +317,7 @@ class StructMCPServer:
                     "dry_run": dry_run,
                     "mappings": mappings,
                     "structures_path": structures_path,
+                    "source": source,
                 },
             )
             result = self._generate_structure_logic(
@@ -242,9 +327,50 @@ class StructMCPServer:
                 dry_run,
                 mappings,
                 structures_path,
+                source,
             )
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: generate_structure len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="list_sources", description="List configured custom structure sources")
+        async def list_sources() -> str:
+            self.logger.debug("MCP request: list_sources args={}")
+            result = self._list_sources_logic()
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: list_sources len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="add_source", description="Add or replace a local custom structure source")
+        async def add_source(name: str, path_or_url: str) -> str:
+            self.logger.debug(f"MCP request: add_source args={{'name': {name!r}, 'path_or_url': {path_or_url!r}}}")
+            result = self._add_source_logic(name, path_or_url)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: add_source len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="remove_source", description="Remove a configured custom structure source")
+        async def remove_source(name: str) -> str:
+            self.logger.debug(f"MCP request: remove_source args={{'name': {name!r}}}")
+            result = self._remove_source_logic(name)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: remove_source len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="show_source", description="Show a configured custom structure source")
+        async def show_source(name: str) -> str:
+            self.logger.debug(f"MCP request: show_source args={{'name': {name!r}}}")
+            result = self._show_source_logic(name)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: show_source len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="validate_source", description="Validate a configured custom structure source")
+        async def validate_source(name: str) -> str:
+            self.logger.debug(f"MCP request: validate_source args={{'name': {name!r}}}")
+            result = self._validate_source_logic(name)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: validate_source len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="validate_structure", description="Validate a structure configuration YAML file")
@@ -323,8 +449,9 @@ class StructMCPServer:
         """Compatibility method for tests that expect MCP-style responses."""
         structure_name = params.get('structure_name')
         structures_path = params.get('structures_path')
+        source = params.get('source')
 
-        result_text = self._get_structure_info_logic(structure_name, structures_path)
+        result_text = self._get_structure_info_logic(structure_name, structures_path, source)
 
         # Mock MCP response structure
         class MockContent:

@@ -75,3 +75,15 @@ Existing custom-structure behavior remains compatible:
 4. If none of the above are used, StructKit uses its bundled contrib structures.
 
 When a custom path or named source is selected, StructKit still falls back to bundled contrib structures for `list`, `search`, and `generate` in the same way as the existing `STRUCTKIT_STRUCTURES_PATH` workflow.
+
+### MCP tools
+
+The MCP server exposes the same source-management workflow for AI clients:
+
+- `list_sources`
+- `add_source`
+- `remove_source`
+- `show_source`
+- `validate_source`
+
+The structure tools also accept named sources. Pass `source` to `list_structures`, `get_structure_info`, or `generate_structure`, or use a source-prefixed structure name such as `company/project/python` with `get_structure_info` and `generate_structure`.

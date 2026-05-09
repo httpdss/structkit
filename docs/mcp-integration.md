@@ -124,6 +124,28 @@ Lint one or more structure YAML files or structure names for quality and safety 
 - `lint_all` (optional): Lint all bundled contrib structures (default: false).
 - `output` (optional): Output format - "text" or "json" (default: "text").
 
+
+### 7. graph_structure
+Visualize structure dependencies from `folders[].struct` references as text, JSON, or Mermaid. The tool reports nested dependencies, missing references, and cycles.
+
+```json
+{
+  "name": "graph_structure",
+  "arguments": {
+    "structure_definition": "project/python",
+    "structures_path": "/path/to/custom/structures",
+    "graph_all": false,
+    "output": "mermaid"
+  }
+}
+```
+
+**Parameters:**
+- `structure_definition` (optional): Structure name or local YAML file to graph. Required unless `graph_all` is true.
+- `structures_path` (optional): Custom path to structure definitions.
+- `graph_all` (optional): Graph all available structures (default: false).
+- `output` (optional): Output format - "text", "json", or "mermaid" (default: "text").
+
 ## Usage
 
 ### Starting the MCP Server (FastMCP stdio / http / sse)

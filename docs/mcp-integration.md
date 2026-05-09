@@ -103,6 +103,27 @@ Validate a structure configuration YAML file.
 **Parameters:**
 - `yaml_file` (required): Path to the YAML configuration file to validate
 
+### 6. lint_structure
+Lint one or more structure YAML files or structure names for quality and safety issues.
+
+```json
+{
+  "name": "lint_structure",
+  "arguments": {
+    "targets": ["project/python", "/path/to/.struct.yaml"],
+    "structures_path": "/path/to/custom/structures",
+    "lint_all": false,
+    "output": "json"
+  }
+}
+```
+
+**Parameters:**
+- `targets` (optional): YAML file paths or structure names to lint. Required unless `lint_all` is true.
+- `structures_path` (optional): Custom path to structure definitions.
+- `lint_all` (optional): Lint all bundled contrib structures (default: false).
+- `output` (optional): Output format - "text" or "json" (default: "text").
+
 ## Usage
 
 ### Starting the MCP Server (FastMCP stdio / http / sse)
@@ -246,6 +267,7 @@ The MCP tools can be chained together for complex workflows:
 2. Get detailed info about a specific structure
 3. Generate the structure with custom mappings
 4. Validate any custom configurations
+5. Lint structures for stricter quality and safety checks
 
 ### Integration Examples
 
@@ -374,6 +396,7 @@ Once connected, you can use these tools:
 - `generate_structure` - Generate project structures
 - `get_structure_vars` - Inspect declared structure variables
 - `validate_structure` - Validate YAML configuration files
+- `lint_structure` - Lint YAML files or structure names for quality and safety issues
 
 ## Troubleshooting
 

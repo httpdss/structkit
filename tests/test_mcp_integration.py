@@ -1,6 +1,8 @@
 """
 Tests for MCP (Model Context Protocol) integration with FastMCP stdio transport.
 """
+import asyncio
+import json
 import os
 import tempfile
 import unittest
@@ -18,6 +20,11 @@ class TestMCPIntegration(unittest.TestCase):
     def test_server_initialization(self):
         self.assertIsNotNone(self.server)
         self.assertTrue(hasattr(self.server, 'app'))
+
+    def test_get_structure_vars_tool_is_registered(self):
+        tools = asyncio.run(self.server.app.list_tools())
+        tool_names = [tool.name for tool in tools]
+        self.assertIn('get_structure_vars', tool_names)
 
     def test_list_structures_logic(self):
         text = self.server._list_structures_logic()
@@ -42,6 +49,76 @@ class TestMCPIntegration(unittest.TestCase):
                 output="console",
             )
             self.assertIsInstance(text, str)
+
+    def test_get_structure_vars_logic(self):
+        text = self.server._get_structure_vars_logic(None)
+        self.assertIn("structure_name is required", text)
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            yaml.dump({
+                'variables': [
+                    {
+                        'project_name': {
+                            'type': 'string',
+                            'default': 'MyProject',
+                            'description': 'Project name'
+                        }
+                    },
+                    {
+                        'api_token': {
+                            'type': 'string',
+                            'help': 'API token',
+                            'required': True
+                        }
+                    },
+                ]
+            }, f)
+            f.flush()
+            try:
+                text = self.server._get_structure_vars_logic(f.name)
+                self.assertIn("Variables for", text)
+                self.assertIn("project_name", text)
+                self.assertIn("MyProject", text)
+                self.assertIn("api_token", text)
+                self.assertIn("required", text)
+
+                json_text = self.server._get_structure_vars_logic(f.name, output="json")
+                data = json.loads(json_text)
+                self.assertEqual(data[0]['name'], 'project_name')
+                self.assertEqual(data[0]['default'], 'MyProject')
+                self.assertEqual(data[1]['name'], 'api_token')
+                self.assertTrue(data[1]['required'])
+            finally:
+                os.unlink(f.name)
+
+    def test_get_structure_vars_logic_custom_path(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            structure_path = os.path.join(temp_dir, 'custom.yaml')
+            with open(structure_path, 'w') as f:
+                yaml.dump({
+                    'variables': [
+                        {'custom_name': {'type': 'string', 'description': 'Custom variable'}}
+                    ]
+                }, f)
+
+            text = self.server._get_structure_vars_logic('custom', structures_path=temp_dir)
+            self.assertIn('custom_name', text)
+            self.assertIn('Custom variable', text)
+
+    def test_get_structure_vars_compat_handler(self):
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            yaml.dump({'variables': [{'enabled': {'type': 'boolean', 'default': True}}]}, f)
+            f.flush()
+            try:
+                result = asyncio.run(self.server._handle_get_structure_vars({
+                    'structure_name': f.name,
+                    'output': 'json',
+                }))
+                data = json.loads(result.content[0].text)
+                self.assertEqual(data[0]['name'], 'enabled')
+                self.assertTrue(data[0]['default'])
+            finally:
+                os.unlink(f.name)
 
     def test_validate_structure_logic(self):
         # Missing yaml_file

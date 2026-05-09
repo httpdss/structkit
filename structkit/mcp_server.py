@@ -6,6 +6,7 @@ This module provides MCP (Model Context Protocol) support for:
 2. Getting detailed information about structures
 3. Generating structures with various options
 4. Validating structure configurations
+5. Visualizing structure dependency graphs
 """
 import asyncio
 import logging
@@ -17,6 +18,7 @@ from typing import Any, Dict, Optional
 from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
+from structkit.commands.graph import GraphCommand
 from structkit.commands.validate import ValidateCommand
 from structkit import __version__
 
@@ -167,6 +169,30 @@ class StructMCPServer:
                 return f"Dry run completed for structure '{structure_definition}' at '{base_path}'"
             return f"Structure '{structure_definition}' generated successfully at '{base_path}'"
 
+    def _graph_structure_logic(
+        self,
+        structure_definition: Optional[str] = None,
+        structures_path: Optional[str] = None,
+        include_all: bool = False,
+        output_format: str = "text",
+    ) -> str:
+        if not include_all and not structure_definition:
+            return "Error: structure_definition is required unless include_all is true"
+
+        if output_format not in {"text", "json", "mermaid"}:
+            return "Error: output_format must be one of: text, json, mermaid"
+
+        import argparse
+        dummy_parser = argparse.ArgumentParser()
+        command = GraphCommand(dummy_parser)
+        graph = command.build_graph(structure_definition, structures_path, include_all)
+
+        if output_format == "json":
+            return command.format_json(graph)
+        if output_format == "mermaid":
+            return command.format_mermaid(graph)
+        return command.format_text(graph)
+
     def _validate_structure_logic(self, yaml_file: Optional[str]) -> str:
         if not yaml_file:
             return "Error: yaml_file is required"
@@ -245,6 +271,32 @@ class StructMCPServer:
             )
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: generate_structure len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="graph_structure", description="Visualize structure dependency graphs from folders[].struct references")
+        async def graph_structure(
+            structure_definition: Optional[str] = None,
+            structures_path: Optional[str] = None,
+            include_all: bool = False,
+            output_format: str = "text",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: graph_structure args=%s",
+                {
+                    "structure_definition": structure_definition,
+                    "structures_path": structures_path,
+                    "include_all": include_all,
+                    "output_format": output_format,
+                },
+            )
+            result = self._graph_structure_logic(
+                structure_definition,
+                structures_path,
+                include_all,
+                output_format,
+            )
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: graph_structure len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="validate_structure", description="Validate a structure configuration YAML file")

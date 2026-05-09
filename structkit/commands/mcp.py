@@ -49,6 +49,7 @@ class MCPCommand(Command):
             print("  - list_structures: List all available structure definitions")
             print("  - get_structure_info: Get detailed information about a structure")
             print("  - generate_structure: Generate structures with various options")
+            print("  - graph_structure: Visualize structure dependency graphs")
             print("  - validate_structure: Validate structure configuration files")
             print("\nExamples:")
             print("  structkit mcp --server --transport stdio --debug")

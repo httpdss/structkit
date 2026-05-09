@@ -69,7 +69,28 @@ Generate a project structure using specified definition and options.
 - `mappings` (optional): Variable mappings for template substitution
 - `structures_path` (optional): Custom path to structure definitions
 
-### 4. validate_structure
+### 4. graph_structure
+Visualize dependency graphs from `folders[].struct` references.
+
+```json
+{
+  "name": "graph_structure",
+  "arguments": {
+    "structure_definition": "project/python",
+    "structures_path": "/path/to/custom/structures",
+    "include_all": false,
+    "output_format": "mermaid"
+  }
+}
+```
+
+**Parameters:**
+- `structure_definition` (optional): Name or local YAML path to graph. Required unless `include_all` is `true`
+- `structures_path` (optional): Custom path to structure definitions
+- `include_all` (optional): Include all available structures instead of a single root (default: `false`)
+- `output_format` (optional): Output format - `text`, `json`, or `mermaid` (default: `text`)
+
+### 5. validate_structure
 Validate a structure configuration YAML file.
 
 ```json

@@ -1,6 +1,7 @@
 """
 Tests for MCP (Model Context Protocol) integration with FastMCP stdio transport.
 """
+import json
 import os
 import tempfile
 import unittest
@@ -42,6 +43,41 @@ class TestMCPIntegration(unittest.TestCase):
                 output="console",
             )
             self.assertIsInstance(text, str)
+
+    def test_graph_structure_logic(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            app_path = os.path.join(temp_dir, "app.yaml")
+            library_path = os.path.join(temp_dir, "library.yaml")
+            with open(app_path, "w") as f:
+                yaml.dump({
+                    "files": [],
+                    "folders": [
+                        {"src": {"struct": "library"}}
+                    ],
+                }, f)
+            with open(library_path, "w") as f:
+                yaml.dump({"files": []}, f)
+
+            text = self.server._graph_structure_logic("app", temp_dir)
+            self.assertIn("app", text)
+            self.assertIn("library", text)
+
+            payload = json.loads(
+                self.server._graph_structure_logic("app", temp_dir, output_format="json")
+            )
+            self.assertEqual(payload["edges"], [{"from": "app", "to": "library"}])
+
+            mermaid = self.server._graph_structure_logic(
+                "app", temp_dir, output_format="mermaid"
+            )
+            self.assertIn('n_app["app"] --> n_library["library"]', mermaid)
+
+    def test_graph_structure_logic_validates_arguments(self):
+        text = self.server._graph_structure_logic()
+        self.assertIn("structure_definition is required", text)
+
+        text = self.server._graph_structure_logic("app", output_format="dot")
+        self.assertIn("output_format must be one of", text)
 
     def test_validate_structure_logic(self):
         # Missing yaml_file

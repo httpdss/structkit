@@ -167,6 +167,17 @@ def test_mcp_command_server_flag(parser):
         mock_start.assert_called_once()
 
 
+def test_mcp_command_lists_graph_tool(parser):
+    command = MCPCommand(parser)
+    args = parser.parse_args([])
+
+    with patch('builtins.print') as mock_print:
+        command.execute(args)
+
+    printed = "\n".join(call.args[0] for call in mock_print.call_args_list)
+    assert 'graph_structure' in printed
+
+
 # ValidateCommand error-path tests on helpers
 
 def test_validate_structure_config_errors(parser):

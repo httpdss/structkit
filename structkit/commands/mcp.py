@@ -50,6 +50,7 @@ class MCPCommand(Command):
             print("  - get_structure_info: Get detailed information about a structure")
             print("  - generate_structure: Generate structures with various options")
             print("  - validate_structure: Validate structure configuration files")
+            print("  - lint_structure: Lint structure configuration files for quality issues")
             print("\nExamples:")
             print("  structkit mcp --server --transport stdio --debug")
             print("  structkit mcp --server --transport http --host 127.0.0.1 --port 9000 --path /mcp --uvicorn-log-level debug")

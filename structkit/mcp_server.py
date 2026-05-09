@@ -6,17 +6,19 @@ This module provides MCP (Model Context Protocol) support for:
 2. Getting detailed information about structures
 3. Generating structures with various options
 4. Validating structure configurations
+5. Linting structure configurations
 """
 import asyncio
 import logging
 import os
 import sys
 import yaml
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
+from structkit.commands.lint import LintCommand
 from structkit.commands.validate import ValidateCommand
 from structkit import __version__
 
@@ -193,6 +195,43 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+    def _lint_structure_logic(
+        self,
+        targets: Optional[List[str]] = None,
+        structures_path: Optional[str] = None,
+        lint_all: bool = False,
+        json_output: bool = False,
+    ) -> str:
+        class Args:
+            pass
+
+        args = Args()
+        args.targets = targets or []
+        args.structures_path = structures_path
+        args.all = lint_all
+        args.json = json_output
+        args.log = "INFO"
+        args.config_file = None
+        args.log_file = None
+
+        from io import StringIO
+        buf = StringIO()
+        old = sys.stdout
+        sys.stdout = buf
+        try:
+            import argparse
+            dummy_parser = argparse.ArgumentParser()
+            try:
+                LintCommand(dummy_parser).execute(args)
+            except SystemExit:
+                # LintCommand uses SystemExit(1) to signal lint errors to the CLI.
+                # MCP clients need the report text instead of a transport-level exit.
+                pass
+            text = buf.getvalue()
+            return text.strip() or "✅ No lint issues found."
+        finally:
+            sys.stdout = old
+
     # =====================
     # FastMCP tool registration (maps to logic above)
     # =====================
@@ -253,6 +292,27 @@ class StructMCPServer:
             result = self._validate_structure_logic(yaml_file)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: validate_structure len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="lint_structure", description="Lint one or more structure configuration YAML files")
+        async def lint_structure(
+            targets: Optional[List[str]] = None,
+            structures_path: Optional[str] = None,
+            lint_all: bool = False,
+            json_output: bool = False,
+        ) -> str:
+            self.logger.debug(
+                "MCP request: lint_structure args=%s",
+                {
+                    "targets": targets,
+                    "structures_path": structures_path,
+                    "lint_all": lint_all,
+                    "json_output": json_output,
+                },
+            )
+            result = self._lint_structure_logic(targets, structures_path, lint_all, json_output)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: lint_structure len={len(result)} preview=\n{preview}")
             return result
 
     async def run(

@@ -84,6 +84,27 @@ Validate a structure configuration YAML file.
 **Parameters:**
 - `yaml_file` (required): Path to the YAML configuration file to validate
 
+### 5. lint_structure
+Lint one or more structure configuration YAML files for quality and safety issues.
+
+```json
+{
+  "name": "lint_structure",
+  "arguments": {
+    "targets": ["/path/to/structure.yaml"],
+    "structures_path": "/path/to/custom/structures",
+    "lint_all": false,
+    "json_output": true
+  }
+}
+```
+
+**Parameters:**
+- `targets` (optional): List of YAML file paths, `file://` URLs, or bundled/custom structure names to lint
+- `structures_path` (optional): Custom path to structure definitions
+- `lint_all` (optional): Lint all bundled structures, plus custom structures when `structures_path` is supplied (default: false)
+- `json_output` (optional): Return a JSON report with summary counts and issue details (default: false)
+
 ## Usage
 
 ### Starting the MCP Server (FastMCP stdio / http / sse)
@@ -227,6 +248,7 @@ The MCP tools can be chained together for complex workflows:
 2. Get detailed info about a specific structure
 3. Generate the structure with custom mappings
 4. Validate any custom configurations
+5. Lint custom or generated configurations before using them
 
 ### Integration Examples
 
@@ -261,6 +283,17 @@ The MCP tools can be chained together for complex workflows:
   "arguments": {
     "structure_definition": "file:///path/to/custom-structure.yaml",
     "base_path": "/tmp/project"
+  }
+}
+```
+
+**Example 3: Lint Custom Structures**
+```json
+{
+  "name": "lint_structure",
+  "arguments": {
+    "targets": ["/path/to/custom-structure.yaml"],
+    "json_output": true
   }
 }
 ```
@@ -354,6 +387,7 @@ Once connected, you can use these tools:
 - `get_structure_info` - Get details about a specific structure
 - `generate_structure` - Generate project structures
 - `validate_structure` - Validate YAML configuration files
+- `lint_structure` - Lint YAML configuration files for quality and safety issues
 
 ## Troubleshooting
 

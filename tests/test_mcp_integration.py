@@ -1,9 +1,11 @@
 """
 Tests for MCP (Model Context Protocol) integration with FastMCP stdio transport.
 """
+import json
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 import yaml
 
 from structkit.mcp_server import StructMCPServer
@@ -62,6 +64,26 @@ class TestMCPIntegration(unittest.TestCase):
             finally:
                 os.unlink(f.name)
 
+    def test_lint_structure_logic(self):
+        # Missing target returns the lint command's machine-readable error report.
+        missing = self.server._lint_structure_logic(json_output=True)
+        missing_payload = json.loads(missing)
+        self.assertEqual(missing_payload['summary']['errors'], 1)
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            yaml.dump({
+                'description': 'Lintable structure',
+                'files': [
+                    {'README.md': {'content': 'Hello World'}}
+                ],
+            }, f)
+            f.flush()
+            try:
+                text = self.server._lint_structure_logic(targets=[f.name])
+                self.assertIn('No lint issues found', text)
+            finally:
+                os.unlink(f.name)
+
 
 class TestMCPCommands(unittest.TestCase):
     """Test MCP command line integration."""
@@ -96,6 +118,20 @@ class TestMCPCommands(unittest.TestCase):
         args = parser.parse_args(['info', 'test_structure', '--mcp'])
         self.assertTrue(hasattr(args, 'mcp'))
         self.assertEqual(args.structure_definition, 'test_structure')
+
+    def test_mcp_command_lists_lint_tool(self):
+        from structkit.commands.mcp import MCPCommand
+        import argparse
+
+        parser = argparse.ArgumentParser()
+        command = MCPCommand(parser)
+        args = parser.parse_args([])
+
+        with patch('builtins.print') as mock_print:
+            command.execute(args)
+
+        printed = '\n'.join(str(call.args[0]) for call in mock_print.call_args_list)
+        self.assertIn('lint_structure', printed)
 
 
 if __name__ == '__main__':

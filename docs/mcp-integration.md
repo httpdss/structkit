@@ -69,7 +69,38 @@ Generate a project structure using specified definition and options.
 - `mappings` (optional): Variable mappings for template substitution
 - `structures_path` (optional): Custom path to structure definitions
 
-### 4. validate_structure
+### 4. explain_structure
+Explain how a structure resolves without creating files, fetching remote content, generating prompt-based content, or executing hooks. This is useful when an AI assistant needs to inspect the structure graph before deciding whether to generate it.
+
+```json
+{
+  "name": "explain_structure",
+  "arguments": {
+    "structure_definition": "project/python",
+    "base_path": "/tmp/myproject",
+    "output": "json",
+    "variables": {
+      "project_name": "MyProject"
+    },
+    "mappings": {
+      "team": "platform"
+    },
+    "file_strategy": "overwrite",
+    "structures_path": "/path/to/custom/structures"
+  }
+}
+```
+
+**Parameters:**
+- `structure_definition` (required): Name or path to the structure definition
+- `base_path` (optional): Base path used to resolve generated paths (default: `.`)
+- `output` (optional): Output mode - `"text"` or `"json"` (default: `"text"`)
+- `variables` (optional): Template variables to resolve structure names, paths, hooks, and nested `with` values
+- `mappings` (optional): Additional mappings exposed to templates as `mappings`
+- `file_strategy` (optional): Conflict strategy to explain: `overwrite`, `skip`, `append`, `rename`, or `backup` (default: `overwrite`)
+- `structures_path` (optional): Custom path to structure definitions
+
+### 5. validate_structure
 Validate a structure configuration YAML file.
 
 ```json
@@ -204,6 +235,12 @@ async def main():
             # FastMCP tools return plain text content
             print(result.content[0].text)
 
+            explanation = await session.call_tool("explain_structure", {
+                "structure_definition": "project/python",
+                "output": "json"
+            })
+            print(explanation.content[0].text)
+
 if __name__ == "__main__":
     asyncio.run(main())
 ```
@@ -225,8 +262,9 @@ The MCP tools can be chained together for complex workflows:
 
 1. List available structures
 2. Get detailed info about a specific structure
-3. Generate the structure with custom mappings
-4. Validate any custom configurations
+3. Explain the structure to preview files, folders, variables, hooks, and remote references
+4. Generate the structure with custom mappings
+5. Validate any custom configurations
 
 ### Integration Examples
 
@@ -261,6 +299,32 @@ The MCP tools can be chained together for complex workflows:
   "arguments": {
     "structure_definition": "file:///path/to/custom-structure.yaml",
     "base_path": "/tmp/project"
+  }
+}
+```
+
+
+**Example 3: Explain Before Generate**
+```json
+// 1. Explain structure resolution without side effects
+{
+  "name": "explain_structure",
+  "arguments": {
+    "structure_definition": "project/python",
+    "base_path": "/tmp/review",
+    "output": "json",
+    "variables": {
+      "project_name": "ReviewProject"
+    }
+  }
+}
+
+// 2. If the explanation looks correct, generate the structure
+{
+  "name": "generate_structure",
+  "arguments": {
+    "structure_definition": "project/python",
+    "base_path": "/tmp/review"
   }
 }
 ```
@@ -353,6 +417,7 @@ Once connected, you can use these tools:
 - `list_structures` - Get all available structures
 - `get_structure_info` - Get details about a specific structure
 - `generate_structure` - Generate project structures
+- `explain_structure` - Explain structure resolution without side effects
 - `validate_structure` - Validate YAML configuration files
 
 ## Troubleshooting

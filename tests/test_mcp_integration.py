@@ -43,6 +43,49 @@ class TestMCPIntegration(unittest.TestCase):
             )
             self.assertIsInstance(text, str)
 
+
+    def test_explain_structure_logic(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            structure_path = os.path.join(temp_dir, 'example.yaml')
+            with open(structure_path, 'w') as f:
+                yaml.dump({
+                    'variables': [
+                        {'project_name': {'type': 'string', 'default': 'Demo'}}
+                    ],
+                    'pre_hooks': ['echo {{@ project_name @}}'],
+                    'files': [
+                        {'README.md': {'content': '# {{@ project_name @}}'}},
+                        {'remote.txt': {'file': 'https://example.com/template.txt'}}
+                    ],
+                }, f)
+
+            text = self.server._explain_structure_logic(
+                structure_definition=structure_path,
+                base_path=temp_dir,
+                variables={'project_name': 'MCP Demo'},
+            )
+
+            self.assertIn('Structure explanation', text)
+            self.assertIn('MCP Demo', text)
+            self.assertIn('remote.txt', text)
+            self.assertIn('https://example.com/template.txt', text)
+            self.assertIn('Hooks (not executed)', text)
+
+            json_text = self.server._explain_structure_logic(
+                structure_definition=structure_path,
+                base_path=temp_dir,
+                output='json',
+                variables={'project_name': 'MCP Demo'},
+                file_strategy='skip',
+            )
+            self.assertIn('"file_strategy": "skip"', json_text)
+            self.assertIn('"remote_files"', json_text)
+
+    def test_explain_structure_logic_validates_inputs(self):
+        self.assertIn('structure_definition is required', self.server._explain_structure_logic(''))
+        self.assertIn('output must be one of', self.server._explain_structure_logic('project/python', output='xml'))
+        self.assertIn('file_strategy must be one of', self.server._explain_structure_logic('project/python', file_strategy='replace'))
+
     def test_validate_structure_logic(self):
         # Missing yaml_file
         text = self.server._validate_structure_logic(None)

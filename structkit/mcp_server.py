@@ -6,6 +6,7 @@ This module provides MCP (Model Context Protocol) support for:
 2. Getting detailed information about structures
 3. Generating structures with various options
 4. Validating structure configurations
+5. Explaining structure resolution without side effects
 """
 import asyncio
 import logging
@@ -17,6 +18,7 @@ from typing import Any, Dict, Optional
 from fastmcp import FastMCP
 
 from structkit.commands.generate import GenerateCommand
+from structkit.commands.explain import ExplainCommand
 from structkit.commands.validate import ValidateCommand
 from structkit import __version__
 
@@ -193,6 +195,56 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+    def _explain_structure_logic(
+        self,
+        structure_definition: str,
+        base_path: str = ".",
+        output: str = "text",
+        variables: Optional[Dict[str, str]] = None,
+        mappings: Optional[Dict[str, Any]] = None,
+        structures_path: Optional[str] = None,
+        file_strategy: str = "overwrite",
+    ) -> str:
+        if not structure_definition:
+            return "Error: structure_definition is required"
+
+        valid_outputs = {"text", "json"}
+        if output not in valid_outputs:
+            return f"Error: output must be one of {sorted(valid_outputs)}, got: {output}"
+
+        valid_file_strategies = {"overwrite", "skip", "append", "rename", "backup"}
+        if file_strategy not in valid_file_strategies:
+            return f"Error: file_strategy must be one of {sorted(valid_file_strategies)}, got: {file_strategy}"
+
+        class Args:
+            pass
+        args = Args()
+        args.structure_definition = structure_definition
+        args.base_path = base_path or "."
+        args.output = output
+        args.json_output = output == "json"
+        args.structures_path = structures_path
+        args.vars = None
+        args.mappings_file = None
+        args.file_strategy = file_strategy
+        args.log = "INFO"
+        args.config_file = None
+        args.log_file = None
+
+        if variables:
+            args.vars = ",".join([f"{k}={v}" for k, v in variables.items()])
+
+        import argparse
+        dummy_parser = argparse.ArgumentParser()
+        command = ExplainCommand(dummy_parser)
+        explanation = command.explain(args, mappings=mappings or {})
+        if explanation is None:
+            return f"Unable to explain structure '{structure_definition}'"
+        if output == "json":
+            import json
+            return json.dumps(explanation, indent=2, sort_keys=True)
+        return command._format_text(explanation)
+
     # =====================
     # FastMCP tool registration (maps to logic above)
     # =====================
@@ -253,6 +305,41 @@ class StructMCPServer:
             result = self._validate_structure_logic(yaml_file)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: validate_structure len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="explain_structure", description="Explain structure resolution without creating files, fetching remote content, or running hooks")
+        async def explain_structure(
+            structure_definition: str,
+            base_path: str = ".",
+            output: str = "text",
+            variables: Optional[Dict[str, str]] = None,
+            mappings: Optional[Dict[str, Any]] = None,
+            structures_path: Optional[str] = None,
+            file_strategy: str = "overwrite",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: explain_structure args=%s",
+                {
+                    "structure_definition": structure_definition,
+                    "base_path": base_path,
+                    "output": output,
+                    "variables": variables,
+                    "mappings": mappings,
+                    "structures_path": structures_path,
+                    "file_strategy": file_strategy,
+                },
+            )
+            result = self._explain_structure_logic(
+                structure_definition,
+                base_path,
+                output,
+                variables,
+                mappings,
+                structures_path,
+                file_strategy,
+            )
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: explain_structure len={len(result)} preview=\n{preview}")
             return result
 
     async def run(

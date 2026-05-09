@@ -115,6 +115,34 @@ structkit generate
 - `--mappings-file MAPPINGS_FILE`: Path to a YAML file containing mappings to be used in templates (can be specified multiple times).
 - `-o {console,file}, --output {console,file}`: Output mode.
 
+
+### `explain`
+
+Preview how a structure definition resolves before generation. Unlike `generate --dry-run`, `explain` is structure-focused: it lists the files, folders, nested structures, remote file references, declared variables, resolved values, hooks, and conflict behavior without fetching remote content, creating directories, writing files, or executing hooks.
+
+**Usage:**
+
+```sh
+structkit explain [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-v VARS] [-f {overwrite,skip,append,rename,backup}] [--json] structure_definition [base_path]
+```
+
+**Arguments:**
+
+- `structure_definition`: Built-in structure name, custom structure name, or local YAML file path. Local `.yaml` and `.yml` files can be passed directly, or with `file://`.
+- `base_path` (optional): Base path used to resolve generated paths and existing-file conflict behavior (default: `.`).
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable.
+- `-v VARS, --vars VARS`: Template variables in the format `KEY1=value1,KEY2=value2`; these are shown as resolved values and are used for nested `folders[].with` values.
+- `-f {overwrite,skip,append,rename,backup}, --file-strategy {overwrite,skip,append,rename,backup}`: Strategy to report when a generated file already exists.
+- `--json`: Print a machine-readable JSON explanation.
+
+Examples:
+
+```sh
+structkit explain terraform/modules/generic
+structkit explain ./my-struct.yaml --vars project_name=demo
+structkit explain project/python --json
+```
+
 ### `vars`
 
 Inspect variables declared by a structure definition without generating files.

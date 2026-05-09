@@ -7,6 +7,7 @@ This module provides MCP (Model Context Protocol) support for:
 3. Generating structures with various options
 4. Validating structure configurations
 5. Inspecting structure variables
+6. Explaining structure resolution without generating files
 """
 import asyncio
 import logging
@@ -20,6 +21,7 @@ from fastmcp import FastMCP
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.validate import ValidateCommand
 from structkit.commands.vars import VarsCommand
+from structkit.commands.explain import ExplainCommand
 from structkit import __version__
 
 
@@ -169,6 +171,37 @@ class StructMCPServer:
                 return f"Dry run completed for structure '{structure_definition}' at '{base_path}'"
             return f"Structure '{structure_definition}' generated successfully at '{base_path}'"
 
+    def _explain_structure_logic(
+        self,
+        structure_definition: Optional[str],
+        base_path: str = ".",
+        structures_path: Optional[str] = None,
+        vars: Optional[Dict[str, str]] = None,
+        output: str = "text",
+        file_strategy: str = "overwrite",
+    ) -> str:
+        if not structure_definition:
+            return "Error: structure_definition is required"
+
+        import argparse
+        dummy_parser = argparse.ArgumentParser()
+        explain_command = ExplainCommand(dummy_parser)
+        vars_str = None
+        if vars:
+            vars_str = ",".join([f"{k}={v}" for k, v in vars.items()])
+        explanation = explain_command.explain(
+            structure_definition,
+            base_path,
+            structures_path=structures_path,
+            vars_str=vars_str,
+            file_strategy=file_strategy,
+        )
+
+        if output == "json":
+            import json
+            return json.dumps(explanation, indent=2)
+        return explain_command.format_text(explanation)
+
     def _validate_structure_logic(self, yaml_file: Optional[str]) -> str:
         if not yaml_file:
             return "Error: yaml_file is required"
@@ -272,6 +305,38 @@ class StructMCPServer:
             result = self._get_structure_vars_logic(structure_name, structures_path, output)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: get_structure_vars len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="explain_structure", description="Explain how a structure resolves without creating files or executing hooks")
+        async def explain_structure(
+            structure_definition: str,
+            base_path: str = ".",
+            structures_path: Optional[str] = None,
+            vars: Optional[Dict[str, str]] = None,
+            output: str = "text",
+            file_strategy: str = "overwrite",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: explain_structure args=%s",
+                {
+                    "structure_definition": structure_definition,
+                    "base_path": base_path,
+                    "structures_path": structures_path,
+                    "vars": vars,
+                    "output": output,
+                    "file_strategy": file_strategy,
+                },
+            )
+            result = self._explain_structure_logic(
+                structure_definition,
+                base_path,
+                structures_path,
+                vars,
+                output,
+                file_strategy,
+            )
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: explain_structure len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="generate_structure", description="Generate a project structure using specified definition and options")
@@ -405,6 +470,27 @@ class StructMCPServer:
         result_text = self._get_structure_vars_logic(structure_name, structures_path, output)
 
         # Mock MCP response structure
+        class MockContent:
+            def __init__(self, text):
+                self.text = text
+
+        class MockResult:
+            def __init__(self, content):
+                self.content = content
+
+        return MockResult([MockContent(result_text)])
+
+    async def _handle_explain_structure(self, params: Dict[str, Any]):
+        """Compatibility method for tests that expect MCP-style responses."""
+        result_text = self._explain_structure_logic(
+            params.get('structure_definition'),
+            params.get('base_path', '.'),
+            params.get('structures_path'),
+            params.get('vars'),
+            params.get('output', 'text'),
+            params.get('file_strategy', 'overwrite'),
+        )
+
         class MockContent:
             def __init__(self, text):
                 self.text = text

@@ -9,6 +9,7 @@ This module provides MCP (Model Context Protocol) support for:
 5. Inspecting structure variables
 6. Explaining structure resolution without generating files
 7. Linting structure definitions for quality and safety issues
+8. Visualizing structure dependency graphs
 """
 import asyncio
 import logging
@@ -24,6 +25,7 @@ from structkit.commands.validate import ValidateCommand
 from structkit.commands.lint import LintCommand
 from structkit.commands.vars import VarsCommand
 from structkit.commands.explain import ExplainCommand
+from structkit.commands.graph import GraphCommand
 from structkit import __version__
 
 
@@ -268,6 +270,26 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+    def _graph_structure_logic(
+        self,
+        structure_definition: Optional[str] = None,
+        structures_path: Optional[str] = None,
+        graph_all: bool = False,
+        output: str = "text",
+    ) -> str:
+        if not graph_all and not structure_definition:
+            return "Error: structure_definition is required unless graph_all is true"
+
+        import argparse
+        dummy_parser = argparse.ArgumentParser()
+        graph_command = GraphCommand(dummy_parser)
+        graph = graph_command.build_graph(
+            structure_definition=structure_definition,
+            structures_path=structures_path,
+            all_structures=graph_all,
+        )
+        return graph_command.format_graph(graph, output)
+
 
     def _lint_structure_logic(
         self,
@@ -398,6 +420,27 @@ class StructMCPServer:
             self.logger.debug(f"MCP response: generate_structure len={len(result)} preview=\n{preview}")
             return result
 
+
+        @self.app.tool(name="graph_structure", description="Visualize folders[].struct dependencies as text, JSON, or Mermaid")
+        async def graph_structure(
+            structure_definition: Optional[str] = None,
+            structures_path: Optional[str] = None,
+            graph_all: bool = False,
+            output: str = "text",
+        ) -> str:
+            self.logger.debug(
+                "MCP request: graph_structure args=%s",
+                {
+                    "structure_definition": structure_definition,
+                    "structures_path": structures_path,
+                    "graph_all": graph_all,
+                    "output": output,
+                },
+            )
+            result = self._graph_structure_logic(structure_definition, structures_path, graph_all, output)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: graph_structure len={len(result)} preview=\n{preview}")
+            return result
 
         @self.app.tool(name="lint_structure", description="Lint structure YAML files for quality and safety issues")
         async def lint_structure(
@@ -538,6 +581,25 @@ class StructMCPServer:
             params.get('vars'),
             params.get('output', 'text'),
             params.get('file_strategy', 'overwrite'),
+        )
+
+        class MockContent:
+            def __init__(self, text):
+                self.text = text
+
+        class MockResult:
+            def __init__(self, content):
+                self.content = content
+
+        return MockResult([MockContent(result_text)])
+
+    async def _handle_graph_structure(self, params: Dict[str, Any]):
+        """Compatibility method for tests that expect MCP-style responses."""
+        result_text = self._graph_structure_logic(
+            params.get('structure_definition'),
+            params.get('structures_path'),
+            params.get('graph_all', False),
+            params.get('output', 'text'),
         )
 
         class MockContent:

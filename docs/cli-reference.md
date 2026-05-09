@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-structkit {info,validate,generate,vars,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,explain,vars,graph,list,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -198,6 +198,34 @@ structkit vars project/python
 structkit vars ./my-struct.yaml --json
 structkit vars python-basic --structures-path ~/custom-structures
 ```
+
+
+### `graph`
+
+Visualize dependency relationships between structure definitions. The command follows nested structure references declared in `folders[].struct` or `folders[].structkit`, reports missing references, and detects cycles.
+
+**Usage:**
+
+```sh
+structkit graph [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--all] [--format {text,json,mermaid}] [structure_definition]
+```
+
+**Arguments:**
+
+- `structure_definition`: Built-in structure name, custom structure name, or local YAML file path. Local `.yaml` and `.yml` files can be passed directly, or with `file://`.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to custom structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable.
+- `--all`: Graph every available built-in and custom structure.
+- `--format {text,json,mermaid}`: Output a human-readable tree, machine-readable JSON, or Mermaid flowchart syntax (default: `text`).
+
+Examples:
+
+```sh
+structkit graph project/python
+structkit graph terraform/apps/generic --format mermaid
+structkit graph --all --format json
+```
+
+Mermaid output starts with `graph TD` and can be pasted into Markdown documentation that supports Mermaid diagrams.
 
 ### `list`
 

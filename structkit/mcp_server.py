@@ -27,6 +27,14 @@ from structkit.commands.vars import VarsCommand
 from structkit.commands.explain import ExplainCommand
 from structkit.commands.graph import GraphCommand
 from structkit import __version__
+from structkit.sources import (
+    SourceError,
+    add_source,
+    read_sources,
+    remove_source,
+    resolve_structures_path,
+    validate_source_path,
+)
 
 
 class StructMCPServer:
@@ -127,7 +135,13 @@ class StructMCPServer:
         dry_run: bool = False,
         mappings: Optional[Dict[str, str]] = None,
         structures_path: Optional[str] = None,
+        source: Optional[str] = None,
     ) -> str:
+        try:
+            structures_path, structure_definition = resolve_structures_path(structures_path, source, structure_definition)
+        except SourceError as exc:
+            return f"Error: {exc}"
+
         class Args:
             pass
         args = Args()
@@ -315,6 +329,50 @@ class StructMCPServer:
         finally:
             sys.stdout = old
 
+    def _manage_sources_logic(
+        self,
+        action: str,
+        name: Optional[str] = None,
+        path_or_url: Optional[str] = None,
+        config_path: Optional[str] = None,
+    ) -> str:
+        try:
+            if action == "list":
+                sources = read_sources(config_path)
+                if not sources:
+                    return "No sources configured."
+                return "\n".join(f"{source_name}\t{source_path}" for source_name, source_path in sorted(sources.items()))
+            if action == "add":
+                if not name or not path_or_url:
+                    return "Error: name and path_or_url are required for add"
+                add_source(name, path_or_url, config_path)
+                return f"Added source '{name}' -> {read_sources(config_path)[name]}"
+            if action == "remove":
+                if not name:
+                    return "Error: name is required for remove"
+                remove_source(name, config_path)
+                return f"Removed source '{name}'"
+            if action == "show":
+                if not name:
+                    return "Error: name is required for show"
+                sources = read_sources(config_path)
+                if name not in sources:
+                    return f"Error: source not found: {name}"
+                return f"{name}\t{sources[name]}"
+            if action == "validate":
+                if not name:
+                    return "Error: name is required for validate"
+                sources = read_sources(config_path)
+                if name not in sources:
+                    return f"Error: source not found: {name}"
+                ok, message = validate_source_path(sources[name])
+                if not ok:
+                    return f"Error: {message}"
+                return f"Source '{name}' is valid: {message}"
+            return "Error: action must be one of list, add, remove, show, validate"
+        except SourceError as exc:
+            return f"Error: {exc}"
+
     # =====================
     # FastMCP tool registration (maps to logic above)
     # =====================
@@ -396,6 +454,7 @@ class StructMCPServer:
             dry_run: bool = False,
             mappings: Optional[Dict[str, str]] = None,
             structures_path: Optional[str] = None,
+            source: Optional[str] = None,
         ) -> str:
             self.logger.debug(
                 "MCP request: generate_structure args=%s",
@@ -406,6 +465,7 @@ class StructMCPServer:
                     "dry_run": dry_run,
                     "mappings": mappings,
                     "structures_path": structures_path,
+                    "source": source,
                 },
             )
             result = self._generate_structure_logic(
@@ -415,6 +475,7 @@ class StructMCPServer:
                 dry_run,
                 mappings,
                 structures_path,
+                source,
             )
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: generate_structure len={len(result)} preview=\n{preview}")
@@ -461,6 +522,27 @@ class StructMCPServer:
             result = self._lint_structure_logic(targets, structures_path, lint_all, output)
             preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
             self.logger.debug(f"MCP response: lint_structure len={len(result)} preview=\n{preview}")
+            return result
+
+        @self.app.tool(name="manage_sources", description="Manage named custom structure sources")
+        async def manage_sources(
+            action: str,
+            name: Optional[str] = None,
+            path_or_url: Optional[str] = None,
+            config_path: Optional[str] = None,
+        ) -> str:
+            self.logger.debug(
+                "MCP request: manage_sources args=%s",
+                {
+                    "action": action,
+                    "name": name,
+                    "path_or_url": path_or_url,
+                    "config_path": config_path,
+                },
+            )
+            result = self._manage_sources_logic(action, name, path_or_url, config_path)
+            preview = result if len(result) <= 1000 else result[:1000] + f"... [truncated {len(result)-1000} chars]"
+            self.logger.debug(f"MCP response: manage_sources len={len(result)} preview=\n{preview}")
             return result
 
         @self.app.tool(name="validate_structure", description="Validate a structure configuration YAML file")
@@ -619,6 +701,25 @@ class StructMCPServer:
             params.get('structures_path'),
             params.get('lint_all', False),
             params.get('output', 'text'),
+        )
+
+        class MockContent:
+            def __init__(self, text):
+                self.text = text
+
+        class MockResult:
+            def __init__(self, content):
+                self.content = content
+
+        return MockResult([MockContent(result_text)])
+
+    async def _handle_manage_sources(self, params: Dict[str, Any]):
+        """Compatibility method for tests that expect MCP-style responses."""
+        result_text = self._manage_sources_logic(
+            params.get('action'),
+            params.get('name'),
+            params.get('path_or_url'),
+            params.get('config_path'),
         )
 
         class MockContent:

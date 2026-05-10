@@ -9,7 +9,7 @@ The `struct` CLI allows you to generate project structures from YAML configurati
 **Basic Usage:**
 
 ```sh
-structkit {info,validate,generate,explain,vars,graph,list,generate-schema,mcp,completion,init} ...
+structkit {info,validate,generate,explain,vars,graph,list,sources,generate-schema,mcp,completion,init} ...
 ```
 
 ## Global Options
@@ -27,6 +27,7 @@ The following environment variables can be used to configure default values for 
 
 - `STRUCTKIT_LOG_LEVEL`: Set the default logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Overridden by the `--log` flag.
 - `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used as the default value for the `--structures-path` flag when not explicitly provided. When set, the CLI will log an info message indicating that this environment variable is being used.
+- `STRUCTKIT_SOURCES_CONFIG`: Override the user-level named sources config file (default: `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml`).
 
 **Precedence:**
 
@@ -135,7 +136,8 @@ structkit generate
 
 - `structure_definition` (optional): Path to the YAML configuration file (default: `.struct.yaml`).
 - `base_path` (optional): Base path where the structure will be created (default: `.`).
-- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable. When using the environment variable (and no explicit CLI flag), an info-level log message will be emitted indicating which path is being used.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable. When using the environment variable (and no explicit CLI flag), an info-level log message will be emitted indicating which path is being used. Takes precedence over named sources.
+- `--source SOURCE`: Named source to use when resolving structure definitions. You can also use `<source>/<structure>` as the structure definition.
 - `-n INPUT_STORE, --input-store INPUT_STORE`: Path to the input store.
 - `-d, --dry-run`: Perform a dry run without creating any files or directories.
 - `--diff`: Show unified diffs for files that would be created/modified (works with `--dry-run` and in `-o console` mode).
@@ -234,12 +236,44 @@ List available structures.
 **Usage:**
 
 ```sh
-structkit list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
+structkit list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [--source SOURCE]
 ```
 
 **Arguments:**
 
-- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions.
+- `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Takes precedence over named sources.
+- `--source SOURCE`: Named source to list.
+
+### `sources`
+
+Manage named custom structure sources. Sources currently support local filesystem directories. Remote sources are reserved for future support.
+
+**Usage:**
+
+```sh
+structkit sources [--config-path CONFIG_PATH] {list,add,remove,show,validate} ...
+structkit sources add NAME PATH_OR_URL
+structkit sources remove NAME
+structkit sources show NAME
+structkit sources validate NAME
+structkit sources list
+```
+
+**Arguments:**
+
+- `--config-path CONFIG_PATH`: Override the sources config file for this command.
+- `NAME`: Source name.
+- `PATH_OR_URL`: Local directory to use as a structure source.
+
+**Examples:**
+
+```sh
+structkit sources add company ./templates
+structkit list --source company
+structkit generate company/project/python ./app
+```
+
+Resolution precedence is `--structures-path`/`STRUCTKIT_STRUCTURES_PATH`, then `--source` or `<source>/<structure>`, then bundled structures.
 
 ### `generate-schema`
 

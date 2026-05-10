@@ -14,6 +14,7 @@ from structkit.commands.search import SearchCommand
 from structkit.commands.graph import GraphCommand
 from structkit.commands.generate_schema import GenerateSchemaCommand
 from structkit.commands.mcp import MCPCommand
+from structkit.commands.sources import SourcesCommand
 from structkit.logging_config import configure_logging
 
 # Optional dependency: shtab for static shell completion generation
@@ -46,6 +47,7 @@ def get_parser():
     GraphCommand(subparsers.add_parser('graph', help='Visualize structure dependencies'))
     GenerateSchemaCommand(subparsers.add_parser('generate-schema', help='Generate JSON schema for available structures'))
     MCPCommand(subparsers.add_parser('mcp', help='MCP (Model Context Protocol) support'))
+    SourcesCommand(subparsers.add_parser('sources', help='Manage named custom structure sources'))
 
     # init to create a basic .struct.yaml
     from structkit.commands.init import InitCommand

@@ -1,6 +1,7 @@
 from structkit.commands import Command
 import os
 import asyncio
+from structkit.sources import SourceError, resolve_structures_path
 
 
 # List command class
@@ -9,14 +10,20 @@ class ListCommand(Command):
     super().__init__(parser)
     parser.description = "List available structures"
     parser.add_argument(
-      '-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
+      '-s', '--structures-path', type=str, help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH). Takes precedence over --source.',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
+    parser.add_argument('--source', type=str, help='Named source to list')
     parser.add_argument('--names-only', action='store_true', help='Print only structure names, one per line (for shell completion)')
     parser.add_argument('--mcp', action='store_true', help='Enable MCP (Model Context Protocol) integration')
     parser.set_defaults(func=self.execute)
 
   def execute(self, args):
+    try:
+      args.structures_path, _ = resolve_structures_path(args.structures_path, getattr(args, 'source', None))
+    except SourceError as exc:
+      self.logger.error(f"❗ {exc}")
+      raise SystemExit(1) from exc
     self.logger.info("Listing available structures")
     if args.mcp:
       self._list_structures_mcp(args)

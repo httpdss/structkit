@@ -5,6 +5,7 @@ import argparse
 from structkit.file_item import FileItem
 from structkit.completers import file_strategy_completer, structures_completer
 from structkit.template_renderer import TemplateRenderer
+from structkit.sources import SourceError, resolve_structures_path
 
 import subprocess
 
@@ -21,9 +22,10 @@ class GenerateCommand(Command):
       '-s',
       '--structures-path',
       type=str,
-      help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH)',
+      help='Path to structure definitions (env: STRUCTKIT_STRUCTURES_PATH). Takes precedence over --source.',
       default=os.getenv('STRUCTKIT_STRUCTURES_PATH', None)
     )
+    parser.add_argument('--source', type=str, help='Named source to use when resolving structure definitions')
     parser.add_argument('-n', '--input-store', type=str, help='Path to the input store (env: STRUCTKIT_INPUT_STORE)', default=os.getenv('STRUCTKIT_INPUT_STORE', '/tmp/structkit/input.json'))
     parser.add_argument('-d', '--dry-run', action='store_true', help='Perform a dry run without creating any files or directories')
     parser.add_argument('--diff', action='store_true', help='Show unified diffs for files that would change during dry-run or console output')
@@ -126,6 +128,16 @@ class GenerateCommand(Command):
         return yaml.safe_load(f)
 
   def execute(self, args):
+    try:
+      args.structures_path, args.structure_definition = resolve_structures_path(
+        args.structures_path,
+        getattr(args, 'source', None),
+        args.structure_definition,
+      )
+    except SourceError as exc:
+      self.logger.error(f"❗ {exc}")
+      raise SystemExit(1) from exc
+
     # Log when using STRUCTKIT_STRUCTURES_PATH environment variable
     if args.structures_path and args.structures_path == os.getenv('STRUCTKIT_STRUCTURES_PATH'):
       self.logger.info(f"Using STRUCTKIT_STRUCTURES_PATH: {args.structures_path}")

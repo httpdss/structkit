@@ -79,7 +79,7 @@ jobs:
       - name: Install StructKit (latest)
         if: ${{ inputs.version == 'main' }}
         run: |
-          pip install structkit
+          pip install git+https://github.com/httpdss/structkit.git
           structkit -h
 
       - name: Install StructKit (specific version)

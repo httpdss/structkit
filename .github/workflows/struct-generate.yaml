@@ -74,11 +74,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
+          cache: 'pip'
 
       - name: Install StructKit (latest)
         if: ${{ inputs.version == 'main' }}
         run: |
-          pip install git+https://github.com/httpdss/structkit.git
+          pip install structkit
           structkit -h
 
       - name: Install StructKit (specific version)

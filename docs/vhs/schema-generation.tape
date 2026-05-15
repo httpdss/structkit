@@ -11,6 +11,10 @@ Type "# StructKit Schema Generation Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Generate JSON schema for VSCode autocompletion"
 Enter
 Type "structkit generate-schema"

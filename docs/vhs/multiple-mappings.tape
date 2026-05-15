@@ -11,6 +11,10 @@ Type "# StructKit Multiple Mappings Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Create company info mapping"
 Enter
 Type "cat > company-info.yaml << EOF"

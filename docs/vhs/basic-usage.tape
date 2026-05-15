@@ -10,6 +10,10 @@ Type "# StructKit - Basic Usage Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# First, let's see what structures are available"
 Enter
 Sleep 500ms

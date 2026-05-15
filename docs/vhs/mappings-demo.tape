@@ -11,6 +11,10 @@ Type "# StructKit Mappings Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Create a simple mapping file with team data"
 Enter
 Type "cat > team-mapping.yaml << EOF"

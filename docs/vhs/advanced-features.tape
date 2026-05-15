@@ -11,6 +11,10 @@ Type "# StructKit Advanced Features Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Generate schema for VSCode autocompletion"
 Enter
 Type "mkdir -p .vscode"

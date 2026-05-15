@@ -11,6 +11,10 @@ Type "# StructKit YAML Configuration Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Create a simple project structure configuration"
 Enter
 Type "cat > my-project.yaml << EOF"

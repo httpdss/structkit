@@ -11,6 +11,10 @@ Type "# StructKit Remote Content Demo"
 Enter
 Sleep 1s
 
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
+
 Type "# Create configuration with remote files"
 Enter
 Type "cat > remote-example.yaml << EOF"

@@ -32,37 +32,28 @@ jobs:
         with:
           python-version: '3.x'
 
-      - uses: charmbracelet/vhs-action@v2
+      - name: 🚀 Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00
         with:
-          path: 'docs/vhs/install.tape'
+            go-version: '1.25.1'
 
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/basic-usage.tape'
+      - name: 🧪 Generate the gif with vhs
+        if: github.actor != 'dependabot[bot]'
+        run: |
+          sudo apt update
+          sudo apt install -y ffmpeg ttyd
+          go install github.com/charmbracelet/vhs@latest
 
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/yaml-config.tape'
-
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/mappings-demo.tape'
-
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/multiple-mappings.tape'
-
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/advanced-features.tape'
-
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/remote-content.tape'
-
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: 'docs/vhs/schema-generation.tape'
+          cd docs/vhs
+          vhs install.tape
+          vhs basic-usage.tape
+          vhs yaml-config.tape
+          vhs mappings-demo.tape
+          vhs multiple-mappings.tape
+          vhs advanced-features.tape
+          vhs remote-content.tape
+          vhs schema-generation.tape
+          cd ..
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8

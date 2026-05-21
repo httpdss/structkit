@@ -8,18 +8,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  run-tapes:
-    strategy:
-      matrix:
-        tapes:
-          - 'docs/vhs/install.tape'
-          - 'docs/vhs/basic-usage.tape'
-          - 'docs/vhs/yaml-config.tape'
-          - 'docs/vhs/mappings-demo.tape'
-          - 'docs/vhs/multiple-mappings.tape'
-          - 'docs/vhs/advanced-features.tape'
-          - 'docs/vhs/remote-content.tape'
-          - 'docs/vhs/schema-generation.tape'
+  generate-gifs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,16 +21,25 @@ jobs:
         with:
           python-version: '3.x'
 
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: ${{ matrix.tapes }}
+      - name: Install VHS
+        run: |
+          sudo mkdir -p /etc/apt/keyrings
+          curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+          sudo apt-get update && sudo apt-get install -y vhs
+
+      - name: Generate GIFs
+        run: bash scripts/generate-gifs.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: Update generated VHS GIF
-          branch: repository-dispatch/update-${{ github.run_id }}
-          title: Update generated VHS GIF
-          body: This PR updates the generated VHS GIF files.
+          commit-message: 'chore: update generated VHS GIFs'
+          branch: automation/update-vhs-gifs-${{ github.run_id }}
+          title: '[chore] update generated VHS GIFs'
+          body: |
+            This PR updates all generated VHS GIF files.
+
+            Triggered by workflow run [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           base: main
           labels: automation

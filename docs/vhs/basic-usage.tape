@@ -1,6 +1,7 @@
 Output docs/vhs/usage.gif
 
 Set Theme "Dracula"
+Set Font "JetBrainsMono Nerd Font"
 Set FontSize 18
 Set Width 1200
 Set Height 600

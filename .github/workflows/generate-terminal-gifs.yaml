@@ -7,19 +7,8 @@ permissions:
   contents: write
   pull-requests: write
 
-
-    #     tapes:
-    #       - 'docs/vhs/install.tape'
-    #       - 'docs/vhs/basic-usage.tape'
-    #       - 'docs/vhs/yaml-config.tape'
-    #       - 'docs/vhs/mappings-demo.tape'
-    #       - 'docs/vhs/multiple-mappings.tape'
-    #       - 'docs/vhs/advanced-features.tape'
-    #       - 'docs/vhs/remote-content.tape'
-    #       - 'docs/vhs/schema-generation.tape'
-
 jobs:
-  run-tapes:
+  generate-gifs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,35 +21,43 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: 🚀 Setup Go
+      - name: Setup Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00
         with:
-            go-version: '1.25.1'
+          go-version: '1.25.1'
 
-      - name: 🧪 Generate the gif with vhs
-        if: github.actor != 'dependabot[bot]'
+      - name: Install VHS dependencies
         run: |
-          sudo apt update
-          sudo apt install -y ffmpeg ttyd
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg ttyd
           go install github.com/charmbracelet/vhs@latest
 
-          cd docs/vhs
-          vhs install.tape
-          vhs basic-usage.tape
-          vhs yaml-config.tape
-          vhs mappings-demo.tape
-          vhs multiple-mappings.tape
-          vhs advanced-features.tape
-          vhs remote-content.tape
-          vhs schema-generation.tape
-          cd ..
+      - name: Install JetBrainsMono Nerd Font
+        run: |
+          mkdir -p ~/.local/share/fonts/JetBrainsMono
+          curl -fLo /tmp/JetBrainsMono.zip \
+            https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+          unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
+          fc-cache -fv
+
+      - name: Set up virtual environment
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -e .
+
+      - name: Generate GIFs
+        run: bash scripts/generate-gifs.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: Update generated VHS GIF
-          branch: repository-dispatch/update-${{ github.run_id }}
-          title: Update generated VHS GIF
-          body: This PR updates the generated VHS GIF files.
+          commit-message: 'chore: update generated VHS GIFs'
+          branch: automation/update-vhs-gifs-${{ github.run_id }}
+          title: '[chore] update generated VHS GIFs'
+          body: |
+            This PR updates all generated VHS GIF files.
+
+            Triggered by workflow run [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           base: main
           labels: automation

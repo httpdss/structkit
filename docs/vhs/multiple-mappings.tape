@@ -1,6 +1,7 @@
 Output docs/vhs/multiple-mappings.gif
 
 Set Theme "Monokai Vivid"
+Set Font "JetBrainsMono Nerd Font"
 Set FontSize 18
 Set TypingSpeed 40ms
 Set Width 1400

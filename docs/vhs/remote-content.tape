@@ -1,7 +1,7 @@
 Output docs/vhs/remote-content.gif
 
 Set Theme "Monokai Vivid"
-Set FontSize 14
+Set FontSize 18
 Set TypingSpeed 40ms
 Set Width 1400
 Set Height 800
@@ -10,6 +10,10 @@ Set Shell "bash"
 Type "# StructKit Remote Content Demo"
 Enter
 Sleep 1s
+
+Type "source .venv/bin/activate"
+Enter
+Sleep 500ms
 
 Type "# Create configuration with remote files"
 Enter

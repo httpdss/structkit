@@ -2,7 +2,7 @@
 Output docs/vhs/install.gif
 
 Set Theme "Monokai Vivid"
-Set FontSize 14
+Set FontSize 18
 Set TypingSpeed 40ms
 Set Width 1400
 Set Height 800

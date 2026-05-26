@@ -1,3 +1,7 @@
+description: >
+  Creates a Chef cookbook scaffold for configuring NGINX, including a default recipe,
+  node attributes, an nginx.conf.erb template, a default index.html, and a README.md.
+
 files:
   - recipes/default.rb:
       content: |

@@ -1,3 +1,8 @@
+description: >
+  Creates a release drafter workflow (z-release-drafter.yaml), a major tagging workflow
+  (z-major-tagging.yaml), and a release-drafter.yml config with feature/bugfix/patch
+  label categories and semantic versioning resolution.
+
 files:
   - .github/workflows/z-release-drafter.yaml:
       content: |

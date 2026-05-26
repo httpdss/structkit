@@ -1,3 +1,7 @@
+description: >
+  Creates a .kuberc kubectl preferences file with a custom alias for creating namespaces
+  and a forced --interactive=true flag for kubectl delete commands.
+
 files:
   - .kuberc:
       content: |

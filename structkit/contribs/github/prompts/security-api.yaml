@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Copilot prompt for reviewing REST API security, covering
+  authentication, input validation, rate limiting, and security event logging.
+
 files:
   - .github/prompts/security-api.prompt.md:
       content: |

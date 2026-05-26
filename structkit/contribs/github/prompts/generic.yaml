@@ -1,3 +1,7 @@
+description: >
+  Creates a generic GitHub Copilot prompt file (.github/prompts/generic.prompt.md)
+  as a blank starter template for defining reusable AI prompts.
+
 files:
   - .github/prompts/generic.prompt.md:
       content: |

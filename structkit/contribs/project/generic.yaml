@@ -1,3 +1,9 @@
+description: >
+  Creates a comprehensive generic project scaffold with standard directory structure
+  (.config, .build, src, test, doc, tools, dep), common config files (.editorconfig,
+  .gitignore, Dockerfile, docker-compose.yml), GitHub community files, and Terraform
+  environment apps (prod, stage, qa, dev, init).
+
 files:
   - .config/REMOVE_ME.md:
       content: |

@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Copilot chat mode file (plan.chatmode.md) that configures an AI
+  planning assistant for generating implementation plans without making any code edits.
+
 files:
   - ./github/chatmodes/plan.chatmode.md:
       content: |

@@ -1,3 +1,8 @@
+description: >
+  Creates the scaffolding for a custom StructKit structures repository: README.md,
+  custom-mappings.yaml, a structures/ directory, and common configs via sub-structures
+  (devcontainer, editor-config, prettier, run-struct, release-drafter, pre-commit).
+
 files:
   - README.md:
       content: |

@@ -1,3 +1,8 @@
+description: >
+  Creates Terraform app directories for nonprod and prod AWS accounts under
+  .devops/apps/accounts/, each using the generic app structure with a remote backend,
+  plus execute-tf-workflow GitHub Actions workflows for each account.
+
 folders:
   - .devops/apps/accounts/nonprod:
       struct: terraform/apps/generic

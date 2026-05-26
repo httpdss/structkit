@@ -1,3 +1,8 @@
+description: >
+  Creates a generic Terraform app scaffold with main.tf, variables.tf, outputs.tf,
+  providers.tf (with a remote backend on app.terraform.io), and README.md.
+  Uses variables for the remote backend organization and workspace names.
+
 files:
   - main.tf:
       content: |

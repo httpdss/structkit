@@ -1,3 +1,8 @@
+description: >
+  Creates a Ruby project scaffold with .rubocop.yml, RSpec test structure (spec/),
+  lib directory with versioned module and main class, bin/console and bin/setup scripts,
+  .editorconfig, .gitignore, README.md, and Apache 2.0 LICENSE.
+
 files:
   - .editorconfig:
       content: |

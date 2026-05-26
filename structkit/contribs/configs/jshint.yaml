@@ -1,3 +1,7 @@
+description: >
+  Creates JSHint configuration files (.jshintrc and .jshintignore) for Node.js/ES6
+  JavaScript linting, excluding node_modules and dist directories.
+
 files:
   - .jshintrc:
       content: |

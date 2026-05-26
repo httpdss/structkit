@@ -1,3 +1,7 @@
+description: >
+  Creates a VS Code dev container configuration using Python 3.12 (bullseye) with
+  yamlfmt and pre-commit features pre-installed.
+
 files:
   - .devcontainer/devcontainer.json:
       content: |

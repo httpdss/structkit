@@ -1,3 +1,7 @@
+description: >
+  Creates AWS CloudFormation files: a template.yaml defining an S3 bucket resource,
+  a parameters.json file, and a deploy.sh script for deploying the stack via the AWS CLI.
+
 files:
   - template.yaml:
       content: |

@@ -1,3 +1,8 @@
+description: >
+  Creates a generic Terraform module scaffold with main.tf (EC2 instance example),
+  variables.tf, outputs.tf, versions.tf (with AWS and Datadog providers auto-versioned),
+  and README.md. Uses a module_name variable for documentation templating.
+
 files:
   - main.tf:
       content: |

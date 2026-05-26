@@ -1,3 +1,7 @@
+description: >
+  Creates CI/CD pipeline configuration files for multiple platforms: GitLab CI (.gitlab-ci.yml),
+  Jenkins (Jenkinsfile), and GitHub Actions (ci.yml and cd.yml) with build, test, and deploy stages.
+
 files:
   - .gitlab-ci.yml:
       content: |

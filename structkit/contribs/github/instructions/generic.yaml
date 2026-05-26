@@ -1,3 +1,7 @@
+description: >
+  Creates a generic GitHub Copilot instructions file (.github/instructions/generic.instruction.md)
+  as a blank starter template for defining AI coding guidelines and context.
+
 files:
   - .github/instructions/generic.instruction.md:
       skip_if_exists: true

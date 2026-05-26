@@ -1,3 +1,7 @@
+description: >
+  Creates Terraform files for managing a GitHub organization: providers.tf with the
+  GitHub provider and a remote backend, plus main.tf, variables.tf, outputs.tf, and README.md.
+
 files:
   - providers.yaml:
       content: |

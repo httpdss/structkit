@@ -1,3 +1,8 @@
+description: >
+  Creates a Java Maven project scaffold with pom.xml, standard Maven directory layout
+  (src/main/java, src/test/java), App.java and AppTest.java starters, .editorconfig,
+  .gitignore, README.md, and Apache 2.0 LICENSE.
+
 files:
   - .editorconfig:
       content: |

@@ -1,3 +1,7 @@
+description: >
+  Creates Docker configuration files: a Dockerfile (nginx-based), .dockerignore,
+  a docker-compose.yml with web and db (MySQL) services, and a .env file.
+
 files:
   - Dockerfile:
       content: |

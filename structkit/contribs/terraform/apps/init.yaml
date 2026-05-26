@@ -1,3 +1,7 @@
+description: >
+  Creates a Terraform init app directory under .devops/apps/init/ using the generic
+  app structure with a remote backend, plus an execute-tf-workflow GitHub Actions workflow.
+
 folders:
   - .devops/apps/init:
       struct: terraform/apps/generic

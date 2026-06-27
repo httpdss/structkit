@@ -187,6 +187,63 @@ def test_mcp_command_server_flag(parser):
         mock_start.assert_called_once()
 
 
+def test_validate_missing_file_reports_clean_error(parser, tmp_path, caplog):
+    command = ValidateCommand(parser)
+    missing = tmp_path / 'missing.yaml'
+    args = parser.parse_args([str(missing)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert f"File not found: {missing}" in caplog.text
+    assert "Traceback" not in caplog.text
+
+
+def test_validate_invalid_yaml_reports_clean_error(parser, tmp_path, caplog):
+    command = ValidateCommand(parser)
+    invalid = tmp_path / 'invalid.yaml'
+    invalid.write_text('files: [\n')
+    args = parser.parse_args([str(invalid)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert f"Invalid YAML in {invalid}" in caplog.text
+    assert "while parsing" in caplog.text
+    assert "Traceback" not in caplog.text
+
+
+def test_validate_invalid_config_reports_clean_error(parser, tmp_path, caplog):
+    command = ValidateCommand(parser)
+    invalid_config = tmp_path / 'invalid-config.yaml'
+    invalid_config.write_text('files:\n  - out.txt: {}\n')
+    args = parser.parse_args([str(invalid_config)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert "Invalid structure config" in caplog.text
+    assert "Dictionary item 'out.txt' must contain" in caplog.text
+    assert "Traceback" not in caplog.text
+
+
+def test_validate_top_level_non_mapping_reports_clean_error(parser, tmp_path, caplog):
+    command = ValidateCommand(parser)
+    invalid_config = tmp_path / 'list.yaml'
+    invalid_config.write_text('- item\n')
+    args = parser.parse_args([str(invalid_config)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert "Top-level YAML content must be a mapping." in caplog.text
+    assert "Traceback" not in caplog.text
+
+
 # ValidateCommand error-path tests on helpers
 
 def test_validate_structure_config_errors(parser):

@@ -10,6 +10,10 @@ from structkit.sources import SourceError, resolve_structures_path
 import subprocess
 
 
+class GenerateConfigError(ValueError):
+  """Expected generate config load/shape error shown without traceback."""
+
+
 # Generate command class
 class GenerateCommand(Command):
   def __init__(self, parser):
@@ -111,8 +115,7 @@ class GenerateCommand(Command):
       structure_definition = f"file://{structure_definition}"
 
     if structure_definition.startswith("file://") and structure_definition.endswith(".yaml"):
-      with open(structure_definition[7:], 'r') as f:
-        return yaml.safe_load(f)
+      file_path = structure_definition[7:]
     else:
       this_file = os.path.dirname(os.path.realpath(__file__))
       contribs_path = os.path.join(this_file, "..", "contribs")
@@ -121,11 +124,23 @@ class GenerateCommand(Command):
         file_path = os.path.join(structures_path, f"{structure_definition}.yaml")
       if not os.path.exists(file_path):
         file_path = os.path.join(contribs_path, f"{structure_definition}.yaml")
-      if not os.path.exists(file_path):
-        self.logger.error(f"❗ File not found: {file_path}")
-        return None
+
+    try:
       with open(file_path, 'r') as f:
         return yaml.safe_load(f)
+    except FileNotFoundError:
+      raise GenerateConfigError(f"File not found: {file_path}") from None
+    except yaml.YAMLError as exc:
+      raise GenerateConfigError(f"Invalid YAML in {file_path}: {exc}") from None
+    except OSError as exc:
+      raise GenerateConfigError(f"Failed to read {file_path}: {exc}") from None
+
+  def _validate_loaded_config(self, config):
+    if config is None:
+      return {}
+    if not isinstance(config, dict):
+      raise GenerateConfigError("Top-level YAML content must be a mapping.")
+    return config
 
   def execute(self, args):
     try:
@@ -164,18 +179,22 @@ class GenerateCommand(Command):
           self.logger.error(f"Mappings file not found: {mappings_file_path}")
           return
 
+    # Load and validate config before creating output/backup paths, so config
+    # errors do not leave partial filesystem side effects behind.
+    try:
+      config = self._validate_loaded_config(
+        self._load_yaml_config(args.structure_definition, args.structures_path)
+      )
+    except GenerateConfigError as exc:
+      self.logger.error(f"❗ {exc}")
+      raise SystemExit(1) from None
+
     if args.backup and not os.path.exists(args.backup):
       os.makedirs(args.backup)
 
     if args.base_path and not os.path.exists(args.base_path) and "console" not in args.output:
       self.logger.info(f"Creating base path: {args.base_path}")
       os.makedirs(args.base_path)
-
-    # Load config to check for hooks
-    config = None
-    config = self._load_yaml_config(args.structure_definition, args.structures_path)
-    if config is None:
-      return
 
     pre_hooks = config.get('pre_hooks', [])
     post_hooks = config.get('post_hooks', [])
@@ -188,7 +207,7 @@ class GenerateCommand(Command):
     # Actually generate structure
     try:
       self._create_structure(args, mappings)
-    except TemplateVariableError as exc:
+    except (GenerateConfigError, TemplateVariableError) as exc:
       self.logger.error(f"❗ {exc}")
       raise SystemExit(1) from None
 
@@ -201,9 +220,9 @@ class GenerateCommand(Command):
     if isinstance(args, dict):
         args = argparse.Namespace(**args)
 
-    config = self._load_yaml_config(args.structure_definition, args.structures_path)
-    if config is None:
-      return summary if summary is not None else None
+    config = self._validate_loaded_config(
+      self._load_yaml_config(args.structure_definition, args.structures_path)
+    )
 
     # Safely parse template variables
     template_vars = self._parse_template_vars(args.vars) if getattr(args, 'vars', None) else {}

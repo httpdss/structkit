@@ -9,6 +9,7 @@ from structkit.commands.info import InfoCommand
 from structkit.commands.list import ListCommand
 from structkit.commands.mcp import MCPCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.file_item import ContentFetchError
 from structkit.template_renderer import TemplateVariableError
 
 
@@ -341,3 +342,74 @@ def test_validate_variables_config_errors(parser):
         v._validate_variables_config([{ 'name': { 'type': 'bad' } }])
     with pytest.raises(ValueError):
         v._validate_variables_config([{ 'name': { 'type': 'boolean', 'default': 'yes' } }])
+
+
+def test_generate_missing_local_file_ref_exits_cleanly(parser, tmp_path, caplog):
+    """Missing file:// target exits 1 with root-cause message and no Traceback."""
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / 'out'
+    out_dir.mkdir()
+
+    struct_yaml = tmp_path / 'struct.yaml'
+    struct_yaml.write_text(
+        'files:\n'
+        '  - out.txt:\n'
+        '      file: file:///tmp/does-not-exist-structkit-test.txt\n'
+    )
+
+    args = parser.parse_args(['--non-interactive', str(struct_yaml), str(out_dir)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert 'Failed to fetch content from' in caplog.text
+    assert 'does-not-exist-structkit-test.txt' in caplog.text
+    assert 'Traceback' not in caplog.text
+    # The output file must NOT have been created
+    assert not (out_dir / 'out.txt').exists()
+
+
+def test_generate_remote_fetch_failure_exits_cleanly(parser, tmp_path, caplog):
+    """Mocked remote fetch failure exits 1 with root-cause message and no Traceback."""
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / 'out'
+    out_dir.mkdir()
+
+    config = {
+        'files': [{'out.txt': {'file': 'https://example.com/no-such-file.txt'}}],
+        'folders': [],
+    }
+
+    store_dir = tmp_path / 'store'
+    store_dir.mkdir(parents=True, exist_ok=True)
+    (store_dir / 'input.json').write_text('{}')
+
+    with patch.object(command, '_load_yaml_config', return_value=config), \
+         patch(
+             'structkit.content_fetcher.ContentFetcher._fetch_http_url',
+             side_effect=ConnectionError('network unreachable'),
+         ):
+        args = argparse.Namespace(
+            structure_definition='dummy',
+            base_path=str(out_dir),
+            structures_path=None,
+            dry_run=False,
+            diff=False,
+            output='file',
+            vars=None,
+            backup=None,
+            file_strategy='overwrite',
+            global_system_prompt=None,
+            input_store=str(store_dir / 'input.json'),
+            non_interactive=True,
+            mappings_file=None,
+            source=None,
+        )
+        with pytest.raises(SystemExit) as excinfo:
+            command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert 'Failed to fetch content from' in caplog.text
+    assert 'Traceback' not in caplog.text
+    assert not (out_dir / 'out.txt').exists()

@@ -11,6 +11,10 @@ from structkit.model_wrapper import ModelWrapper
 load_dotenv()
 
 
+class ContentFetchError(Exception):
+  """Raised when remote or local file: content cannot be fetched."""
+
+
 class FileItem:
     def __init__(self, properties):
       self.logger = logging.getLogger(__name__)
@@ -89,7 +93,9 @@ class FileItem:
               raw_content, template_vars)
           self.logger.debug(f"Rendered content: {self.content}")
         except Exception as e:
-          self.logger.error(f"❗ Failed to fetch content from {self.content_location}: {e}")
+          raise ContentFetchError(
+              f"Failed to fetch content from {self.content_location}: {e}"
+          ) from e
 
     def _merge_default_template_vars(self, template_vars):
       default_vars = {

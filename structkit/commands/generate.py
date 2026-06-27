@@ -6,6 +6,7 @@ from structkit.file_item import FileItem, ContentFetchError
 from structkit.completers import file_strategy_completer, structures_completer
 from structkit.template_renderer import TemplateRenderer, TemplateVariableError
 from structkit.sources import SourceError, resolve_structures_path
+from structkit.input_store import InputStoreError
 
 import subprocess
 
@@ -207,7 +208,7 @@ class GenerateCommand(Command):
     # Actually generate structure
     try:
       self._create_structure(args, mappings)
-    except (GenerateConfigError, TemplateVariableError, ContentFetchError) as exc:
+    except (GenerateConfigError, TemplateVariableError, ContentFetchError, InputStoreError) as exc:
       self.logger.error(f"❗ {exc}")
       raise SystemExit(1) from None
 

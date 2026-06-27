@@ -78,7 +78,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://httpdss.github.io/structkit/"
+Homepage = "https://structkit.app/"
 Repository = "https://github.com/httpdss/structkit"
 Issues = "https://github.com/httpdss/structkit/issues"
 Discussions = "https://github.com/httpdss/structkit/discussions"

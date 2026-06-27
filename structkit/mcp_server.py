@@ -178,13 +178,19 @@ class StructMCPServer:
                 GenerateCommand(dummy_parser).execute(args)
                 text = buf.getvalue()
                 return text.strip() or "Structure generation completed successfully"
+            except SystemExit as exc:
+                text = buf.getvalue().strip()
+                return text or f"Error: structure generation failed with exit code {exc.code}"
             finally:
                 sys.stdout = old
         else:
             # Create a dummy parser for GenerateCommand
             import argparse
             dummy_parser = argparse.ArgumentParser()
-            GenerateCommand(dummy_parser).execute(args)
+            try:
+                GenerateCommand(dummy_parser).execute(args)
+            except SystemExit as exc:
+                return f"Error: structure generation failed with exit code {exc.code}"
             if dry_run:
                 return f"Dry run completed for structure '{structure_definition}' at '{base_path}'"
             return f"Structure '{structure_definition}' generated successfully at '{base_path}'"

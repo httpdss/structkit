@@ -134,6 +134,53 @@ def test_generate_reports_template_variable_error_without_traceback(parser, tmp_
     assert "Traceback" not in caplog.text
 
 
+def test_generate_invalid_yaml_reports_clean_error_without_side_effect(parser, tmp_path, caplog):
+    command = GenerateCommand(parser)
+    invalid = tmp_path / 'invalid.yaml'
+    invalid.write_text('files: [\n')
+    out_dir = tmp_path / 'out-invalid'
+    args = parser.parse_args(['--non-interactive', str(invalid), str(out_dir)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert f"Invalid YAML in {invalid}" in caplog.text
+    assert "Traceback" not in caplog.text
+    assert not out_dir.exists()
+
+
+def test_generate_top_level_non_mapping_reports_clean_error_without_side_effect(parser, tmp_path, caplog):
+    command = GenerateCommand(parser)
+    non_mapping = tmp_path / 'list.yaml'
+    non_mapping.write_text('- item\n')
+    out_dir = tmp_path / 'out-list'
+    args = parser.parse_args(['--non-interactive', str(non_mapping), str(out_dir)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert "Top-level YAML content must be a mapping." in caplog.text
+    assert "Traceback" not in caplog.text
+    assert not out_dir.exists()
+
+
+def test_generate_missing_file_reports_clean_error_without_side_effect(parser, tmp_path, caplog):
+    command = GenerateCommand(parser)
+    missing = tmp_path / 'missing.yaml'
+    out_dir = tmp_path / 'out-missing'
+    args = parser.parse_args(['--non-interactive', str(missing), str(out_dir)])
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert f"File not found: {missing}" in caplog.text
+    assert "Traceback" not in caplog.text
+    assert not out_dir.exists()
+
+
 def test_info_nonexistent_file_logs_error(parser):
     command = InfoCommand(parser)
     args = parser.parse_args(['does-not-exist'])

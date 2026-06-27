@@ -19,6 +19,10 @@ from structkit.input_store import InputStore
 from structkit.utils import get_current_repo
 
 
+class TemplateVariableError(ValueError):
+    """Raised when a template variable is missing or fails validation."""
+
+
 class TemplateRenderer:
     def __init__(self, config_variables, input_store, non_interactive, mappings=None):
       self.config_variables = config_variables
@@ -147,8 +151,15 @@ class TemplateRenderer:
       self.logger.debug(f"Default values from config: {default_values}")
 
       for var in undeclared_variables:
+        conf = schema.get(var, {})
+        if var in vars:
+          if conf:
+            coerced = self._coerce_and_validate(var, vars[var], conf)
+            self.input_store.set_value(var, coerced)
+            vars[var] = coerced
+          continue
+
         if var not in vars:
-          conf = schema.get(var, {})
           required = conf.get('required', False)
           default = self.input_data.get(var, default_values.get(var, ""))
           if self.non_interactive:
@@ -190,7 +201,7 @@ class TemplateRenderer:
                 user_input = raw
               else:
                 # For invalid enum input, raise immediately instead of re-prompting
-                raise ValueError(f"Variable '{var}' must be one of {enum}, got: {raw}")
+                raise self._enum_value_error(var, raw, enum)
             else:
               if description:
                 print(f"{icon} {BOLD}{var}{RESET}: {description}")
@@ -223,12 +234,12 @@ class TemplateRenderer:
         else:
           coerced = '' if value is None else str(value)
       except Exception:
-        raise ValueError(f"Variable '{name}' could not be coerced to {vtype} (value: {original})")
+        raise TemplateVariableError(f"Variable '{name}' could not be coerced to {vtype} (value: {original})")
 
       # Enum validation
       enum = conf.get('enum')
       if enum is not None and coerced not in enum:
-        raise ValueError(f"Variable '{name}' must be one of {enum}, got: {coerced}")
+        raise self._enum_value_error(name, coerced, enum)
 
       # Regex validation (only for strings)
       pattern = conf.get('regex') or conf.get('pattern')
@@ -255,3 +266,14 @@ class TemplateRenderer:
           raise ValueError(f"Variable '{name}' must be <= {maxv}, got {coerced}")
 
       return coerced
+
+    def _enum_value_error(self, name, value, enum):
+      allowed_values = ", ".join(str(item) for item in enum)
+      if value is None or value == "":
+        return TemplateVariableError(
+          f"Variable '{name}' must be set to one of: {allowed_values}. "
+          f"No value was provided. Pass --vars {name}=<value> or define a default."
+        )
+      return TemplateVariableError(
+        f"Variable '{name}' must be one of: {allowed_values}. Got: {value}."
+      )

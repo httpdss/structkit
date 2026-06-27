@@ -9,6 +9,7 @@ from structkit.commands.info import InfoCommand
 from structkit.commands.list import ListCommand
 from structkit.commands.mcp import MCPCommand
 from structkit.commands.validate import ValidateCommand
+from structkit.template_renderer import TemplateVariableError
 
 
 @pytest.fixture
@@ -112,6 +113,25 @@ def test_generate_mappings_file_not_found(parser, tmp_path):
     with patch('os.path.exists', return_value=False):
         # Should return early without error
         command.execute(args)
+
+
+def test_generate_reports_template_variable_error_without_traceback(parser, tmp_path, caplog):
+    command = GenerateCommand(parser)
+    args = parser.parse_args(['struct-x', str(tmp_path)])
+    args.structures_path = None
+    args.mappings_file = None
+    args.backup = None
+
+    with patch.object(command, '_load_yaml_config', return_value={'files': [], 'folders': []}), \
+         patch.object(command, '_create_structure', side_effect=TemplateVariableError(
+             "Variable 'environment' must be one of: dev, staging, prod. Got: qa."
+         )):
+        with pytest.raises(SystemExit) as excinfo:
+            command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert "Variable 'environment' must be one of: dev, staging, prod. Got: qa." in caplog.text
+    assert "Traceback" not in caplog.text
 
 
 def test_info_nonexistent_file_logs_error(parser):

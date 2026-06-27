@@ -482,3 +482,53 @@ def test_generate_unreadable_input_store_exits_cleanly(parser, tmp_path, caplog)
 
     assert excinfo.value.code == 1
     assert 'Traceback' not in caplog.text
+
+
+# ---------------------------------------------------------------------------
+# Template variable validation normalization (issue 167)
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("var_value,constraint,expected_fragment", [
+    ("Invalid Slug!", {"type": "string", "pattern": "^[a-z0-9-]+$"}, "does not match"),
+    (0,              {"type": "integer", "min": 1},                    ">= 1"),
+    (99,             {"type": "integer", "max": 10},                   "<= 10"),
+])
+def test_generate_validation_error_exits_cleanly(parser, tmp_path, caplog, var_value, constraint, expected_fragment):
+    """Regex/min/max violations exit 1 with a clean message and no Traceback."""
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / 'out'
+    out_dir.mkdir()
+
+    config = {
+        'variables': [{'val': constraint}],
+        'files': [{'out.txt': {'content': '{{@ val @}}'}}],
+        'folders': [],
+    }
+
+    store_dir = tmp_path / 'store'
+    store_dir.mkdir()
+    (store_dir / 'input.json').write_text('{}')
+
+    with patch.object(command, '_load_yaml_config', return_value=config):
+        args = argparse.Namespace(
+            structure_definition='dummy',
+            base_path=str(out_dir),
+            structures_path=None,
+            dry_run=False,
+            diff=False,
+            output='file',
+            vars=f'val={var_value}',
+            backup=None,
+            file_strategy='overwrite',
+            global_system_prompt=None,
+            input_store=str(store_dir / 'input.json'),
+            non_interactive=True,
+            mappings_file=None,
+            source=None,
+        )
+        with pytest.raises(SystemExit) as excinfo:
+            command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert expected_fragment in caplog.text
+    assert 'Traceback' not in caplog.text

@@ -4,7 +4,7 @@ import yaml
 import argparse
 from structkit.file_item import FileItem
 from structkit.completers import file_strategy_completer, structures_completer
-from structkit.template_renderer import TemplateRenderer
+from structkit.template_renderer import TemplateRenderer, TemplateVariableError
 from structkit.sources import SourceError, resolve_structures_path
 
 import subprocess
@@ -186,7 +186,11 @@ class GenerateCommand(Command):
       return
 
     # Actually generate structure
-    self._create_structure(args, mappings)
+    try:
+      self._create_structure(args, mappings)
+    except TemplateVariableError as exc:
+      self.logger.error(f"❗ {exc}")
+      raise SystemExit(1) from None
 
     # Run post-hooks
     if not self._run_hooks(post_hooks, hook_type="post"):

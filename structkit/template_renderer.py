@@ -246,7 +246,9 @@ class TemplateRenderer:
       if pattern and isinstance(coerced, str):
         import re as _re
         if _re.fullmatch(pattern, coerced) is None:
-          raise ValueError(f"Variable '{name}' does not match required pattern: {pattern}")
+          raise TemplateVariableError(
+              f"Variable '{name}' does not match required pattern '{pattern}': got '{coerced}'"
+          )
 
       # Min/Max validation
       def _as_num(x):
@@ -259,11 +261,15 @@ class TemplateRenderer:
       if minv is not None:
         cv = _as_num(coerced)
         if cv is not None and cv < float(minv):
-          raise ValueError(f"Variable '{name}' must be >= {minv}, got {coerced}")
+          raise TemplateVariableError(
+              f"Variable '{name}' must be >= {minv}, got {coerced}"
+          )
       if maxv is not None:
         cv = _as_num(coerced)
         if cv is not None and cv > float(maxv):
-          raise ValueError(f"Variable '{name}' must be <= {maxv}, got {coerced}")
+          raise TemplateVariableError(
+              f"Variable '{name}' must be <= {maxv}, got {coerced}"
+          )
 
       return coerced
 

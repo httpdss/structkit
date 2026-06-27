@@ -9,15 +9,15 @@ tags:
 
 ## Quick Start Using Docker
 
-1. Create a YAML configuration file for your project structure. [See sample configuration here](https://github.com/httpdss/structkit/blob/main/example/structure.yaml).
-2. Run the following command to generate the project structure:
+1. Pick one of the polished examples in [`examples/`](../examples/).
+2. Run the following command to generate the Python CLI example:
 
 ```sh
 docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
   ghcr.io/httpdss/structkit:main generate \
-  file:///workdir/example/structure.yaml \
+  file:///workdir/examples/python-cli/.struct.yaml \
   /workdir/example_output
 ```
 
@@ -28,7 +28,7 @@ docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
   ghcr.io/httpdss/structkit:alpine generate \
-  file:///workdir/example/structure.yaml \
+  file:///workdir/examples/python-cli/.struct.yaml \
   /workdir/example_output
 ```
 
@@ -46,7 +46,7 @@ pip install structkit
 mkdir example
 cd example/
 touch structure.yaml
-vim structure.yaml # copy the content from the example folder
+vim structure.yaml # or copy one of the examples from the examples/ directory
 structkit generate structure.yaml .
 ```
 
@@ -70,7 +70,7 @@ This shows all built-in structures you can use.
 After installing StructKit, try this simple example:
 
 ```sh
-structkit generate terraform/modules/generic ./my-terraform-module
+structkit generate --vars module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
 ```
 
 This will create a new terraform module structure in the `./my-terraform-module` directory.
@@ -95,4 +95,4 @@ This writes a basic .struct.yaml with hooks, a README, and a reference to the ru
 
 - Learn about [YAML Configuration](configuration.md)
 - Explore [Template Variables](template-variables.md)
-- Check out [Usage Examples](usage.md)
+- Explore the [example pack](examples/index.md)

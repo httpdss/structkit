@@ -10,11 +10,11 @@ services:
       "generate",
       "--log=DEBUG",
       "--dry-run",
-      "--vars=project_name=MyProject,author_name=JohnDoe",
+      "--vars=project_name=MyProject,package_name=my_project,cli_command=my-project,description=Example CLI",
       "--backup=/app/backup",
       "--file-strategy=rename",
       "--log-file=/app/logfile.log",
-      "/app/example/structure.yaml",
+      "/app/examples/python-cli/.struct.yaml",
       "/app/example_project"
     ]
   structkit-test:
@@ -27,10 +27,10 @@ services:
     command: [
       "generate",
       "--log=DEBUG",
-      "--vars=project_name=MyProject,author_name=JohnDoe",
+      "--vars=project_name=MyProject,package_name=my_project,cli_command=my-project,description=Example CLI",
       "--backup=/app/backup",
       "--file-strategy=rename",
       "--log-file=/app/logfile.log",
-      "/app/example/structure.yaml",
+      "/app/examples/python-cli/.struct.yaml",
       "/app/example_project"
     ]

@@ -1,0 +1,96 @@
+files:
+  - README.md:
+      content: |
+        # {{@ project_name @}}
+
+        {{@ description @}}
+
+        This repository is structured for human and AI-assisted development. See `AGENTS.md` for working conventions.
+  - AGENTS.md:
+      content: |
+        # Agent instructions for {{@ project_name @}}
+
+        ## Project goals
+
+        {{@ description @}}
+
+        ## Working rules
+
+        - Keep changes scoped to the issue or task.
+        - Update docs when behavior changes.
+        - Run the verification commands before opening a PR.
+        - Prefer small, reviewable commits.
+
+        ## Verification
+
+        ```bash
+        # Replace with project-specific checks
+        structkit validate .struct.yaml
+        ```
+  - .struct.yaml:
+      content: |
+        files:
+          - README.md:
+              content: |
+                # {{@ project_name @}}
+
+                {{@ description @}}
+          - AGENTS.md:
+              content: |
+                # Agent instructions
+
+                Keep changes scoped, documented, and verified.
+        folders:
+          - docs/:
+              struct: []
+          - tasks/:
+              struct: []
+        variables:
+          - project_name:
+              description: "Project name."
+              type: string
+              default: "{{@ project_name @}}"
+          - description:
+              description: "Project description."
+              type: string
+              default: "{{@ description @}}"
+  - docs/architecture.md:
+      content: |
+        # Architecture
+
+        ## Context
+
+        Describe the system context, external dependencies, and major design constraints.
+
+        ## Components
+
+        - Application code
+        - Documentation
+        - Automation templates
+  - docs/decisions/0001-record-architecture-decisions.md:
+      content: |
+        # 0001. Record architecture decisions
+
+        ## Status
+
+        Accepted
+
+        ## Decision
+
+        Use lightweight ADRs in `docs/decisions/` for decisions that affect project structure or long-term maintenance.
+  - tasks/backlog.md:
+      content: |
+        # Backlog
+
+        - [ ] Replace generated placeholders with project-specific content.
+        - [ ] Add canonical build and test commands to `AGENTS.md`.
+        - [ ] Validate `.struct.yaml` after customizing it.
+variables:
+  - project_name:
+      description: "Project name."
+      type: string
+      default: "AI Assisted Project"
+  - description:
+      description: "Short project description."
+      type: string
+      default: "A project scaffolded for AI-assisted development with StructKit."

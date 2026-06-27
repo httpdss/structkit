@@ -96,7 +96,7 @@ struct/
 │   └── ...
 ├── tests/                 # Test files
 ├── docs/                  # Documentation
-├── example/               # Example configurations
+├── examples/              # Example configurations
 ├── scripts/               # Utility scripts
 └── requirements*.txt      # Dependencies
 ```

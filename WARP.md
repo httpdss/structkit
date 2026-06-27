@@ -278,7 +278,7 @@ pre-commit run --all-files
 1. Create YAML file in `structkit/contribs/`
 2. Follow naming convention: `project-type.yaml`
 3. Include comprehensive variable definitions
-4. Add example in `docs/examples/`
+4. Add a docs entry in `docs/examples/` and, for reusable examples, a runnable template under `examples/`
 5. Update `structkit list` output
 
 ## 🐛 Troubleshooting

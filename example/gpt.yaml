@@ -1,5 +1,0 @@
-files:
-  - .github/workflows/run_struct.yaml:
-      user_prompt: |
-        make sure that token is set on secrets and value is TOKEN
-        make sure that password is set on secrets and value is PASSWORD

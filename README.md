@@ -11,7 +11,7 @@
 
 **StructKit** replaces copy-pasted boilerplate and aging "golden repos" with reusable YAML structures. It can render template variables, fetch canonical files from remote sources, preview changes before writing, and expose your scaffolds to AI assistants through the Model Context Protocol.
 
-> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](example/)** | 🤖 **[MCP Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
+> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](examples/)** | 🤖 **[MCP Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
 
 ## ⚡ Try it in 60 seconds
 
@@ -23,14 +23,14 @@ pip install structkit
 structkit list
 
 # Generate a ready-made Terraform module scaffold
-structkit generate --var module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
+structkit generate --vars module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
 ```
 
 Prefer Docker?
 
 ```bash
 docker run --rm -v "$(pwd):/workdir" ghcr.io/httpdss/structkit:main \
-  generate --var module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
+  generate --vars module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
 ```
 
 ## 👤 Who StructKit is for
@@ -76,7 +76,7 @@ Project scaffolding tools exist in most ecosystems, but StructKit solves problem
 
 ```bash
 # Generate a Terraform module structure
-structkit generate --var module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
+structkit generate --vars module_name=my-terraform-module terraform/modules/generic ./my-terraform-module
 
 # List available structures
 structkit list
@@ -88,7 +88,7 @@ structkit validate my-config.yaml
 structkit mcp --server
 ```
 
-If StructKit saves you setup time, **star the repo**, try an [example](example/), or share your use case in [GitHub Discussions](https://github.com/httpdss/structkit/discussions).
+If StructKit saves you setup time, **star the repo**, try an [example](examples/), or share your use case in [GitHub Discussions](https://github.com/httpdss/structkit/discussions).
 
 ### Example Configuration
 
@@ -147,7 +147,7 @@ Our comprehensive documentation is organized into the following sections:
 ### 📖 Resources
 
 - **[Articles & Tutorials](docs/articles.md)** - Community content and learning resources
-- **[Examples](example/)** - Practical examples and use cases
+- **[Examples](examples/)** - Practical examples and use cases
 
 ## 🎯 Use Cases
 

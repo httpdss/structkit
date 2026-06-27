@@ -1,0 +1,75 @@
+files:
+  - README.md:
+      content: |
+        # {{@ project_name @}}
+
+        This repository uses a generated GitHub Actions CI baseline.
+
+        ## CI checks
+
+        - Install dependencies
+        - Run pre-commit hooks
+        - Run pytest
+  - .github/workflows/ci.yml:
+      content: |
+        name: CI
+
+        on:
+          pull_request:
+          push:
+            branches: [main]
+
+        jobs:
+          test:
+            runs-on: ubuntu-latest
+            steps:
+              - name: Checkout
+                uses: actions/checkout@v4
+
+              - name: Set up Python
+                uses: actions/setup-python@v5
+                with:
+                  python-version: "{{@ python_version @}}"
+
+              - name: Install dependencies
+                run: |
+                  python -m pip install --upgrade pip
+                  if [ -f pyproject.toml ]; then pip install -e ".[dev]"; fi
+                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+              - name: Run pre-commit
+                run: |
+                  pip install pre-commit
+                  pre-commit run --all-files
+
+              - name: Run tests
+                run: |
+                  pip install pytest
+                  pytest
+  - .github/dependabot.yml:
+      content: |
+        version: 2
+        updates:
+          - package-ecosystem: "github-actions"
+            directory: "/"
+            schedule:
+              interval: "weekly"
+  - .pre-commit-config.yaml:
+      content: |
+        repos:
+          - repo: https://github.com/pre-commit/pre-commit-hooks
+            rev: v4.6.0
+            hooks:
+              - id: trailing-whitespace
+              - id: end-of-file-fixer
+              - id: check-yaml
+              - id: check-added-large-files
+variables:
+  - project_name:
+      description: "Repository name."
+      type: string
+      default: "Demo Python Project"
+  - python_version:
+      description: "Python version for CI."
+      type: string
+      default: "3.12"

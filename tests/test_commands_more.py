@@ -10,6 +10,7 @@ from structkit.commands.list import ListCommand
 from structkit.commands.mcp import MCPCommand
 from structkit.commands.validate import ValidateCommand
 from structkit.file_item import ContentFetchError
+from structkit.input_store import InputStoreError
 from structkit.template_renderer import TemplateVariableError
 
 
@@ -413,3 +414,71 @@ def test_generate_remote_fetch_failure_exits_cleanly(parser, tmp_path, caplog):
     assert 'Failed to fetch content from' in caplog.text
     assert 'Traceback' not in caplog.text
     assert not (out_dir / 'out.txt').exists()
+
+
+# ---------------------------------------------------------------------------
+# InputStore tests
+# ---------------------------------------------------------------------------
+
+def test_input_store_relative_path_does_not_crash(tmp_path):
+    """A bare filename like 'input.json' must not cause makedirs('') crash."""
+    import os
+    from structkit.input_store import InputStore
+
+    orig = os.getcwd()
+    try:
+        os.chdir(tmp_path)
+        store = InputStore('input.json')
+        store.load()
+        assert store.get_data() == {}
+        store.set_value('key', 'value')
+        store.save()
+        store2 = InputStore('input.json')
+        store2.load()
+        assert store2.get_data() == {'key': 'value'}
+    finally:
+        os.chdir(orig)
+
+
+def test_generate_corrupt_input_store_exits_cleanly(parser, tmp_path, caplog):
+    """Corrupt JSON in the input-store exits 1 with a clean message and no Traceback."""
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / 'out'
+    out_dir.mkdir()
+
+    # Write corrupt JSON
+    store_file = tmp_path / 'input.json'
+    store_file.write_text('{ not valid json')
+
+    struct_yaml = tmp_path / 'struct.yaml'
+    struct_yaml.write_text('files:\n  - hello.txt: Hello\n')
+
+    args = parser.parse_args(['--non-interactive', str(struct_yaml), str(out_dir)])
+    args.input_store = str(store_file)
+
+    with pytest.raises(SystemExit) as excinfo:
+        command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert 'invalid JSON' in caplog.text
+    assert 'Traceback' not in caplog.text
+
+
+def test_generate_unreadable_input_store_exits_cleanly(parser, tmp_path, caplog):
+    """An OSError reading the input store exits 1 with a clean message and no Traceback."""
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / 'out'
+    out_dir.mkdir()
+
+    struct_yaml = tmp_path / 'struct.yaml'
+    struct_yaml.write_text('files:\n  - hello.txt: Hello\n')
+
+    args = parser.parse_args(['--non-interactive', str(struct_yaml), str(out_dir)])
+    args.input_store = str(tmp_path / 'input.json')
+
+    with patch('builtins.open', side_effect=PermissionError('permission denied')):
+        with pytest.raises(SystemExit) as excinfo:
+            command.execute(args)
+
+    assert excinfo.value.code == 1
+    assert 'Traceback' not in caplog.text

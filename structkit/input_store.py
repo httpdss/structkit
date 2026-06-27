@@ -2,25 +2,48 @@ import json
 import os
 
 
+class InputStoreError(Exception):
+  """Raised when the input store cannot be read, written, or parsed."""
+
+
 class InputStore:
 
   def __init__(self, input_file):
     self.input_file = input_file
     self.data = None
 
-    # create directory if it doesn't exist
+    # create directory if it doesn't exist (skip for bare filenames like 'input.json')
     directory = os.path.dirname(input_file)
-    if not os.path.exists(directory):
-      os.makedirs(directory)
+    if directory:
+      try:
+        os.makedirs(directory, exist_ok=True)
+      except OSError as e:
+        raise InputStoreError(
+            f"Cannot create input-store directory '{directory}': {e}"
+        ) from e
 
     # create file if it doesn't exist
     if not os.path.exists(input_file):
-      with open(input_file, 'w') as f:
-        json.dump({}, f)
+      try:
+        with open(input_file, 'w') as f:
+          json.dump({}, f)
+      except OSError as e:
+        raise InputStoreError(
+            f"Cannot create input-store file '{input_file}': {e}"
+        ) from e
 
   def load(self):
-    with open(self.input_file, 'r') as f:
-      self.data = json.load(f)
+    try:
+      with open(self.input_file, 'r') as f:
+        self.data = json.load(f)
+    except OSError as e:
+      raise InputStoreError(
+          f"Cannot read input-store file '{self.input_file}': {e}"
+      ) from e
+    except json.JSONDecodeError as e:
+      raise InputStoreError(
+          f"Input-store file '{self.input_file}' contains invalid JSON: {e}"
+      ) from e
 
   def get_data(self):
     return self.data
@@ -32,5 +55,10 @@ class InputStore:
     self.data[key] = value
 
   def save(self):
-    with open(self.input_file, 'w') as f:
-      json.dump(self.data, f, indent=2)
+    try:
+      with open(self.input_file, 'w') as f:
+        json.dump(self.data, f, indent=2)
+    except OSError as e:
+      raise InputStoreError(
+          f"Cannot write input-store file '{self.input_file}': {e}"
+      ) from e

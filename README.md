@@ -2,8 +2,6 @@
 
 > Define project structures once in YAML, then generate consistent repos, CI files, docs, Terraform modules, and app layouts locally, in CI, or through an AI assistant via MCP.
 
-![StructKit demo: generate project structure from YAML](./docs/assets/github-hero.gif)
-
 [![codecov](https://codecov.io/github/httpdss/structkit/graph/badge.svg?token=JL5WIO1C9T)](https://codecov.io/github/httpdss/structkit)
 ![GitHub issues](https://img.shields.io/github/issues/httpdss/structkit)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/httpdss/structkit)

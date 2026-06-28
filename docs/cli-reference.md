@@ -1,10 +1,10 @@
 # CLI Reference
 
-This document provides a reference for the `struct` command-line interface (CLI).
+This document provides a reference for the `structkit` command-line interface (CLI).
 
 ## Overview
 
-The `struct` CLI allows you to generate project structures from YAML configuration files. It supports both built-in structure definitions and custom structures.
+The `structkit` CLI allows you to generate project structures from YAML configuration files. It supports both built-in structure definitions and custom structures.
 
 **Basic Usage:**
 

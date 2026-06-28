@@ -38,7 +38,7 @@ Welcome to the comprehensive documentation for StructKit - the Automated Project
 
 ## 🔗 External Resources
 
-- [GitHub Repository](https://github.com/httpdss/struct)
+- [GitHub Repository](https://github.com/httpdss/structkit)
 - [StructKit Agent Skills](https://github.com/httpdss/structkit-skills)
 - [Articles and Tutorials](articles.md)
 - [Known Issues](known-issues.md)

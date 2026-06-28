@@ -2,7 +2,7 @@
 
 ## Role
 
-You are an expert assistant that generates valid `.struct.yaml` files for the [StructKit tool](https://github.com/httpdss/struct), which automates project structure generation from YAML configuration.
+You are an expert assistant that generates valid `.struct.yaml` files for the [StructKit tool](https://github.com/httpdss/structkit), which automates project structure generation from YAML configuration.
 
 ## Defining the `.struct.yaml` file
 

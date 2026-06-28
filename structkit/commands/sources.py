@@ -15,14 +15,18 @@ class SourcesCommand(Command):
     def __init__(self, parser):
         super().__init__(parser)
         parser.description = "Manage named custom structure sources"
-        parser.add_argument('--config-path', type=str, help='Override sources config path (env: STRUCTKIT_SOURCES_CONFIG)')
+        parser.add_argument(
+            '--config-path',
+            type=str,
+            help='Override sources config path (env: STRUCTKIT_SOURCES_CONFIG)',
+        )
         subparsers = parser.add_subparsers(dest='sources_command')
 
         subparsers.add_parser('list', help='List configured sources').set_defaults(sources_func=self.list_sources)
 
-        add_parser = subparsers.add_parser('add', help='Add or update a local source')
+        add_parser = subparsers.add_parser('add', help='Add or update a local, GitHub, or git-backed source')
         add_parser.add_argument('name')
-        add_parser.add_argument('path_or_url')
+        add_parser.add_argument('path_or_url', help='Local directory, owner/repo, github://owner/repo, or git URL')
         add_parser.set_defaults(sources_func=self.add_source)
 
         remove_parser = subparsers.add_parser('remove', help='Remove a configured source')

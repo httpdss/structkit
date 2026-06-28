@@ -56,7 +56,8 @@ Generate a project structure using specified definition and options.
       "project_name": "MyProject",
       "author": "John Doe"
     },
-    "structures_path": "/path/to/custom/structures"  // optional
+    "structures_path": "/path/to/custom/structures",  // optional
+    "source": "company"  // optional named source
   }
 }
 ```
@@ -68,6 +69,7 @@ Generate a project structure using specified definition and options.
 - `dry_run` (optional): Perform a dry run without creating actual files (default: false)
 - `mappings` (optional): Variable mappings for template substitution
 - `structures_path` (optional): Custom path to structure definitions
+- `source` (optional): Named source configured with `manage_sources`. The structure definition can also use a `<source>/<structure>` prefix.
 
 ### 4. get_structure_vars
 Inspect variables declared by a specific structure without generating files.
@@ -145,6 +147,26 @@ Visualize structure dependencies from `folders[].struct` references as text, JSO
 - `structures_path` (optional): Custom path to structure definitions.
 - `graph_all` (optional): Graph all available structures (default: false).
 - `output` (optional): Output format - "text", "json", or "mermaid" (default: "text").
+
+### 8. manage_sources
+Manage named structure sources. Sources can point at local directories, GitHub repositories, or git URLs. Git-backed sources are cloned into the StructKit sources cache and refreshed when resolved or validated.
+
+```json
+{
+  "name": "manage_sources",
+  "arguments": {
+    "action": "add",
+    "name": "platform",
+    "path_or_url": "github://httpdss/platform-structures@v1/structures"
+  }
+}
+```
+
+**Parameters:**
+- `action` (required): One of `list`, `add`, `remove`, `show`, or `validate`.
+- `name` (required except for `list`): Source name.
+- `path_or_url` (required for `add`): Local directory, GitHub shorthand (`owner/repo`), `github://owner/repo`, or git URL.
+- `config_path` (optional): Override the sources config file for this request.
 
 ## Usage
 

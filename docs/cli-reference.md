@@ -28,6 +28,7 @@ The following environment variables can be used to configure default values for 
 - `STRUCTKIT_LOG_LEVEL`: Set the default logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Overridden by the `--log` flag.
 - `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used as the default value for the `--structures-path` flag when not explicitly provided. When set, the CLI will log an info message indicating that this environment variable is being used.
 - `STRUCTKIT_SOURCES_CONFIG`: Override the user-level named sources config file (default: `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml`).
+- `STRUCTKIT_SOURCES_CACHE`: Override the local cache directory used for git-backed sources (default: `$XDG_CACHE_HOME/structkit/sources` or `~/.cache/structkit/sources`).
 
 **Precedence:**
 
@@ -246,7 +247,7 @@ structkit list [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
 
 ### `sources`
 
-Manage named custom structure sources. Sources currently support local filesystem directories. Remote sources are reserved for future support.
+Manage named custom structure sources. Sources support local filesystem directories, GitHub repositories, and git-backed repositories.
 
 **Usage:**
 
@@ -263,15 +264,19 @@ structkit sources list
 
 - `--config-path CONFIG_PATH`: Override the sources config file for this command.
 - `NAME`: Source name.
-- `PATH_OR_URL`: Local directory to use as a structure source.
+- `PATH_OR_URL`: Local directory, GitHub repository shorthand (`owner/repo`), `github://owner/repo`, or git URL to use as a structure source. GitHub sources may include an optional ref and subdirectory, for example `github://owner/repo@v1/structures`.
 
 **Examples:**
 
 ```sh
 structkit sources add company ./templates
+structkit sources add platform httpdss/platform-structures
+structkit sources add versioned github://httpdss/platform-structures@v1/structures
 structkit list --source company
 structkit generate company/project/python ./app
 ```
+
+Git-backed sources are cloned into the StructKit sources cache and refreshed with `git fetch` when resolved or validated.
 
 Resolution precedence is `--structures-path`/`STRUCTKIT_STRUCTURES_PATH`, then `--source` or `<source>/<structure>`, then bundled structures.
 

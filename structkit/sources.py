@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
+import re
+import shutil
+import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 from urllib.parse import urlparse
@@ -12,10 +17,21 @@ import yaml
 
 CONFIG_ENV_VAR = "STRUCTKIT_SOURCES_CONFIG"
 CONFIG_DIR_ENV_VAR = "XDG_CONFIG_HOME"
+CACHE_ENV_VAR = "STRUCTKIT_SOURCES_CACHE"
+CACHE_DIR_ENV_VAR = "XDG_CACHE_HOME"
 
 
 class SourceError(ValueError):
     """Raised when source configuration is invalid or cannot be resolved."""
+
+
+@dataclass(frozen=True)
+class RemoteSource:
+    """A git-backed source normalized for local cache resolution."""
+
+    git_url: str
+    ref: Optional[str] = None
+    subdir: str = ""
 
 
 def get_sources_config_path() -> Path:
@@ -29,6 +45,19 @@ def get_sources_config_path() -> Path:
         return Path(config_home).expanduser() / "structkit" / "sources.yaml"
 
     return Path.home() / ".config" / "structkit" / "sources.yaml"
+
+
+def get_sources_cache_dir() -> Path:
+    """Return the cache directory used for git-backed sources."""
+    override = os.getenv(CACHE_ENV_VAR)
+    if override:
+        return Path(override).expanduser()
+
+    cache_home = os.getenv(CACHE_DIR_ENV_VAR)
+    if cache_home:
+        return Path(cache_home).expanduser() / "structkit" / "sources"
+
+    return Path.home() / ".cache" / "structkit" / "sources"
 
 
 def read_sources(config_path: Optional[str] = None) -> Dict[str, str]:
@@ -47,7 +76,7 @@ def read_sources(config_path: Optional[str] = None) -> Dict[str, str]:
     result: Dict[str, str] = {}
     for name, value in sources.items():
         if isinstance(value, dict):
-            value = value.get("path")
+            value = value.get("path") or value.get("url")
         if not isinstance(name, str) or not name:
             raise SourceError("source names must be non-empty strings")
         if not isinstance(value, str) or not value:
@@ -66,22 +95,166 @@ def write_sources(sources: Dict[str, str], config_path: Optional[str] = None) ->
     return path
 
 
+def is_github_shorthand(path_or_url: str) -> bool:
+    """Return true for owner/repo shorthand values that are not local paths."""
+    return bool(re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?(?:@[^/]+)?(?:/.+)?", path_or_url))
+
+
 def is_remote_source(path_or_url: str) -> bool:
+    if path_or_url.startswith("git@"):
+        return True
     parsed = urlparse(path_or_url)
-    return parsed.scheme in {"http", "https", "git", "ssh"}
+    if parsed.scheme in {"http", "https", "git", "ssh", "github", "file"}:
+        return True
+    # Preserve existing relative local-directory behavior: only treat owner/repo
+    # shorthand as GitHub when that path is not present on disk.
+    if is_github_shorthand(path_or_url) and not Path(path_or_url).expanduser().exists():
+        return True
+    return False
+
+
+def _split_ref_and_subdir(value: str) -> Tuple[str, Optional[str], str]:
+    """Split 'repo@ref/subdir' or 'repo/subdir' into repo, ref, subdir."""
+    first, sep, rest = value.partition("/")
+    repo_part = first
+    subdir = rest if sep else ""
+    if "@" in repo_part:
+        repo, ref = repo_part.rsplit("@", 1)
+    else:
+        repo, ref = repo_part, None
+    return repo, ref, subdir.strip("/")
+
+
+def parse_remote_source(path_or_url: str) -> Optional[RemoteSource]:
+    """Parse supported git/GitHub source forms.
+
+    Supported forms:
+    - github://owner/repo
+    - github://owner/repo@ref
+    - github://owner/repo@ref/path/to/structures
+    - owner/repo or owner/repo@ref shorthand
+    - https://github.com/owner/repo(.git)
+    - git@github.com:owner/repo.git
+    - file:///path/to/repo for local git repositories used as remotes
+    """
+    if not is_remote_source(path_or_url):
+        return None
+
+    if is_github_shorthand(path_or_url):
+        owner, rest = path_or_url.split("/", 1)
+        repo, ref, subdir = _split_ref_and_subdir(rest)
+        repo = repo[:-4] if repo.endswith(".git") else repo
+        return RemoteSource(f"https://github.com/{owner}/{repo}.git", ref, subdir)
+
+    if path_or_url.startswith("git@"):
+        return RemoteSource(path_or_url)
+
+    parsed = urlparse(path_or_url)
+    if parsed.scheme == "github":
+        owner = parsed.netloc
+        repo_path = parsed.path.lstrip("/")
+        if not owner or not repo_path:
+            raise SourceError("github sources must use github://owner/repo")
+        repo, ref, subdir = _split_ref_and_subdir(repo_path)
+        repo = repo[:-4] if repo.endswith(".git") else repo
+        return RemoteSource(f"https://github.com/{owner}/{repo}.git", ref, subdir)
+
+    if parsed.scheme in {"http", "https"} and parsed.netloc.lower() == "github.com":
+        parts = [part for part in parsed.path.strip("/").split("/") if part]
+        if len(parts) < 2:
+            raise SourceError("GitHub HTTPS sources must use https://github.com/owner/repo")
+        owner, repo = parts[0], parts[1]
+        ref = None
+        subdir = ""
+        if len(parts) >= 4 and parts[2] in {"tree", "blob"}:
+            ref = parts[3]
+            subdir = "/".join(parts[4:])
+        elif len(parts) > 2:
+            subdir = "/".join(parts[2:])
+        if repo.endswith(".git"):
+            repo = repo[:-4]
+            subdir = ""
+        return RemoteSource(f"https://github.com/{owner}/{repo}.git", ref, subdir)
+
+    if parsed.scheme in {"http", "https", "git", "ssh", "file"}:
+        return RemoteSource(path_or_url)
+
+    return None
 
 
 def normalize_source_path(path_or_url: str) -> str:
-    """Normalize a local source path, preserving remote URLs for future support."""
-    if is_remote_source(path_or_url):
+    """Normalize a local source path while preserving supported remote source specs."""
+    remote = parse_remote_source(path_or_url)
+    if remote:
+        if remote.git_url.startswith("https://github.com/"):
+            owner_repo = remote.git_url.removeprefix("https://github.com/").removesuffix(".git")
+            suffix = f"@{remote.ref}" if remote.ref else ""
+            subdir = f"/{remote.subdir}" if remote.subdir else ""
+            return f"github://{owner_repo}{suffix}{subdir}"
         return path_or_url
     return str(Path(path_or_url).expanduser().resolve())
 
 
+def _source_cache_path(remote: RemoteSource) -> Path:
+    key = hashlib.sha256(remote.git_url.encode("utf-8")).hexdigest()[:16]
+    safe = re.sub(r"[^A-Za-z0-9_.-]+", "-", remote.git_url).strip("-")[-64:]
+    return get_sources_cache_dir() / f"{safe}-{key}"
+
+
+def _run_git(args: list[str], cwd: Optional[Path] = None) -> None:
+    try:
+        subprocess.run(
+            ["git", *args],
+            cwd=str(cwd) if cwd else None,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
+    except FileNotFoundError:
+        raise SourceError("git is required for remote sources but was not found on PATH") from None
+    except subprocess.CalledProcessError as exc:
+        detail = (exc.stderr or exc.stdout or "").strip()
+        raise SourceError(f"git {' '.join(args)} failed: {detail}") from None
+
+
+def ensure_remote_source(path_or_url: str) -> str:
+    """Clone/fetch a remote source and return the local structures path."""
+    remote = parse_remote_source(path_or_url)
+    if not remote:
+        return str(Path(path_or_url).expanduser().resolve())
+
+    cache_path = _source_cache_path(remote)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if (cache_path / ".git").exists():
+        _run_git(["fetch", "--prune", "--tags", "origin"], cwd=cache_path)
+    else:
+        if cache_path.exists():
+            shutil.rmtree(cache_path)
+        _run_git(["clone", remote.git_url, str(cache_path)])
+
+    if remote.ref:
+        _run_git(["checkout", remote.ref], cwd=cache_path)
+        _run_git(["pull", "--ff-only"], cwd=cache_path)
+
+    structures_path = cache_path / remote.subdir if remote.subdir else cache_path
+    if not structures_path.exists():
+        raise SourceError(f"remote source subdirectory does not exist: {remote.subdir or '.'}")
+    if not structures_path.is_dir():
+        raise SourceError(f"remote source subdirectory is not a directory: {remote.subdir}")
+    return str(structures_path)
+
+
 def validate_source_path(path_or_url: str) -> Tuple[bool, str]:
-    """Validate that a source points at a usable local directory."""
-    if is_remote_source(path_or_url):
-        return False, "remote sources are not supported yet"
+    """Validate that a source points at a usable local directory or git-backed source."""
+    remote = parse_remote_source(path_or_url)
+    if remote:
+        try:
+            local_path = ensure_remote_source(path_or_url)
+        except SourceError as exc:
+            return False, str(exc)
+        return True, f"valid remote source: {path_or_url} -> {local_path}"
 
     path = Path(path_or_url).expanduser()
     if not path.exists():
@@ -114,7 +287,7 @@ def resolve_source_path(source: Optional[str], config_path: Optional[str] = None
     sources = read_sources(config_path)
     if source not in sources:
         raise SourceError(f"source not found: {source}")
-    return sources[source]
+    return ensure_remote_source(sources[source]) if is_remote_source(sources[source]) else sources[source]
 
 
 def split_source_definition(structure_definition: str, config_path: Optional[str] = None) -> Tuple[Optional[str], str]:

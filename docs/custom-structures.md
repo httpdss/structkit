@@ -38,10 +38,12 @@ structkit generate -s ~/path/to/custom-structures/structures file://.struct.yaml
 
 ## Named custom sources
 
-StructKit can store named local structure sources in a user-level config file. This is useful when you reuse a shared template directory and do not want to pass `--structures-path` or set `STRUCTKIT_STRUCTURES_PATH` every time.
+StructKit can store named structure sources in a user-level config file. This is useful when you reuse a shared template directory or GitHub repository and do not want to pass `--structures-path` or set `STRUCTKIT_STRUCTURES_PATH` every time.
 
 ```bash
 structkit sources add company ./templates
+structkit sources add platform httpdss/platform-structures
+structkit sources add versioned github://httpdss/platform-structures@v1/structures
 structkit sources list
 structkit sources show company
 structkit sources validate company
@@ -50,7 +52,14 @@ structkit sources remove company
 
 By default, sources are written to `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml`. Set `STRUCTKIT_SOURCES_CONFIG` to use a different file, or pass `structkit sources --config-path <file>`.
 
-Named sources currently support local filesystem directories. Remote URLs are reserved for future support and are rejected by validation.
+Named sources support:
+
+- Local filesystem directories, such as `./templates` or `~/platform/structures`
+- GitHub shorthand, such as `httpdss/platform-structures`
+- GitHub URLs, such as `github://httpdss/platform-structures` or `github://httpdss/platform-structures@v1/structures`
+- Git URLs, including HTTPS, SSH, and `file://` repositories
+
+Git-backed sources are cloned into `$XDG_CACHE_HOME/structkit/sources` or `~/.cache/structkit/sources` by default. Set `STRUCTKIT_SOURCES_CACHE` to use a different cache directory. StructKit runs `git fetch` when a git-backed source is resolved or validated, so a named source can track the latest content from its configured repository or ref.
 
 Use a source explicitly with `--source`:
 

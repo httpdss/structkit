@@ -23,6 +23,7 @@ Welcome to the comprehensive documentation for StructKit - the Automated Project
 - [Mappings](mappings.md) - Using external data mappings
 - [GitHub Integration](github-integration.md) - Automation with GitHub Actions
 - [MCP / AI Agent Workflow](mcp-integration.md) - Model Context Protocol for approved-template scaffolding with AI assistants
+- [Agent Skills](agent-skills.md) - Installable StructKit workflow skill for AI assistants
 
 ### Development
 
@@ -38,6 +39,7 @@ Welcome to the comprehensive documentation for StructKit - the Automated Project
 ## 🔗 External Resources
 
 - [GitHub Repository](https://github.com/httpdss/struct)
+- [StructKit Agent Skills](https://github.com/httpdss/structkit-skills)
 - [Articles and Tutorials](articles.md)
 - [Known Issues](known-issues.md)
 

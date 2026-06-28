@@ -66,6 +66,8 @@ nav:
     - Custom Structures: structures.md
     - Hooks: hooks.md
     - GitHub Integration: github-integration.md
+    - MCP / AI Agent Workflow: mcp-integration.md
+    - Agent Skills: agent-skills.md
     - Schema Reference: schema.md
   - Development:
     - Development Setup: development.md

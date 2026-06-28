@@ -11,7 +11,7 @@
 
 **StructKit** replaces copy-pasted boilerplate and aging "golden repos" with reusable YAML structures. It can render template variables, fetch canonical files from remote sources, preview changes before writing, and expose your scaffolds to AI assistants through the Model Context Protocol.
 
-> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](examples/)** | 🤖 **[MCP / AI Agent Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
+> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](examples/)** | 🤖 **[MCP / AI Agent Guide](docs/mcp-integration.md)** | 🧠 **[Agent Skills](docs/agent-skills.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
 
 ## ⚡ Try it in 60 seconds
 
@@ -58,6 +58,7 @@ Project scaffolding tools exist in most ecosystems, but StructKit solves problem
 
 - **Remote-first content:** Reference your organization's canonical CI template from GitHub directly in your StructKit config. When the template updates, all new projects get the update — no copy-paste maintenance.
 - **AI-native via MCP:** Start the StructKit MCP server so your AI assistant can generate project scaffolds from natural language using your templates as the source of truth.
+- **Agent skill ready:** Install the companion [`httpdss/structkit-skills`](https://github.com/httpdss/structkit-skills) workflow skill so AI assistants consistently inspect, preview, generate, and validate StructKit structures.
 - **YAML-first:** Define structures directly in YAML. No separate template repository is required.
 - **Safe by default:** Use dry-run previews and file conflict strategies before writing into existing projects.
 
@@ -137,6 +138,7 @@ Our comprehensive documentation is organized into the following sections:
 - **[Mappings](docs/mappings.md)** - External data integration
 - **[GitHub Integration](docs/github-integration.md)** - Automation with GitHub Actions
 - **[MCP / AI Agent Workflow](docs/mcp-integration.md)** - Model Context Protocol for approved-template scaffolding with AI assistants
+- **[Agent Skills](docs/agent-skills.md)** - Installable StructKit workflow skill for AI assistants
 - **[Command-Line Completion](docs/completion.md)** - Enhanced CLI experience
 
 ### 👩‍💻 Development

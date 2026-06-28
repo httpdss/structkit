@@ -1,3 +1,7 @@
+description: >
+  Creates Prettier code-formatting configuration files (.prettierrc and .prettierignore)
+  with standard style settings: single quotes, ES5 trailing commas, 80-char print width.
+
 files:
   - .prettierrc:
       content: |

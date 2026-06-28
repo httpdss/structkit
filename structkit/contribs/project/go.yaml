@@ -1,3 +1,7 @@
+description: >
+  Creates a Go project scaffold with standard directory layout (cmd, pkg, internal, api, test),
+  main.go entry point, .editorconfig, .gitignore, README.md, and Apache 2.0 LICENSE.
+
 files:
   - .editorconfig:
       content: |

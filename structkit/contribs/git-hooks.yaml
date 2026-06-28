@@ -1,3 +1,7 @@
+description: >
+  Creates executable Git hook shell scripts under .git/hooks/: pre-commit,
+  pre-push, and commit-msg, each with a placeholder for custom hook logic.
+
 files:
   - .git/hooks/pre-commit:
       permissions: 755

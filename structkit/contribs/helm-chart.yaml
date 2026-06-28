@@ -1,3 +1,7 @@
+description: >
+  Creates a complete Helm chart scaffold including Chart.yaml, values.yaml,
+  Deployment/Service/Ingress templates, a helpers partial, and .helmignore.
+
 files:
   - Chart.yaml:
       content: |

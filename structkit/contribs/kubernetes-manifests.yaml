@@ -1,3 +1,8 @@
+description: >
+  Creates Kubernetes manifest files for deploying a containerised application:
+  Deployment, Service, Ingress, ConfigMap, Secret, and README.md.
+  Uses variables for app name, deployment name, and Docker image details.
+
 files:
   - deployment.yaml:
       content: |

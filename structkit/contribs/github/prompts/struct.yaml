@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Copilot prompt that configures an AI assistant for generating
+  valid .struct.yaml files for the StructKit tool, with schema references and usage examples.
+
 files:
   - .github/prompts/struct.prompt.md:
       content: |

@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Actions workflow (run-struct.yaml) that can be manually triggered
+  via workflow_dispatch to run struct file generation, plus a starter .struct.yaml file.
+
 files:
   - .github/workflows/run-struct.yaml:
       skip_if_exists: true

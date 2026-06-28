@@ -1,3 +1,8 @@
+description: >
+  Creates a Python project scaffold with setup.py, setup.cfg, pyproject.toml,
+  Makefile (with venv management), requirements.txt, src and tests directories
+  with starter modules, .editorconfig, .gitignore, and Apache 2.0 LICENSE.
+
 files:
   - .editorconfig:
       content: |

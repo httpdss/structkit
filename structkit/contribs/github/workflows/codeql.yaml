@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Actions CodeQL analysis workflow (z-codeql.yaml) for JavaScript
+  security scanning, triggered on push/PR to default branches and on a weekly schedule.
+
 files:
   - .github/workflows/z-codeql.yaml:
       content: | # yaml

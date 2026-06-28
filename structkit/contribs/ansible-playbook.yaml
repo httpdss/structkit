@@ -1,3 +1,7 @@
+description: >
+  Creates an Ansible playbook scaffold with main.yml, vars.yml, tasks/main.yml,
+  handlers/main.yml, a templates directory, and a README.md.
+
 files:
   - main.yml:
       content: |

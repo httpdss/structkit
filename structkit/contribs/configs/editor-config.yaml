@@ -1,3 +1,7 @@
+description: >
+  Creates an .editorconfig file enforcing consistent coding style across editors:
+  UTF-8, LF line endings, 2-space indentation, and trailing whitespace trimming.
+
 files:
   - .editorconfig:
       content: |

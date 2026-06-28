@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Copilot prompt for generating React form components using
+  react-hook-form (uncontrolled), yup validation schemas, and TypeScript types.
+
 files:
   - .github/prompts/react-form.prompt.md:
       content: |

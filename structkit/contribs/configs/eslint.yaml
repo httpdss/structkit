@@ -1,3 +1,7 @@
+description: >
+  Creates ESLint configuration files (.eslintrc.json and .eslintignore) for a
+  React/ES2021 project with eslint:recommended and react/recommended rules enabled.
+
 files:
   - .eslintrc.json:
       content: |

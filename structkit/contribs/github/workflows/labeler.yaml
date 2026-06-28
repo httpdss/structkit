@@ -1,3 +1,8 @@
+description: >
+  Creates a GitHub Actions labeler workflow (labeler.yaml) and a labeler config
+  (.github/labeler.yml) that auto-assigns PR labels based on changed file paths
+  and branch name patterns (feature, bug, docs, release).
+
 files:
   - .github/labeler.yml:
       content: |

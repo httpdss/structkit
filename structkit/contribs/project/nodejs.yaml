@@ -1,3 +1,7 @@
+description: >
+  Creates a Node.js project scaffold with package.json, src/index.js and utils.js,
+  public/index.html, a test starter, .editorconfig, .gitignore, README.md, and Apache 2.0 LICENSE.
+
 files:
   - .editorconfig:
       content: |

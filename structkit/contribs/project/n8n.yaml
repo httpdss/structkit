@@ -1,3 +1,8 @@
+description: >
+  Creates a self-hosted n8n workflow automation setup with docker-compose.yaml
+  (n8n container + Traefik reverse proxy with automatic HTTPS), .env configuration,
+  and a local-files/ directory. Uses variables for domain, subdomain, timezone, and SSL email.
+
 files:
   - .gitignore:
       content: |

@@ -1,3 +1,7 @@
+description: >
+  Creates GitHub PR templates (bug fix, feature request, general PR) under
+  .github/PULL_REQUEST_TEMPLATE/ and an issue template under .github/ISSUE_TEMPLATE/.
+
 files:
   - .github/PULL_REQUEST_TEMPLATE/bug_fix_template.md:
       content: |

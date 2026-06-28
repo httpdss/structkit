@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Actions workflow (stale.yaml) that runs daily on a cron schedule
+  to mark inactive issues and pull requests as stale with configurable messages.
+
 files:
   - .github/workflows/stale.yaml:
       content: |

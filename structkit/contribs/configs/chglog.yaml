@@ -1,3 +1,7 @@
+description: >
+  Creates git-chglog configuration files (.chglog/config.yaml and CHANGELOG.tpl.md)
+  for automated changelog generation with GitHub-style commit parsing and Markdown output.
+
 files:
   - .chglog/config.yaml:
       content: |

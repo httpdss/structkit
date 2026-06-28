@@ -1,3 +1,7 @@
+description: >
+  Creates a Vagrant development environment with a Vagrantfile (Ubuntu bionic64),
+  an executable bootstrap.sh provisioning script that installs nginx, and a README.md.
+
 files:
   - Vagrantfile:
       content: |

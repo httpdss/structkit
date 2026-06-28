@@ -1,3 +1,8 @@
+description: >
+  Creates Terraform app directories for four environments (dev, qa, stage, prod) under
+  .devops/apps/environments/, using the generic app structure with a remote backend,
+  plus execute-tf-workflow GitHub Actions workflows for each environment.
+
 folders:
   - .devops/apps/environments/dev:
       struct: terraform/apps/generic

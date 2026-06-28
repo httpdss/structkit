@@ -1,3 +1,7 @@
+description: >
+  Creates standard open-source project documentation files: README.md, CONTRIBUTING.md,
+  CODE_OF_CONDUCT.md, and LICENSE.md, all templated with a project_name variable.
+
 files:
   - README.md:
       content: |

@@ -1,3 +1,7 @@
+description: >
+  Creates a GitHub Actions pre-commit workflow (z-pre-commit.yaml) and a
+  .pre-commit-config.yaml with check-yaml, end-of-file-fixer, and trailing-whitespace hooks.
+
 files:
   - .github/workflows/z-pre-commit.yaml:
       content: |

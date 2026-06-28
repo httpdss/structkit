@@ -11,7 +11,7 @@
 
 **StructKit** replaces copy-pasted boilerplate and aging "golden repos" with reusable YAML structures. It can render template variables, fetch canonical files from remote sources, preview changes before writing, and expose your scaffolds to AI assistants through the Model Context Protocol.
 
-> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](examples/)** | 🤖 **[MCP Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
+> 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🧩 **[Examples](examples/)** | 🤖 **[MCP / AI Agent Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
 
 ## ⚡ Try it in 60 seconds
 
@@ -136,7 +136,7 @@ Our comprehensive documentation is organized into the following sections:
 - **[Hooks](docs/hooks.md)** - Pre and post-generation automation
 - **[Mappings](docs/mappings.md)** - External data integration
 - **[GitHub Integration](docs/github-integration.md)** - Automation with GitHub Actions
-- **[MCP Integration](docs/mcp-integration.md)** - Model Context Protocol for AI-assisted workflows
+- **[MCP / AI Agent Workflow](docs/mcp-integration.md)** - Model Context Protocol for approved-template scaffolding with AI assistants
 - **[Command-Line Completion](docs/completion.md)** - Enhanced CLI experience
 
 ### 👩‍💻 Development

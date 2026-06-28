@@ -328,6 +328,160 @@ The MCP tools can be chained together for complex workflows:
 }
 ```
 
+## End-to-end AI assistant workflow
+
+Use this flow when you want an AI assistant to scaffold from an approved
+StructKit template instead of inventing a repository layout from scratch. The
+assistant should inspect available templates, choose one with you, preview the
+generated files, and only then write to disk.
+
+### 1. Start the MCP server
+
+For local MCP clients that launch tools over stdio, use:
+
+```bash
+structkit mcp --server --transport stdio
+```
+
+For a long-running local HTTP endpoint during development, use:
+
+```bash
+structkit mcp --server --transport http --host 127.0.0.1 --port 9000 --path /mcp
+```
+
+### 2. Give the assistant a scoped prompt
+
+```text
+Use StructKit templates as the source of truth. List available structures,
+inspect the Terraform module template, preview the generated output for a module
+named "network-observability", and only write files after I approve the preview.
+```
+
+This prompt keeps the model on the approved-template path: discover, inspect,
+preview, then generate.
+
+### 3. List templates and inspect the chosen one
+
+First, the assistant can discover the bundled templates:
+
+```json
+{
+  "name": "list_structures",
+  "arguments": {}
+}
+```
+
+Then it can inspect the Terraform module scaffold:
+
+```json
+{
+  "name": "get_structure_info",
+  "arguments": {
+    "structure_name": "terraform/modules/generic"
+  }
+}
+```
+
+For required variables, ask for the variable schema before generating:
+
+```json
+{
+  "name": "get_structure_vars",
+  "arguments": {
+    "structure_name": "terraform/modules/generic",
+    "output": "json"
+  }
+}
+```
+
+The bundled `terraform/modules/generic` structure declares `module_name`, so the
+assistant should provide that value instead of guessing during generation.
+
+### 4. Preview generated output
+
+Use `output: "console"` to render the structure into the chat or tool result
+without writing files:
+
+```json
+{
+  "name": "generate_structure",
+  "arguments": {
+    "structure_definition": "terraform/modules/generic",
+    "base_path": "/tmp/structkit-preview/network-observability",
+    "output": "console",
+    "dry_run": true,
+    "mappings": {
+      "module_name": "network-observability"
+    }
+  }
+}
+```
+
+Review the preview for the expected source-of-truth files:
+
+- `main.tf`
+- `variables.tf`
+- `outputs.tf`
+- `versions.tf`
+- `README.md`
+
+If the preview is not right, adjust the selected structure or mappings rather
+than asking the assistant to hand-edit a bespoke layout.
+
+### 5. Generate approved files
+
+After approval, call the same structure with `output: "files"` and
+`dry_run: false`:
+
+```json
+{
+  "name": "generate_structure",
+  "arguments": {
+    "structure_definition": "terraform/modules/generic",
+    "base_path": "./modules/network-observability",
+    "output": "files",
+    "dry_run": false,
+    "mappings": {
+      "module_name": "network-observability"
+    }
+  }
+}
+```
+
+The generated project structure now comes from the checked-in StructKit template.
+Future changes to the scaffold should happen in the YAML definition, not as
+one-off AI-generated folder edits.
+
+### 6. Validate custom templates
+
+If your team stores its own templates, point the MCP tools at that directory:
+
+```json
+{
+  "name": "validate_structure",
+  "arguments": {
+    "yaml_file": "/path/to/company-structures/terraform/modules/service.yaml"
+  }
+}
+```
+
+Then generate from the same source of truth:
+
+```json
+{
+  "name": "generate_structure",
+  "arguments": {
+    "structure_definition": "terraform/modules/service",
+    "structures_path": "/path/to/company-structures",
+    "base_path": "./modules/service-a",
+    "output": "files",
+    "mappings": {
+      "module_name": "service-a"
+    }
+  }
+}
+```
+
 ## Configuration
 
 ### Environment Variables

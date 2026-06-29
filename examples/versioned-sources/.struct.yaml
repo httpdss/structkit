@@ -1,0 +1,23 @@
+# Demonstrates file-local sources and nested struct inheritance.
+#
+# For a real shared template repo, replace the local path with a pinned GitHub
+# source, for example:
+#
+# sources:
+#   platform:
+#     url: github://httpdss/platform-structures@v1.2.0/structures
+#
+# This example uses a local directory so it can run offline from the StructKit
+# repository root.
+sources:
+  platform:
+    path: examples/versioned-sources/structures
+
+folders:
+  - ./:
+      # Resolves to examples/versioned-sources/structures/app/base.yaml.
+      # Nested structs referenced by app/base inherit the same platform source.
+      struct: platform/app/base
+      with:
+        app_name: DemoVersionedApp
+        python_version: "3.12"

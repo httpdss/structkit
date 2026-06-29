@@ -1,0 +1,39 @@
+variables:
+  - app_name:
+      type: string
+      default: DemoVersionedApp
+      help: Name of the generated application
+  - python_version:
+      type: string
+      default: "3.12"
+      help: Python version used by the generated CI workflow
+
+files:
+  - README.md:
+      content: |
+        # {{@ app_name @}}
+
+        This project was generated from a StructKit struct that came from a
+        file-local named source.
+
+        The parent struct also referenced `app/ci` without a source prefix.
+        StructKit resolved that nested struct from the same inherited source
+        context, so the CI workflow stays on the same pinned source/ref as the
+        parent struct.
+
+  - pyproject.toml:
+      content: |
+        [project]
+        name = "{{@ app_name | slugify @}}"
+        version = "0.1.0"
+        requires-python = ">={{@ python_version @}}"
+        description = "Example generated with StructKit file-local sources"
+
+folders:
+  - .github/workflows:
+      # This unqualified child struct inherits the current source context.
+      # If the parent source is pinned to v1.2.0, this resolves from v1.2.0 too.
+      struct: app/ci
+      with:
+        app_name: "{{@ app_name @}}"
+        python_version: "{{@ python_version @}}"

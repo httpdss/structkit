@@ -24,7 +24,8 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Sync pyproject version to release draft
+      - name: Update pyproject version from release draft
+        id: pyproject-version
         env:
           RESOLVED_VERSION: ${{ steps.release-drafter.outputs.resolved_version }}
         run: |
@@ -55,11 +56,22 @@ jobs:
 
           if git diff --quiet -- pyproject.toml; then
             echo "pyproject.toml already matches ${RESOLVED_VERSION}"
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "pyproject.toml will be bumped to ${RESOLVED_VERSION}"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add pyproject.toml
-          git commit -m "chore: bump pyproject version to ${RESOLVED_VERSION}"
-          git push
+      - name: Open pyproject version bump PR
+        if: steps.pyproject-version.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          branch: chore/bump-pyproject-version
+          delete-branch: true
+          commit-message: "chore: bump pyproject version to ${{ steps.release-drafter.outputs.resolved_version }}"
+          title: "Bump pyproject version to ${{ steps.release-drafter.outputs.resolved_version }}"
+          body: |
+            Release Drafter resolved the next release as `${{ steps.release-drafter.outputs.resolved_version }}`.
+
+            This PR updates `pyproject.toml` before the draft release is published so the PyPI publish workflow can build a package whose version matches the release tag.
+          labels: release

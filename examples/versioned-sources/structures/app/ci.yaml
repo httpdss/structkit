@@ -1,0 +1,30 @@
+variables:
+  - app_name:
+      type: string
+      default: DemoVersionedApp
+      help: Name used in the CI workflow
+  - python_version:
+      type: string
+      default: "3.12"
+      help: Python version used by the CI workflow
+
+files:
+  - ci.yml:
+      content: |
+        name: CI
+
+        on:
+          push:
+            branches: [main]
+          pull_request:
+
+        jobs:
+          test:
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@v4
+              - uses: actions/setup-python@v5
+                with:
+                  python-version: "{{@ python_version @}}"
+              - name: Show generated app name
+                run: echo "Generated app: {{@ app_name @}}"

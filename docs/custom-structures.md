@@ -57,9 +57,54 @@ Named sources support:
 - Local filesystem directories, such as `./templates` or `~/platform/structures`
 - GitHub shorthand, such as `httpdss/platform-structures`
 - GitHub URLs, such as `github://httpdss/platform-structures` or `github://httpdss/platform-structures@v1/structures`
+- Query-style refs for branch names that contain slashes, such as `github://httpdss/platform-structures/structures?ref=release/1.x`
 - Git URLs, including HTTPS, SSH, and `file://` repositories
 
-Git-backed sources are cloned into `$XDG_CACHE_HOME/structkit/sources` or `~/.cache/structkit/sources` by default. Set `STRUCTKIT_SOURCES_CACHE` to use a different cache directory. StructKit runs `git fetch` when a git-backed source is resolved or validated, so a named source can track the latest content from its configured repository or ref.
+Git-backed sources are cloned into `$XDG_CACHE_HOME/structkit/sources` or `~/.cache/structkit/sources` by default. Set `STRUCTKIT_SOURCES_CACHE` to use a different cache directory. StructKit runs `git fetch` when a git-backed source is resolved or validated. Branch refs are checked out from `origin/<branch>`; tag and commit refs are checked out detached so tags and SHAs do not run `git pull`.
+
+## File-local sources
+
+Committed `.struct.yaml` files can declare their own named sources. This keeps generation portable and protects existing files from changes to a user's global `structkit sources` configuration.
+
+```yaml
+sources:
+  platform:
+    url: github://httpdss/platform-structures@v1.2.0/structures
+
+folders:
+  - ./:
+      struct: platform/python/service
+      with:
+        service_name: demo-api
+```
+
+File-local sources override user-level sources with the same name at the top level. Nested structs inherit the parent's source context, and a nested struct cannot silently redefine an inherited source name to a different URL/path. Use a different source name when you intentionally need two versions:
+
+```yaml
+sources:
+  platform_v1:
+    url: github://httpdss/platform-structures@v1/structures
+  platform_v2:
+    url: github://httpdss/platform-structures@v2/structures
+
+folders:
+  - ./:
+      struct:
+        - platform_v1/python/service
+        - platform_v2/github/actions-ci
+```
+
+Unqualified nested structs inherit the current structures path. For example, if `platform/python/service` references `github/actions-ci`, that child struct is resolved from the same pinned `platform` source unless it uses another named source or a fully qualified remote reference.
+
+You can also reference a remote struct directly:
+
+```yaml
+folders:
+  - ./:
+      struct: github://httpdss/platform-structures@v1.2.0/structures/python/service
+```
+
+For reproducible `.struct.yaml` files, prefer tags or commit SHAs over mutable branches.
 
 Use a source explicitly with `--source`:
 

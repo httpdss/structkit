@@ -1,11 +1,9 @@
 import argparse
 import os
 import subprocess
-import tempfile
 from pathlib import Path
 
 import pytest
-import yaml
 
 from structkit.commands.generate import GenerateCommand
 from structkit.commands.list import ListCommand
@@ -19,6 +17,7 @@ from structkit.sources import (
     resolve_source_path,
     resolve_structures_path,
 )
+from structkit.struct_refs import SourceContext, resolve_struct_reference
 
 
 def test_sources_config_read_write_and_validate(monkeypatch, tmp_path):
@@ -146,6 +145,14 @@ def test_github_shorthand_sources_normalize_to_github_scheme(tmp_path):
     assert web_url.ref == "v1"
     assert web_url.subdir == "structures"
 
+    query_ref = parse_remote_source("github://httpdss/structkit-templates/structures?ref=release/1.x")
+    assert query_ref is not None
+    assert query_ref.ref == "release/1.x"
+    assert query_ref.subdir == "structures"
+    assert normalize_source_path("github://httpdss/structkit-templates/structures?ref=release/1.x") == (
+        "github://httpdss/structkit-templates/structures?ref=release/1.x"
+    )
+
     local_dir = tmp_path / "owner" / "repo"
     local_dir.mkdir(parents=True)
     cwd = os.getcwd()
@@ -182,6 +189,100 @@ def test_git_backed_source_resolves_to_cache_and_generates(monkeypatch, tmp_path
     assert args.structure_definition == "demo"
     assert args.structures_path == resolved
     assert (out_dir / "README.md").read_text().strip() == "remote demo"
+
+
+def test_file_local_sources_resolve_nested_structs(monkeypatch, tmp_path):
+    global_config = tmp_path / "global-sources.yaml"
+    global_source = tmp_path / "global"
+    global_source.mkdir()
+    (global_source / "child.yaml").write_text("files:\n  - child.txt:\n      content: global\n")
+    monkeypatch.setenv("STRUCTKIT_SOURCES_CONFIG", str(global_config))
+    add_source("platform", str(global_source), str(global_config))
+
+    local_source = tmp_path / "local"
+    local_source.mkdir()
+    (local_source / "parent.yaml").write_text(
+        "folders:\n"
+        "  - nested:\n"
+        "      struct: child\n"
+    )
+    (local_source / "child.yaml").write_text("files:\n  - child.txt:\n      content: local\n")
+
+    root = tmp_path / ".struct.yaml"
+    root.write_text(
+        "sources:\n"
+        f"  platform:\n"
+        f"    path: {local_source}\n"
+        "folders:\n"
+        "  - ./:\n"
+        "      struct: platform/parent\n"
+    )
+
+    parser = argparse.ArgumentParser()
+    command = GenerateCommand(parser)
+    out_dir = tmp_path / "out"
+    args = parser.parse_args([f"file://{root}", str(out_dir)])
+    command.execute(args)
+
+    assert (out_dir / "nested" / "child.txt").read_text().strip() == "local"
+
+
+def test_nested_source_redefinition_is_rejected(tmp_path):
+    source_v1 = tmp_path / "source-v1"
+    source_v2 = tmp_path / "source-v2"
+    source_v1.mkdir()
+    source_v2.mkdir()
+    (source_v1 / "parent.yaml").write_text(
+        "sources:\n"
+        f"  platform:\n"
+        f"    path: {source_v2}\n"
+        "files: []\n"
+    )
+
+    root = tmp_path / ".struct.yaml"
+    root.write_text(
+        "sources:\n"
+        f"  platform:\n"
+        f"    path: {source_v1}\n"
+        "folders:\n"
+        "  - ./:\n"
+        "      struct: platform/parent\n"
+    )
+
+    parser = argparse.ArgumentParser()
+    command = GenerateCommand(parser)
+    args = parser.parse_args([f"file://{root}", str(tmp_path / "out")])
+
+    with pytest.raises(SystemExit):
+        command.execute(args)
+
+
+def test_resolve_struct_reference_named_source(tmp_path):
+    source_dir = tmp_path / "templates"
+    source_dir.mkdir()
+    context = SourceContext({"platform": str(source_dir)})
+
+    resolved_path, struct_name = resolve_struct_reference("platform/python/api", None, context)
+
+    assert resolved_path == str(source_dir.resolve())
+    assert struct_name == "python/api"
+
+
+def test_resolve_struct_reference_direct_remote(monkeypatch, tmp_path):
+    repo_root = tmp_path / "repo"
+    structures = repo_root / "structures" / "python"
+    structures.mkdir(parents=True)
+    (structures / "api.yaml").write_text("files: []\n")
+    monkeypatch.setattr("structkit.struct_refs.ensure_remote_repo", lambda _ref: str(repo_root))
+
+    resolved_path, struct_name = resolve_struct_reference(
+        "github://httpdss/platform-structures@v1.2.0/structures/python/api",
+        None,
+        SourceContext(),
+    )
+
+    assert resolved_path == str(repo_root / "structures")
+    assert struct_name == "python/api"
 
 
 def test_mcp_manage_sources(tmp_path):

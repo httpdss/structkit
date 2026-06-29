@@ -98,6 +98,28 @@
         }
       }
     },
+    "sources": {
+      "type": "object",
+      "description": "File-local named structure sources. These override user-level sources at the top level and are inherited by nested structs.",
+      "patternProperties": {
+        ".*": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "url": { "type": "string" }
+              },
+              "additionalProperties": false,
+              "minProperties": 1,
+              "maxProperties": 1
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
     "pre_hooks": {
       "type": "array",
       "items": { "type": "string" },

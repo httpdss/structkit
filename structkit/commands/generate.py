@@ -6,6 +6,7 @@ from structkit.file_item import FileItem, ContentFetchError
 from structkit.completers import file_strategy_completer, structures_completer
 from structkit.template_renderer import TemplateRenderer, TemplateVariableError
 from structkit.sources import SourceError, resolve_structures_path
+from structkit.struct_refs import SourceContext, resolve_struct_reference
 from structkit.input_store import InputStoreError
 
 import subprocess
@@ -208,7 +209,7 @@ class GenerateCommand(Command):
     # Actually generate structure
     try:
       self._create_structure(args, mappings)
-    except (GenerateConfigError, TemplateVariableError, ContentFetchError, InputStoreError) as exc:
+    except (GenerateConfigError, SourceError, TemplateVariableError, ContentFetchError, InputStoreError) as exc:
       self.logger.error(f"❗ {exc}")
       raise SystemExit(1) from None
 
@@ -217,12 +218,18 @@ class GenerateCommand(Command):
       self.logger.error("Post-hook failed.")
       return
 
-  def _create_structure(self, args, mappings=None, summary=None, print_summary=True):
+  def _create_structure(self, args, mappings=None, summary=None, print_summary=True, source_context=None):
     if isinstance(args, dict):
         args = argparse.Namespace(**args)
 
     config = self._validate_loaded_config(
       self._load_yaml_config(args.structure_definition, args.structures_path)
+    )
+
+    is_top_level_source_context = source_context is None
+    source_context = (source_context or SourceContext.from_global()).merge_inline(
+      config.get('sources'),
+      allow_override=is_top_level_source_context,
     )
 
     # Safely parse template variables
@@ -395,10 +402,12 @@ class GenerateCommand(Command):
           merged_vars = merged_vars if merged_vars else None
 
           if isinstance(content['struct'], str):
+            child_structures_path, child_structure_definition = resolve_struct_reference(
+              content['struct'], args.structures_path, source_context)
             self._create_structure({
-              'structure_definition': content['struct'],
+              'structure_definition': child_structure_definition,
               'base_path': folder_path,
-              'structures_path': args.structures_path,
+              'structures_path': child_structures_path,
               'dry_run': args.dry_run,
               'diff': getattr(args, 'diff', False),
               'output': getattr(args, 'output', 'file'),
@@ -408,13 +417,15 @@ class GenerateCommand(Command):
               'global_system_prompt': args.global_system_prompt,
               'input_store': args.input_store,
               'non_interactive': args.non_interactive,
-            }, mappings=mappings, summary=summary, print_summary=False)
+            }, mappings=mappings, summary=summary, print_summary=False, source_context=source_context)
           elif isinstance(content['struct'], list):
             for struct in content['struct']:
+              child_structures_path, child_structure_definition = resolve_struct_reference(
+                struct, args.structures_path, source_context)
               self._create_structure({
-                'structure_definition': struct,
+                'structure_definition': child_structure_definition,
                 'base_path': folder_path,
-                'structures_path': args.structures_path,
+                'structures_path': child_structures_path,
                 'dry_run': args.dry_run,
                 'diff': getattr(args, 'diff', False),
                 'output': getattr(args, 'output', 'file'),
@@ -424,7 +435,7 @@ class GenerateCommand(Command):
                 'global_system_prompt': args.global_system_prompt,
                 'input_store': args.input_store,
                 'non_interactive': args.non_interactive,
-              }, mappings=mappings, summary=summary, print_summary=False)
+              }, mappings=mappings, summary=summary, print_summary=False, source_context=source_context)
         else:
           self.logger.warning(f"Unsupported content in folder: {folder}")
 

@@ -10,7 +10,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import yaml
 
@@ -101,6 +101,7 @@ def is_github_shorthand(path_or_url: str) -> bool:
 
 
 def is_remote_source(path_or_url: str) -> bool:
+    path_without_query = path_or_url.split("?", 1)[0]
     if path_or_url.startswith("git@"):
         return True
     parsed = urlparse(path_or_url)
@@ -108,12 +109,12 @@ def is_remote_source(path_or_url: str) -> bool:
         return True
     # Preserve existing relative local-directory behavior: only treat owner/repo
     # shorthand as GitHub when that path is not present on disk.
-    if is_github_shorthand(path_or_url) and not Path(path_or_url).expanduser().exists():
+    if is_github_shorthand(path_without_query) and not Path(path_without_query).expanduser().exists():
         return True
     return False
 
 
-def _split_ref_and_subdir(value: str) -> Tuple[str, Optional[str], str]:
+def _split_ref_and_subdir(value: str, explicit_ref: Optional[str] = None) -> Tuple[str, Optional[str], str]:
     """Split 'repo@ref/subdir' or 'repo/subdir' into repo, ref, subdir."""
     first, sep, rest = value.partition("/")
     repo_part = first
@@ -122,6 +123,8 @@ def _split_ref_and_subdir(value: str) -> Tuple[str, Optional[str], str]:
         repo, ref = repo_part.rsplit("@", 1)
     else:
         repo, ref = repo_part, None
+    if explicit_ref:
+        ref = explicit_ref
     return repo, ref, subdir.strip("/")
 
 
@@ -140,22 +143,25 @@ def parse_remote_source(path_or_url: str) -> Optional[RemoteSource]:
     if not is_remote_source(path_or_url):
         return None
 
-    if is_github_shorthand(path_or_url):
-        owner, rest = path_or_url.split("/", 1)
-        repo, ref, subdir = _split_ref_and_subdir(rest)
+    parsed = urlparse(path_or_url)
+    query_ref = parse_qs(parsed.query).get("ref", [None])[0]
+    path_without_query = path_or_url.split("?", 1)[0]
+
+    if is_github_shorthand(path_without_query):
+        owner, rest = path_without_query.split("/", 1)
+        repo, ref, subdir = _split_ref_and_subdir(rest, query_ref)
         repo = repo[:-4] if repo.endswith(".git") else repo
         return RemoteSource(f"https://github.com/{owner}/{repo}.git", ref, subdir)
 
     if path_or_url.startswith("git@"):
         return RemoteSource(path_or_url)
 
-    parsed = urlparse(path_or_url)
     if parsed.scheme == "github":
         owner = parsed.netloc
         repo_path = parsed.path.lstrip("/")
         if not owner or not repo_path:
             raise SourceError("github sources must use github://owner/repo")
-        repo, ref, subdir = _split_ref_and_subdir(repo_path)
+        repo, ref, subdir = _split_ref_and_subdir(repo_path, query_ref)
         repo = repo[:-4] if repo.endswith(".git") else repo
         return RemoteSource(f"https://github.com/{owner}/{repo}.git", ref, subdir)
 
@@ -171,6 +177,8 @@ def parse_remote_source(path_or_url: str) -> Optional[RemoteSource]:
             subdir = "/".join(parts[4:])
         elif len(parts) > 2:
             subdir = "/".join(parts[2:])
+        if query_ref:
+            ref = query_ref
         if repo.endswith(".git"):
             repo = repo[:-4]
             subdir = ""
@@ -188,16 +196,19 @@ def normalize_source_path(path_or_url: str) -> str:
     if remote:
         if remote.git_url.startswith("https://github.com/"):
             owner_repo = remote.git_url.removeprefix("https://github.com/").removesuffix(".git")
-            suffix = f"@{remote.ref}" if remote.ref else ""
             subdir = f"/{remote.subdir}" if remote.subdir else ""
+            if remote.ref and "/" in remote.ref:
+                return f"github://{owner_repo}{subdir}?ref={remote.ref}"
+            suffix = f"@{remote.ref}" if remote.ref else ""
             return f"github://{owner_repo}{suffix}{subdir}"
         return path_or_url
     return str(Path(path_or_url).expanduser().resolve())
 
 
 def _source_cache_path(remote: RemoteSource) -> Path:
-    key = hashlib.sha256(remote.git_url.encode("utf-8")).hexdigest()[:16]
-    safe = re.sub(r"[^A-Za-z0-9_.-]+", "-", remote.git_url).strip("-")[-64:]
+    cache_identity = f"{remote.git_url}@{remote.ref or 'HEAD'}"
+    key = hashlib.sha256(cache_identity.encode("utf-8")).hexdigest()[:16]
+    safe = re.sub(r"[^A-Za-z0-9_.-]+", "-", cache_identity).strip("-")[-64:]
     return get_sources_cache_dir() / f"{safe}-{key}"
 
 
@@ -218,8 +229,34 @@ def _run_git(args: list[str], cwd: Optional[Path] = None) -> None:
         raise SourceError(f"git {' '.join(args)} failed: {detail}") from None
 
 
-def ensure_remote_source(path_or_url: str) -> str:
-    """Clone/fetch a remote source and return the local structures path."""
+def _git_succeeds(args: list[str], cwd: Path) -> bool:
+    try:
+        subprocess.run(
+            ["git", *args],
+            cwd=str(cwd),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
+        return True
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return False
+
+
+def _checkout_remote_ref(remote: RemoteSource, cache_path: Path) -> None:
+    _run_git(["fetch", "--prune", "--tags", "origin"], cwd=cache_path)
+    if not remote.ref:
+        return
+
+    if _git_succeeds(["show-ref", "--verify", f"refs/remotes/origin/{remote.ref}"], cwd=cache_path):
+        _run_git(["checkout", "-B", remote.ref, f"origin/{remote.ref}"], cwd=cache_path)
+    else:
+        _run_git(["checkout", "--detach", remote.ref], cwd=cache_path)
+
+
+def ensure_remote_repo(path_or_url: str) -> str:
+    """Clone/fetch a remote source and return the checked-out repository root."""
     remote = parse_remote_source(path_or_url)
     if not remote:
         return str(Path(path_or_url).expanduser().resolve())
@@ -227,16 +264,22 @@ def ensure_remote_source(path_or_url: str) -> str:
     cache_path = _source_cache_path(remote)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if (cache_path / ".git").exists():
-        _run_git(["fetch", "--prune", "--tags", "origin"], cwd=cache_path)
-    else:
+    if not (cache_path / ".git").exists():
         if cache_path.exists():
             shutil.rmtree(cache_path)
         _run_git(["clone", remote.git_url, str(cache_path)])
 
-    if remote.ref:
-        _run_git(["checkout", remote.ref], cwd=cache_path)
-        _run_git(["pull", "--ff-only"], cwd=cache_path)
+    _checkout_remote_ref(remote, cache_path)
+    return str(cache_path)
+
+
+def ensure_remote_source(path_or_url: str) -> str:
+    """Clone/fetch a remote source and return the local structures path."""
+    remote = parse_remote_source(path_or_url)
+    if not remote:
+        return str(Path(path_or_url).expanduser().resolve())
+
+    cache_path = Path(ensure_remote_repo(path_or_url))
 
     structures_path = cache_path / remote.subdir if remote.subdir else cache_path
     if not structures_path.exists():

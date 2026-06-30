@@ -8,8 +8,7 @@ on:
     branches:
       - main
 
-env:
-  OPENAI_API_KEY: "my-test-key"
+# Removed hardcoded test API key - use secrets instead if needed
 
 jobs:
   build:
@@ -18,10 +17,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
 
     - name: Set up Python 3.10
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.10'
         cache: pip

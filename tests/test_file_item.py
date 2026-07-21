@@ -56,3 +56,32 @@ def test_fetch_content_renders_template(monkeypatch):
     assert file_item.content == "Hello, World!"
     assert rendered["content"] == "Hello, {{@ name @}}!"
     assert rendered["vars"]["name"] == "World"
+
+
+def test_fetch_content_with_config_variables_list(monkeypatch, tmp_path):
+    properties = {
+        "name": ".gitignore",
+        "file": "github://github/gitignore/main/Python.gitignore",
+        "config_variables": [
+            {
+                "project_name": {
+                    "description": "Name of your project",
+                    "type": "string",
+                    "default": "MyProject",
+                }
+            }
+        ],
+        "input_store": str(tmp_path / "input.json"),
+        "non_interactive": True,
+    }
+    file_item = FileItem(properties)
+
+    monkeypatch.setattr(
+        file_item.content_fetcher,
+        "fetch_content",
+        lambda location: "# Python gitignore\n*.pyc\n",
+    )
+
+    file_item.fetch_content()
+
+    assert file_item.content == "# Python gitignore\n*.pyc"

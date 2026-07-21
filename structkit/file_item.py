@@ -104,6 +104,8 @@ class FileItem:
       }
       if not template_vars:
         return default_vars
+      if not isinstance(template_vars, dict):
+        return default_vars
       return {**default_vars, **template_vars}
 
     def apply_template_variables(self, template_vars):

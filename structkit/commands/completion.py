@@ -51,9 +51,7 @@ class CompletionCommand(Command):
       print("exec zsh")
 
     elif shell == "fish":
-      print("\n# Install shtab (once, in your environment):")
-      print("python -m pip install shtab")
-      print("\n# Generate static fish completion for 'struct':")
+      print("\n# Generate static fish completion for 'structkit':")
       print('mkdir -p ~/.config/fish/completions')
       print('structkit --print-completion fish > ~/.config/fish/completions/structkit.fish')
       print("\n# Apply now:")

@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import shlex
 from dotenv import load_dotenv
 from structkit.utils import read_config_file, merge_configs
 from structkit.commands.generate import GenerateCommand
@@ -24,6 +25,94 @@ except Exception:  # pragma: no cover - optional at runtime
     shtab = None
 
 load_dotenv()
+SUPPORTED_COMPLETION_SHELLS = ("bash", "zsh", "tcsh", "fish")
+
+
+def _fish_quote(value):
+    return shlex.quote(str(value))
+
+
+def _fish_condition(command_path):
+    if not command_path:
+        return "__fish_structkit_using_command"
+    return "__fish_structkit_using_command " + " ".join(_fish_quote(command) for command in command_path)
+
+
+def _fish_completion_script(parser):
+    """Generate a static Fish completion script from an argparse parser."""
+    lines = [
+      "function __fish_structkit_using_command",
+      "    set -l words (commandline -opc)",
+      "    set -e words[1]",
+      "    set -l commands",
+      "    for word in $words",
+      "        if not string match -qr '^-' -- $word",
+      "            set -a commands $word",
+      "        end",
+      "    end",
+      "    test (count $commands) -eq (count $argv)",
+      "    or return 1",
+      "    for index in (seq (count $argv))",
+      "        test \"$commands[$index]\" = \"$argv[$index]\"",
+      "        or return 1",
+      "    end",
+      "end",
+      "",
+      f"complete -c {_fish_quote(parser.prog)} -f",
+    ]
+
+    def add_completions(current_parser, command_path=()):
+        condition = _fish_condition(command_path)
+        for action in current_parser._actions:
+            if isinstance(action, argparse._SubParsersAction):
+                for name, subparser in action.choices.items():
+                    if name not in action._name_parser_map:
+                        continue
+                    help_text = action._name_parser_map[name].description or ""
+                    command = (
+                      f"complete -c {_fish_quote(parser.prog)} -n {_fish_quote(condition)} "
+                      f"-a {_fish_quote(name)}"
+                    )
+                    if help_text:
+                        command += f" -d {_fish_quote(help_text)}"
+                    lines.append(command)
+                    add_completions(subparser, command_path + (name,))
+                continue
+
+            if action.help is argparse.SUPPRESS:
+                continue
+
+            choices = getattr(action, "choices", None)
+            arguments = ""
+            if choices:
+                arguments = " -a " + _fish_quote(" ".join(map(str, choices)))
+
+            for option in action.option_strings:
+                option_type = "-l" if option.startswith("--") else "-s"
+                command = (
+                  f"complete -c {_fish_quote(parser.prog)} -n {_fish_quote(condition)} "
+                  f"{option_type} {_fish_quote(option.lstrip('-'))}"
+                )
+                if action.nargs != 0:
+                    command += " -r"
+                command += arguments
+                if action.help:
+                    command += f" -d {_fish_quote(action.help)}"
+                lines.append(command)
+
+    add_completions(parser)
+    return "\n".join(lines)
+
+
+class PrintCompletionAction(argparse.Action):
+    """Print a completion script for shtab-supported shells or Fish."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values == "fish":
+            print(_fish_completion_script(parser))
+        else:
+            print(shtab.complete(parser, values))
+        parser.exit(0)
 
 
 def get_parser():
@@ -57,10 +146,14 @@ def get_parser():
     from structkit.commands.completion import CompletionCommand
     CompletionCommand(subparsers.add_parser('completion', help='Manage shell completions'))
 
-    # Add shtab completion printing flags if available
+    # shtab supports bash, zsh, and tcsh. Fish is generated locally.
     if shtab is not None:
-        # Adds --print-completion and --shell flags
-        shtab.add_argument_to(parser)
+        parser.add_argument(
+          "--print-completion",
+          choices=SUPPORTED_COMPLETION_SHELLS,
+          action=PrintCompletionAction,
+          help="print shell completion script",
+        )
 
     return parser
 

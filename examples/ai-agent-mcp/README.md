@@ -9,19 +9,19 @@ Use this when creating a repo that will be edited by AI coding assistants and yo
 ## Command
 
 ```bash
-structkit generate --vars "project_name=AI Assisted Project,description=A project scaffolded for AI-assisted development with StructKit." examples/ai-agent-mcp/.struct.yaml ./demo-ai-agent-project
+structkit generate --vars "project_name=AI Assisted Project,description=A project scaffolded for AI-assisted development with StructKit." examples/ai-agent-mcp/.structkit.yaml ./demo-ai-agent-project
 ```
 
 ## Expected output
 
 - `README.md`
 - `AGENTS.md`
-- `.struct.yaml`
+- `.structkit.yaml`
 - `docs/architecture.md`
 - `docs/decisions/0001-record-architecture-decisions.md`
 - `tasks/backlog.md`
 
 ## Customization notes
 
-- Commit the generated `.struct.yaml` so humans and AI agents can regenerate the agreed structure.
+- Commit the generated `.structkit.yaml` so humans and AI agents can regenerate the agreed structure.
 - Adapt `AGENTS.md` with repository-specific build, test, and review commands.

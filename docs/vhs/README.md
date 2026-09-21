@@ -355,7 +355,7 @@ Type "echo && echo 'Available structures in schema:' && jq -r '.definitions.Plug
 Sleep 5
 Type "" Enter
 Type "# Schema can be used in VS Code for autocompletion" Enter
-Type "echo 'Add to your .struct.yaml files for IDE support:'" Enter
+Type "echo 'Add to your .structkit.yaml files for IDE support:'" Enter
 Type "echo '# yaml-language-server: \$schema=./struct-schema.json'" Enter
 Sleep 3
 ```

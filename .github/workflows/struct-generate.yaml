@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       struct_file:
-        description: 'Path to the StructKit file'
+        description: 'Path to the StructKit file. When omitted, uses .structkit.yaml, falling back to .struct.yaml.'
         type: string
         required: false
-        default: '.struct.yaml'
+        default: ''
       output_dir:
         description: 'Path to the output directory'
         type: string
@@ -101,6 +101,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
         run: |
+          STRUCT_FILE='${{ inputs.struct_file }}'
+          if [ -z "$STRUCT_FILE" ]; then
+            if [ -f .structkit.yaml ]; then
+              STRUCT_FILE=.structkit.yaml
+            elif [ -f .struct.yaml ]; then
+              STRUCT_FILE=.struct.yaml
+            else
+              STRUCT_FILE=.structkit.yaml
+            fi
+          fi
+
           if [ -d ./custom-structures ]; then
 
             structkit list \
@@ -110,7 +121,7 @@ jobs:
               --non-interactive \
               -s ./custom-structures/${{ inputs.custom_structure_path }} \
               ${{ inputs.args }} \
-              ${{ inputs.struct_file }} \
+              "$STRUCT_FILE" \
               ${{ inputs.output_dir }}
           else
             structkit list
@@ -118,7 +129,7 @@ jobs:
             structkit generate \
               --non-interactive \
               ${{ inputs.args }} \
-              ${{ inputs.struct_file }} \
+              "$STRUCT_FILE" \
               ${{ inputs.output_dir }}
           fi
 

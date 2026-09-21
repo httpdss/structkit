@@ -108,10 +108,10 @@ structkit lint [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH]
 Examples:
 
 ```sh
-structkit lint .struct.yaml
+structkit lint .structkit.yaml
 structkit lint structkit/contribs/project/python.yaml
 structkit lint --all
-structkit lint .struct.yaml --json
+structkit lint .structkit.yaml --json
 ```
 
 ### `generate`
@@ -125,7 +125,7 @@ structkit generate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_P
 ```
 
 Defaults when omitted:
-- structure_definition -> .struct.yaml
+- structure_definition -> `.structkit.yaml` (falls back to `.struct.yaml` if the canonical file is missing)
 - base_path -> .
 
 Example:
@@ -135,7 +135,7 @@ structkit generate
 
 **Arguments:**
 
-- `structure_definition` (optional): Path to the YAML configuration file (default: `.struct.yaml`).
+- `structure_definition` (optional): Path to the YAML configuration file (default: `.structkit.yaml`, with a fallback to `.struct.yaml`).
 - `base_path` (optional): Base path where the structure will be created (default: `.`).
 - `-s STRUCTURES_PATH, --structures-path STRUCTURES_PATH`: Path to structure definitions. Can be set via the `STRUCTKIT_STRUCTURES_PATH` environment variable. When using the environment variable (and no explicit CLI flag), an info-level log message will be emitted indicating which path is being used. Takes precedence over named sources.
 - `--source SOURCE`: Named source to use when resolving structure definitions. You can also use `<source>/<structure>` as the structure definition.
@@ -333,7 +333,7 @@ The `config print` command shows the final merged configuration from all layers:
 
 1. Built-in defaults (lowest priority)
 2. User config (`~/.config/struct/config.yaml`)
-3. Project config (`.struct.yaml` or `--config-file`)
+3. Project config (`.structkit.yaml`, legacy `.struct.yaml`, or `--config-file`)
 4. CLI arguments (highest priority)
 
 The command also displays which configuration sources were loaded.
@@ -364,7 +364,7 @@ See the [Configuration](configuration.md) documentation for more details on conf
 
 ### `init`
 
-Initialize a basic .struct.yaml in the target directory.
+Initialize a basic .structkit.yaml in the target directory.
 
 Usage:
 
@@ -372,18 +372,18 @@ Usage:
 structkit init [path]
 ```
 
-- Creates a .struct.yaml if it does not exist.
+- Creates a .structkit.yaml if it does not exist.
 - Includes:
   - pre_hooks/post_hooks with echo commands
   - files with a README.md placeholder
   - folders referencing github/workflows/run-structkit at ./
-- Non-destructive: if .struct.yaml already exists, it is not overwritten and a message is printed.
+- Non-destructive: if `.structkit.yaml` or a legacy `.struct.yaml` already exists, it is not overwritten and a message is printed.
 
 ## Examples
 
 ### Using Defaults
 
-Generate with default structure (.struct.yaml) into current directory:
+Generate with default structure (.structkit.yaml) into current directory:
 
 ```sh
 structkit generate

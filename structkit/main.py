@@ -141,9 +141,9 @@ def get_parser():
     SourcesCommand(subparsers.add_parser('sources', help='Manage named custom structure sources'))
     ConfigCommand(subparsers.add_parser('config', help='Display and manage structkit configuration'))
 
-    # init to create a basic .struct.yaml
+    # init to create a basic .structkit.yaml
     from structkit.commands.init import InitCommand
-    InitCommand(subparsers.add_parser('init', help='Initialize a basic .struct.yaml in the target directory'))
+    InitCommand(subparsers.add_parser('init', help='Initialize a basic .structkit.yaml in the target directory'))
 
     # completion manager
     from structkit.commands.completion import CompletionCommand

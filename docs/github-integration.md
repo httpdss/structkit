@@ -21,6 +21,8 @@ jobs:
       token: ${{ secrets.STRUCT_RUN_TOKEN }}
 ```
 
+When `struct_file` is omitted, the workflow uses `.structkit.yaml` if present and falls back to a legacy `.struct.yaml`.
+
 ## Best Practices
 
 1. **Secure Your Token**: Store GitHub tokens in secrets management tools.

@@ -208,7 +208,7 @@ def test_file_local_sources_resolve_nested_structs(monkeypatch, tmp_path):
     )
     (local_source / "child.yaml").write_text("files:\n  - child.txt:\n      content: local\n")
 
-    root = tmp_path / ".struct.yaml"
+    root = tmp_path / ".structkit.yaml"
     root.write_text(
         "sources:\n"
         f"  platform:\n"
@@ -239,7 +239,7 @@ def test_nested_source_redefinition_is_rejected(tmp_path):
         "files: []\n"
     )
 
-    root = tmp_path / ".struct.yaml"
+    root = tmp_path / ".structkit.yaml"
     root.write_text(
         "sources:\n"
         f"  platform:\n"

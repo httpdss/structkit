@@ -9,7 +9,7 @@ Use this when you want to apply a consistent CI baseline across internal Python 
 ## Command
 
 ```bash
-structkit generate --vars "project_name=DemoPythonProject,python_version=3.12" examples/github-actions-ci/.struct.yaml ./demo-ci-baseline
+structkit generate --vars "project_name=DemoPythonProject,python_version=3.12" examples/github-actions-ci/.structkit.yaml ./demo-ci-baseline
 ```
 
 ## Expected output

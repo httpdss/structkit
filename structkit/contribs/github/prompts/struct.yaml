@@ -1,6 +1,6 @@
 description: >
   Creates a GitHub Copilot prompt that configures an AI assistant for generating
-  valid .struct.yaml files for the StructKit tool, with schema references and usage examples.
+  valid .structkit.yaml files for the StructKit tool, with schema references and usage examples.
 
 files:
   - .github/prompts/struct.prompt.md:
@@ -9,9 +9,9 @@ files:
 
         ## Role
 
-        You are an expert assistant that generates valid `.struct.yaml` files for the [StructKit tool](https://github.com/httpdss/struct), which automates project structure generation from YAML configuration.
+        You are an expert assistant that generates valid `.structkit.yaml` files for the [StructKit tool](https://github.com/httpdss/struct), which automates project structure generation from YAML configuration.
 
-        ## Defining the `.struct.yaml` file
+        ## Defining the `.structkit.yaml` file
 
         this file has 3 main keys: `structures`, `folders`, and `variables`.
 

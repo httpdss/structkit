@@ -1,6 +1,10 @@
 from structkit.commands import Command
 import os
 import textwrap
+from structkit.project_file import (
+    CANONICAL_PROJECT_STRUCT_FILE,
+    LEGACY_PROJECT_STRUCT_FILE,
+)
 
 BASIC_STRUCTKIT_YAML = textwrap.dedent(
     """
@@ -17,7 +21,7 @@ BASIC_STRUCTKIT_YAML = textwrap.dedent(
       - README.md: |
           # Project
 
-          Initialized with struct.
+          Initialized with structkit.
 
     folders:
       - ./:
@@ -30,24 +34,33 @@ BASIC_STRUCTKIT_YAML = textwrap.dedent(
 class InitCommand(Command):
   def __init__(self, parser):
     super().__init__(parser)
-    parser.description = "Initialize a basic .struct.yaml in the target directory"
+    parser.description = f"Initialize a basic {CANONICAL_PROJECT_STRUCT_FILE} in the target directory"
     parser.add_argument('path', nargs='?', default='.', help='Directory to initialize (default: current directory)')
     parser.set_defaults(func=self.execute)
 
   def execute(self, args):
     base_path = os.path.abspath(args.path or '.')
-    target = os.path.join(base_path, '.struct.yaml')
+    target = os.path.join(base_path, CANONICAL_PROJECT_STRUCT_FILE)
+    legacy = os.path.join(base_path, LEGACY_PROJECT_STRUCT_FILE)
 
     os.makedirs(base_path, exist_ok=True)
 
-    # If file exists, do not overwrite without explicit confirmation behavior (keep simple: skip)
+    # If either canonical or legacy file exists, do not overwrite.
     if os.path.exists(target):
-      self.logger.info(f".struct.yaml already exists at {target}, skipping creation")
-      print(f"⚠️  .struct.yaml already exists at: {target}")
+      self.logger.info(f"{CANONICAL_PROJECT_STRUCT_FILE} already exists at {target}, skipping creation")
+      print(f"⚠️  {CANONICAL_PROJECT_STRUCT_FILE} already exists at: {target}")
+      return
+
+    if os.path.exists(legacy):
+      self.logger.info(
+        f"{LEGACY_PROJECT_STRUCT_FILE} already exists at {legacy}, skipping creation"
+      )
+      print(f"⚠️  {LEGACY_PROJECT_STRUCT_FILE} already exists at: {legacy}")
+      print(f"   Consider renaming it to {CANONICAL_PROJECT_STRUCT_FILE}.")
       return
 
     with open(target, 'w') as f:
       f.write(BASIC_STRUCTKIT_YAML)
 
-    print("✅ Created .struct.yaml")
+    print(f"✅ Created {CANONICAL_PROJECT_STRUCT_FILE}")
     print(f" - {target}")

@@ -194,8 +194,8 @@ The `contribs` folder contains various sub-structs that can be used to generate 
 
 #### `github/prompts/struct`
 
-- **Description**: Provides a prompt for creating a new .struct.yaml file and workflow to run struct.
-- **When to Use**: Use this sub-structkit when you need to create a new .struct.yaml file and workflow to run struct.
+- **Description**: Provides a prompt for creating a new .structkit.yaml file and workflow to run struct.
+- **When to Use**: Use this sub-structkit when you need to create a new .structkit.yaml file and workflow to run struct.
 
 ### Project
 

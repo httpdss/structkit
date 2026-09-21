@@ -6,7 +6,7 @@ Structkit supports a layered configuration system that allows you to set default
 
 1. **Built-in defaults** - Hard-coded defaults that are always present
 2. **User config** - Global defaults from `~/.config/struct/config.yaml`
-3. **Project config** - Project-specific config from `.struct.yaml` or `--config-file`
+3. **Project config** - Project-specific config from `.structkit.yaml` (legacy `.struct.yaml`) or `--config-file`
 4. **CLI arguments** - Command-line flags (highest priority)
 
 ### User Config
@@ -24,7 +24,7 @@ log: WARNING
 
 ### Project Config
 
-Project-specific settings can be defined in a `.struct.yaml` file or specified via the `--config-file` flag. These settings override user config and built-in defaults.
+Project-specific settings can be defined in a `.structkit.yaml` file or specified via the `--config-file` flag. These settings override user config and built-in defaults. A legacy `.struct.yaml` file is still accepted when `.structkit.yaml` is not present.
 
 ### CLI Arguments
 
@@ -80,7 +80,7 @@ The command also displays which configuration sources were used:
 Configuration sources:
   1. Built-in defaults: always loaded
   2. User config: /home/user/.config/struct/config.yaml (exists)
-  3. Project config: .struct.yaml
+  3. Project config: .structkit.yaml
   4. CLI arguments: highest priority
 ```
 

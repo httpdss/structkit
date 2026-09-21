@@ -25,9 +25,9 @@ files:
 
         ```bash
         # Replace with project-specific checks
-        structkit validate .struct.yaml
+        structkit validate .structkit.yaml
         ```
-  - .struct.yaml:
+  - .structkit.yaml:
       content: |
         files:
           - README.md:
@@ -84,7 +84,7 @@ files:
 
         - [ ] Replace generated placeholders with project-specific content.
         - [ ] Add canonical build and test commands to `AGENTS.md`.
-        - [ ] Validate `.struct.yaml` after customizing it.
+        - [ ] Validate `.structkit.yaml` after customizing it.
 variables:
   - project_name:
       description: "Project name."

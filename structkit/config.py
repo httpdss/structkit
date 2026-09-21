@@ -3,7 +3,7 @@
 Supports loading and merging configuration from multiple sources:
 1. Built-in defaults
 2. User config (~/.config/struct/config.yaml)
-3. Project config (.struct.yaml or --config-file)
+3. Project config (.structkit.yaml, legacy .struct.yaml, or --config-file)
 4. CLI arguments
 
 Priority order: CLI args > Project config > User config > Built-in defaults

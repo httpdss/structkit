@@ -20,19 +20,24 @@ https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json
 ```json
 {
   "yaml.schemas": {
-    "https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json": ".struct.yaml"
+    "https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json": [
+      ".structkit.yaml",
+      ".struct.yaml",
+      "*.structkit.yaml",
+      "*.struct.yaml"
+    ]
   }
 }
 ```
 
-This provides validation and autocompletion for all `.struct.yaml` files.
+This provides validation and autocompletion for `.structkit.yaml` files. Legacy `.struct.yaml` files are included for compatibility.
 
 ### JetBrains IDEs (IntelliJ, PyCharm, etc.)
 
 1. Go to **Settings** → **Languages & Frameworks** → **Schemas and DTDs** → **JSON Schema Mappings**
 2. Click **+** to add a new mapping
 3. Set **Schema file or URL** to: `https://raw.githubusercontent.com/httpdss/structkit/main/struct-schema.json`
-4. Set **File path pattern** to: `*.struct.yaml`
+4. Set **File path pattern** to: `*.structkit.yaml` (also add `*.struct.yaml` if you still use the legacy name)
 
 ## Generating Custom Schema
 
@@ -45,7 +50,7 @@ structkit generate-schema -s /path/to/custom/structures -o my-schema.json
 # Use in VS Code settings
 {
   "yaml.schemas": {
-    "./my-schema.json": ".struct.yaml"
+    "./my-schema.json": [".structkit.yaml", ".struct.yaml"]
   }
 }
 ```

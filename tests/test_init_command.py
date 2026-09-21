@@ -1,8 +1,7 @@
 import argparse
-import os
 from unittest.mock import patch
 
-from structkit.commands.init import InitCommand, BASIC_STRUCTKIT_YAML
+from structkit.commands.init import InitCommand
 
 
 def test_init_creates_struct_yaml(tmp_path):
@@ -12,10 +11,10 @@ def test_init_creates_struct_yaml(tmp_path):
     target_dir = tmp_path / "proj"
     args = parser.parse_args([str(target_dir)])
 
-    with patch('builtins.print') as mock_print:
+    with patch('builtins.print'):
         cmd.execute(args)
 
-    struct_file = target_dir / '.struct.yaml'
+    struct_file = target_dir / '.structkit.yaml'
     assert struct_file.exists()
 
     content = struct_file.read_text()
@@ -34,7 +33,7 @@ def test_init_skips_if_exists(tmp_path):
 
     target_dir = tmp_path / "proj"
     target_dir.mkdir(parents=True)
-    existing = target_dir / '.struct.yaml'
+    existing = target_dir / '.structkit.yaml'
     existing.write_text('files: []\n')
 
     args = parser.parse_args([str(target_dir)])
@@ -45,4 +44,4 @@ def test_init_skips_if_exists(tmp_path):
         assert existing.read_text() == 'files: []\n'
         # Should print a message about skipping
         printed = "\n".join(c.args[0] for c in mock_print.call_args_list)
-        assert '.struct.yaml already exists' in printed
+        assert '.structkit.yaml already exists' in printed

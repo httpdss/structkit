@@ -14,7 +14,7 @@ services:
       "--backup=/app/backup",
       "--file-strategy=rename",
       "--log-file=/app/logfile.log",
-      "/app/examples/python-cli/.struct.yaml",
+      "/app/examples/python-cli/.structkit.yaml",
       "/app/example_project"
     ]
   structkit-test:
@@ -31,6 +31,6 @@ services:
       "--backup=/app/backup",
       "--file-strategy=rename",
       "--log-file=/app/logfile.log",
-      "/app/examples/python-cli/.struct.yaml",
+      "/app/examples/python-cli/.structkit.yaml",
       "/app/example_project"
     ]

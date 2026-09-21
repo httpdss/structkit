@@ -2,7 +2,7 @@
 
 Let's say you are happy with the default structures that StructKit provides, but you want to customize them for your specific needs. This is totally possible!
 
-The best way to approach this is to have a repository where you can store your custom structures. You can then reference these structures in your `.struct.yaml` files.
+The best way to approach this is to have a repository where you can store your custom structures. You can then reference these structures in your `.structkit.yaml` files.
 
 ## Suggested Repository Structure
 
@@ -18,7 +18,7 @@ structures/
 │   └── structure2.yaml
 ```
 
-This way you could reference your custom structures in your `.struct.yaml` files like this:
+This way you could reference your custom structures in your `.structkit.yaml` files like this:
 
 ```yaml
 folders:
@@ -33,7 +33,7 @@ folders:
 For this to work, you will need to set the path to the custom structures repository using the `-s` option when running StructKit:
 
 ```sh
-structkit generate -s ~/path/to/custom-structures/structures file://.struct.yaml ./output
+structkit generate -s ~/path/to/custom-structures/structures file://.structkit.yaml ./output
 ```
 
 ## Named custom sources
@@ -64,7 +64,7 @@ Git-backed sources are cloned into `$XDG_CACHE_HOME/structkit/sources` or `~/.ca
 
 ## File-local sources
 
-Committed `.struct.yaml` files can declare their own named sources. This keeps generation portable and protects existing files from changes to a user's global `structkit sources` configuration.
+Committed `.structkit.yaml` files can declare their own named sources. This keeps generation portable and protects existing files from changes to a user's global `structkit sources` configuration. Legacy `.struct.yaml` files are still read when `.structkit.yaml` is not present.
 
 ```yaml
 sources:
@@ -104,7 +104,7 @@ folders:
       struct: github://httpdss/platform-structures@v1.2.0/structures/python/service
 ```
 
-For reproducible `.struct.yaml` files, prefer tags or commit SHAs over mutable branches.
+For reproducible `.structkit.yaml` files, prefer tags or commit SHAs over mutable branches.
 
 Use a source explicitly with `--source`:
 

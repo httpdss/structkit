@@ -8,6 +8,11 @@ from structkit.template_renderer import TemplateRenderer, TemplateVariableError
 from structkit.sources import SourceError, resolve_structures_path
 from structkit.struct_refs import SourceContext, resolve_struct_reference
 from structkit.input_store import InputStoreError
+from structkit.project_file import (
+    CANONICAL_PROJECT_STRUCT_FILE,
+    LEGACY_PROJECT_STRUCT_FILE,
+    resolve_project_struct_file,
+)
 
 import subprocess
 
@@ -21,7 +26,16 @@ class GenerateCommand(Command):
   def __init__(self, parser):
     super().__init__(parser)
     parser.description = "Generate the project structure from a YAML configuration file"
-    structure_arg = parser.add_argument('structure_definition', nargs='?', default='.struct.yaml', type=str, help='Path to the YAML configuration file (default: .struct.yaml)')
+    structure_arg = parser.add_argument(
+      'structure_definition',
+      nargs='?',
+      default=CANONICAL_PROJECT_STRUCT_FILE,
+      type=str,
+      help=(
+        f'Path to the YAML configuration file (default: {CANONICAL_PROJECT_STRUCT_FILE}; '
+        f'falls back to {LEGACY_PROJECT_STRUCT_FILE} for compatibility)'
+      ),
+    )
     structure_arg.completer = structures_completer
     parser.add_argument('base_path', nargs='?', default='.', type=str, help='Base path where the structure will be created (default: current directory)')
     parser.add_argument(
@@ -246,6 +260,9 @@ class GenerateCommand(Command):
     return config
 
   def execute(self, args):
+    args.structure_definition = resolve_project_struct_file(
+      explicit_path=getattr(args, 'structure_definition', None),
+    )
     try:
       args.structures_path, args.structure_definition = resolve_structures_path(
         args.structures_path,

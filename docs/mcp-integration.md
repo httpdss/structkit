@@ -113,7 +113,7 @@ Lint one or more structure YAML files or structure names for quality and safety 
 {
   "name": "lint_structure",
   "arguments": {
-    "targets": ["project/python", "/path/to/.struct.yaml"],
+    "targets": ["project/python", "/path/to/.structkit.yaml"],
     "structures_path": "/path/to/custom/structures",
     "lint_all": false,
     "output": "json"

@@ -44,7 +44,7 @@ Type "{"
 Enter
 Type '  "yaml.schemas": {'
 Enter
-Type '    "./.vscode/struct-plugins.schema.json": "*.struct.yaml"'
+Type '    "./.vscode/struct-plugins.schema.json": "*.structkit.yaml"'
 Enter
 Type "  }"
 Enter
@@ -56,7 +56,7 @@ Sleep 2s
 
 Type "# Now VSCode will provide autocompletion for structkit names!"
 Enter
-Type "# when you type 'struct:' in a .struct.yaml file"
+Type "# when you type 'struct:' in a .structkit.yaml file"
 Enter
 Sleep 2s
 

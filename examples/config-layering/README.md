@@ -8,7 +8,7 @@ Structkit supports configuration at four levels (from lowest to highest priority
 
 1. **Built-in defaults** - Hard-coded baseline values
 2. **User config** - Global defaults from `~/.config/struct/config.yaml`
-3. **Project config** - Project-specific config from `.struct.yaml` or `--config-file`
+3. **Project config** - Project-specific config from `.structkit.yaml` (legacy `.struct.yaml`) or `--config-file`
 4. **CLI arguments** - Command-line flags (highest priority)
 
 ## Setup
@@ -138,7 +138,7 @@ backup: ~/structkit-backups
 
 Share project-specific settings in version control:
 ```yaml
-# .struct.yaml (checked into git)
+# .structkit.yaml (checked into git)
 structures_path: ./team-structures
 input_store: ./.structkit/input.json
 non_interactive: true

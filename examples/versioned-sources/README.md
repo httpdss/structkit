@@ -1,6 +1,6 @@
 # Versioned Sources Example
 
-This example shows how a committed `.struct.yaml` can define its own named source and then reference structs from that source.
+This example shows how a committed `.structkit.yaml` can define its own named source and then reference structs from that source.
 
 The example uses a local source so it works offline:
 
@@ -31,14 +31,14 @@ sources:
 - `platform/app/base` resolves through the file-local `platform` source.
 - `app/base.yaml` references `app/ci` without a source prefix.
 - The nested `app/ci` reference inherits the same `platform` source context.
-- A future change to the user's global `structkit sources` config will not affect this `.struct.yaml` file.
+- A future change to the user's global `structkit sources` config will not affect this `.structkit.yaml` file.
 
 ## Run it
 
 From the StructKit repository root:
 
 ```bash
-structkit generate examples/versioned-sources/.struct.yaml /tmp/structkit-versioned-sources-demo
+structkit generate examples/versioned-sources/.structkit.yaml /tmp/structkit-versioned-sources-demo
 ```
 
 Expected generated files:
@@ -52,5 +52,5 @@ Expected generated files:
 Preview without writing files:
 
 ```bash
-structkit generate examples/versioned-sources/.struct.yaml /tmp/structkit-versioned-sources-demo --dry-run --diff
+structkit generate examples/versioned-sources/.structkit.yaml /tmp/structkit-versioned-sources-demo --dry-run --diff
 ```

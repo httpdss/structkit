@@ -17,7 +17,7 @@ docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
   ghcr.io/httpdss/structkit:main generate \
-  file:///workdir/examples/python-cli/.struct.yaml \
+  file:///workdir/examples/python-cli/.structkit.yaml \
   /workdir/example_output
 ```
 
@@ -28,7 +28,7 @@ docker run \
   -v $(pwd):/workdir \
   -u $(id -u):$(id -g) \
   ghcr.io/httpdss/structkit:alpine generate \
-  file:///workdir/examples/python-cli/.struct.yaml \
+  file:///workdir/examples/python-cli/.structkit.yaml \
   /workdir/example_output
 ```
 
@@ -50,7 +50,7 @@ vim structure.yaml # or copy one of the examples from the examples/ directory
 structkit generate structure.yaml .
 ```
 
-> Note: The `file://` protocol is automatically added for `.yaml` files, so `structure.yaml` and `file://structure.yaml` work identically. Additionally, if your file is named `.struct.yaml` in the current directory and you want to generate into the current directory, you can just run `structkit generate`.
+> Note: The `file://` protocol is automatically added for `.yaml` files, so `structure.yaml` and `file://structure.yaml` work identically. Additionally, if your file is named `.structkit.yaml` in the current directory (or the legacy `.struct.yaml`) and you want to generate into the current directory, you can just run `structkit generate`.
 
 ## Discovering Available Structures
 
@@ -83,13 +83,13 @@ structkit generate project/nodejs ./my-node-app
 
 ## Bootstrap a new project
 
-Start with a minimal .struct.yaml:
+Start with a minimal .structkit.yaml:
 
 ```sh
 structkit init
 ```
 
-This writes a basic .struct.yaml with hooks, a README, and a reference to the run-structkit workflow.
+This writes a basic .structkit.yaml with hooks, a README, and a reference to the run-structkit workflow.
 
 ## Next Steps
 

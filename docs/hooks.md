@@ -187,11 +187,11 @@ You can disable hooks entirely using the `--no-hooks` flag or environment variab
 
 ```bash
 # Using CLI flag
-structkit generate .struct.yaml --no-hooks
+structkit generate .structkit.yaml --no-hooks
 
 # Using environment variable
 export STRUCTKIT_NO_HOOKS=true
-structkit generate .struct.yaml
+structkit generate .structkit.yaml
 ```
 
 This is recommended for:
@@ -204,7 +204,7 @@ This is recommended for:
 By default, StructKit prompts for confirmation before running hooks in interactive mode:
 
 ```bash
-$ structkit generate .struct.yaml
+$ structkit generate .structkit.yaml
 
 ⚠️  The following pre-hooks will be executed:
   - echo "Preparing environment..."
@@ -243,11 +243,11 @@ When an allowlist exists:
 You can also specify a custom allowlist path:
 
 ```bash
-structkit generate .struct.yaml --hooks-allowlist /path/to/allowlist.txt
+structkit generate .structkit.yaml --hooks-allowlist /path/to/allowlist.txt
 
 # Or via environment variable
 export STRUCTKIT_HOOKS_ALLOWLIST=/path/to/allowlist.txt
-structkit generate .struct.yaml
+structkit generate .structkit.yaml
 ```
 
 ### MCP Integration Safety
@@ -301,7 +301,7 @@ post_hooks:
 ### Safe Hook Example with Allowlist
 
 ```yaml
-# .struct.yaml
+# .structkit.yaml
 pre_hooks:
   - echo "Preparing environment..."
   - python -c "import sys; print(sys.version)"

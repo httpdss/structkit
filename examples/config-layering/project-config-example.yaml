@@ -1,7 +1,7 @@
 # Example project config file
 #
 # This file can be checked into version control to share project-specific
-# settings with your team. Use with --config-file or as .struct.yaml
+# settings with your team. Use with --config-file or as .structkit.yaml
 
 # Project-specific structures location
 structures_path: ./custom-structures

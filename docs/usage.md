@@ -36,11 +36,13 @@ structkit generate <Tab>
 
 ### Using Defaults
 
-If you have a .struct.yaml in the current directory and want to generate into the current directory, you can simply run:
+If you have a `.structkit.yaml` in the current directory and want to generate into the current directory, you can simply run:
 
 ```sh
 structkit generate
 ```
+
+The canonical project file is `.structkit.yaml`. If that file is missing, `structkit generate` still reads a legacy `.struct.yaml` in the same directory. If both exist, `.structkit.yaml` is used.
 
 ### Simple Example
 
@@ -58,7 +60,7 @@ structkit generate my-config.yaml ./output
 structkit generate file://my-config.yaml ./output
 ```
 
-Tip: If your config file is named `.struct.yaml` in the current directory and you want to generate into the current directory, you can simply run:
+Tip: If your config file is named `.structkit.yaml` (or legacy `.struct.yaml`) in the current directory and you want to generate into the current directory, you can simply run:
 
 ```sh
 structkit generate
@@ -120,15 +122,15 @@ structkit generate-schema -s /path/to/custom/structures -o schema.json
 
 The generated schema includes all available structures from both the built-in contribs directory and any custom structures path you specify. This is useful for:
 
-- IDE autocompletion when writing `.struct.yaml` files
+- IDE autocompletion when writing `.structkit.yaml` files
 - Validation of structure references in your configurations
 - Programmatic discovery of available templates
 
 ## Other Commands
 
-### Initialize a project with .struct.yaml
+### Initialize a project with .structkit.yaml
 
-Create a minimal .struct.yaml in the current directory:
+Create a minimal .structkit.yaml in the current directory:
 
 ```sh
 structkit init

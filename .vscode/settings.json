@@ -1,6 +1,11 @@
 {
   "yaml.schemas": {
-    "./.vscode/struct-plugins.schema.json": "*.struct.yaml"
+    "./.vscode/struct-plugins.schema.json": [
+      ".structkit.yaml",
+      ".struct.yaml",
+      "*.structkit.yaml",
+      "*.struct.yaml"
+    ]
   },
   "python.languageServer": "None"
 }

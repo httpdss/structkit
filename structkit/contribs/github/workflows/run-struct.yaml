@@ -1,6 +1,6 @@
 description: >
   Creates a GitHub Actions workflow (run-struct.yaml) that can be manually triggered
-  via workflow_dispatch to run struct file generation, plus a starter .struct.yaml file.
+  via workflow_dispatch to run struct file generation, plus a starter .structkit.yaml file.
 
 files:
   - .github/workflows/run-struct.yaml:
@@ -15,11 +15,11 @@ files:
           generate:
             uses: httpdss/structkit/.github/workflows/struct-generate.yaml@main
             with:
-              struct_file: 'file://.struct.yaml'
+              struct_file: 'file://.structkit.yaml'
               output_dir: '.'
             secrets:
               token: {{@ github_token @}}
-  - .struct.yaml:
+  - .structkit.yaml:
       skip_if_exists: true
       content: |
         files:

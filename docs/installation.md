@@ -71,7 +71,7 @@ sudo dnf install ./structkit-VERSION-1.x86_64.rpm
 # or: sudo rpm -ivh structkit-VERSION-1.x86_64.rpm
 ```
 
-To build packages locally instead, follow [packaging/README.md](../packaging/README.md).
+To build packages locally instead, follow [packaging/README.md](https://github.com/httpdss/structkit/blob/main/packaging/README.md).
 
 ## From Source
 

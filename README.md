@@ -42,7 +42,8 @@ These are install paths for [StructKit](https://github.com/httpdss/structkit), n
 - [VS Code / Cursor](https://github.com/httpdss/vscode-structkit) — schema and autocomplete for `.structkit.yaml`
 - [Agent skills](https://github.com/httpdss/structkit-skills) — inspect, preview, generate, validate from an assistant
 - [pre-commit](https://github.com/httpdss/structkit-pre-commit) — validate structures before they land
-- [Homebrew](https://github.com/httpdss/homebrew-structkit) — `brew tap httpdss/structkit && brew install structkit`
+- [Homebrew](https://github.com/httpdss/homebrew-structkit) — `brew install httpdss/structkit/structkit`
+- Linux `.deb` / `.rpm` — download from [build-linux-packages](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) workflow artifacts (not attached to GitHub Releases), or build locally per [packaging/README.md](packaging/README.md)
 - [Backstage](https://github.com/httpdss/backstage-plugin-structkit) — scaffolder actions for platform teams
 - [Hermes plugin](https://github.com/httpdss/hermes-plugin-structkit) — safe StructKit tools inside Hermes
 
@@ -82,6 +83,8 @@ Project scaffolding tools exist in most ecosystems, but StructKit solves problem
 - **🌐 Remote Content** - Fetch files from GitHub, HTTP/HTTPS, S3, and Google Cloud Storage
 - **🛡️ Smart File Handling** - Multiple strategies for managing existing files (overwrite, skip, backup, etc.)
 - **🪝 Automation Hooks** - Pre and post-generation shell commands
+- **🔒 Hook Safety** - Skip hooks (`--no-hooks` / `STRUCTKIT_NO_HOOKS`), confirm interactively, or restrict commands with an allowlist
+- **⚙️ Config Layering** - Merge built-in defaults, `~/.config/struct/config.yaml`, optional `--config-file`, and CLI flags
 - **🎯 Dry Run Mode** - Preview changes before applying them
 - **✅ Validation & Schema** - Built-in YAML validation and IDE support
 - **🤖 MCP Integration** - Model Context Protocol support for AI-assisted development workflows
@@ -143,6 +146,7 @@ Our comprehensive documentation is organized into the following sections:
 - **[YAML Configuration](docs/configuration.md)** - Complete configuration reference
 - **[Template Variables](docs/template-variables.md)** - Dynamic content and Jinja2 features
 - **[File Handling](docs/file-handling.md)** - Managing files, permissions, and remote content
+- **[Environment Variables](docs/environment-variables.md)** - `STRUCTKIT_*` defaults and overrides
 - **[Schema Reference](docs/schema.md)** - YAML validation and IDE support
 
 ### 🔧 Advanced Features

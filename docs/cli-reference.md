@@ -25,10 +25,12 @@ These options are available for all commands:
 
 The following environment variables can be used to configure default values for CLI arguments:
 
-- `STRUCTKIT_LOG_LEVEL`: Set the default logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Overridden by the `--log` flag.
+- `STRUCTKIT_LOG_LEVEL`: Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Applied after argument parsing and **overrides** `--log` and `--debug` when set to a non-empty value.
 - `STRUCTKIT_STRUCTURES_PATH`: Set the default path to structure definitions. This is used as the default value for the `--structures-path` flag when not explicitly provided. When set, the CLI will log an info message indicating that this environment variable is being used.
-- `STRUCTKIT_SOURCES_CONFIG`: Override the user-level named sources config file (default: `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml`).
+- `STRUCTKIT_SOURCES_CONFIG`: Override the user-level named sources config file (default: `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml`). This is separate from the CLI user config at `~/.config/struct/config.yaml`.
 - `STRUCTKIT_SOURCES_CACHE`: Override the local cache directory used for git-backed sources (default: `$XDG_CACHE_HOME/structkit/sources` or `~/.cache/structkit/sources`).
+
+See [Environment Variables](environment-variables.md) for the full `STRUCTKIT_*` list (hooks, HTTP, and other flags).
 
 **Precedence:**
 
@@ -121,7 +123,7 @@ Generate the project structure.
 **Usage:**
 
 ```sh
-structkit generate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-n INPUT_STORE] [-d] [--diff] [-v VARS] [-b BACKUP] [-f {overwrite,skip,append,rename,backup}] [-p GLOBAL_SYSTEM_PROMPT] [--non-interactive] [--mappings-file MAPPINGS_FILE] [-o {console,file}] [structure_definition] [base_path]
+structkit generate [-h] [-l LOG] [-c CONFIG_FILE] [-i LOG_FILE] [-s STRUCTURES_PATH] [-n INPUT_STORE] [-d] [--diff] [-v VARS] [-b BACKUP] [-f {overwrite,skip,append,rename,backup}] [-p GLOBAL_SYSTEM_PROMPT] [--non-interactive] [--mappings-file MAPPINGS_FILE] [-o {console,file}] [--no-hooks] [--hooks-allowlist HOOKS_ALLOWLIST] [structure_definition] [base_path]
 ```
 
 Defaults when omitted:
@@ -149,6 +151,8 @@ structkit generate
 - `--non-interactive`: Run the command in non-interactive mode.
 - `--mappings-file MAPPINGS_FILE`: Path to a YAML file containing mappings to be used in templates (can be specified multiple times).
 - `-o {console,file}, --output {console,file}`: Output mode.
+- `--no-hooks`: Skip all pre/post hooks. Can be set via `STRUCTKIT_NO_HOOKS` (`true`, `1`, or `yes`).
+- `--hooks-allowlist HOOKS_ALLOWLIST`: Path to a hooks allowlist file. Can be set via `STRUCTKIT_HOOKS_ALLOWLIST`. If omitted, `generate` still loads `.struct-hooks-allowlist` in the current directory when that file exists.
 
 
 ### `explain`
@@ -332,8 +336,8 @@ structkit config print [--format {yaml,json}] [-c CONFIG_FILE]
 The `config print` command shows the final merged configuration from all layers:
 
 1. Built-in defaults (lowest priority)
-2. User config (`~/.config/struct/config.yaml`)
-3. Project config (`.structkit.yaml`, legacy `.struct.yaml`, or `--config-file`)
+2. User config (`~/.config/struct/config.yaml`), loaded automatically when present
+3. Project config from `--config-file` only (`.structkit.yaml` is not auto-loaded as CLI config)
 4. CLI arguments (highest priority)
 
 The command also displays which configuration sources were loaded.

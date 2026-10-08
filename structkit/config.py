@@ -1,12 +1,18 @@
 """Configuration layering system for structkit.
 
-Supports loading and merging configuration from multiple sources:
+Supports loading and merging CLI configuration from multiple sources:
 1. Built-in defaults
-2. User config (~/.config/struct/config.yaml)
-3. Project config (.structkit.yaml, legacy .struct.yaml, or --config-file)
+2. User config (~/.config/struct/config.yaml) — loaded automatically when present
+3. Project config from --config-file only (not auto-loaded from .structkit.yaml)
 4. CLI arguments
 
-Priority order: CLI args > Project config > User config > Built-in defaults
+Priority order: CLI args > --config-file > user config > built-in defaults
+
+.structkit.yaml (and legacy .struct.yaml) is the structure definition used by
+generate/validate/etc., not a layered CLI config file.
+
+Named structure sources live in a separate file
+(~/.config/structkit/sources.yaml, overridable via STRUCTKIT_SOURCES_CONFIG).
 """
 
 import os
@@ -97,10 +103,11 @@ def load_layered_config(project_config_path: Optional[str] = None) -> Dict[str, 
     Merge order (lowest to highest priority):
     1. Built-in defaults
     2. User config (~/.config/struct/config.yaml)
-    3. Project config (if provided)
+    3. Project config from --config-file, if provided
+       (.structkit.yaml is not auto-loaded here)
 
     Args:
-        project_config_path: Path to project-specific config file
+        project_config_path: Path from --config-file, or None
 
     Returns:
         Merged configuration dictionary

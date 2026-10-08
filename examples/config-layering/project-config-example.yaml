@@ -1,7 +1,8 @@
 # Example project config file
 #
 # This file can be checked into version control to share project-specific
-# settings with your team. Use with --config-file or as .structkit.yaml
+# CLI defaults with your team. Pass it with --config-file; it is not
+# auto-loaded from .structkit.yaml (that file is the structure definition).
 
 # Project-specific structures location
 structures_path: ./custom-structures

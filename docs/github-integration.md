@@ -23,6 +23,44 @@ jobs:
 
 When `struct_file` is omitted, the workflow uses `.structkit.yaml` if present and falls back to a legacy `.struct.yaml`.
 
+## GitHub Action step (`httpdss/structkit-action`)
+
+For validate, generate, or a dry-run diff/drift check **as a step** in your own job (instead of calling the reusable workflow as a complete job), use [`httpdss/structkit-action`](https://github.com/httpdss/structkit-action).
+
+Validate:
+
+```yaml
+- uses: actions/checkout@v7
+- uses: httpdss/structkit-action@v1
+  with:
+    command: validate
+    struct_file: .structkit.yaml
+```
+
+Drift check (`generate` + `--dry-run --diff`):
+
+```yaml
+- uses: httpdss/structkit-action@v1
+  with:
+    command: generate
+    struct_file: .structkit.yaml
+    dry_run: true
+    diff: true
+    fail_on_diff: true
+```
+
+Generate:
+
+```yaml
+- uses: httpdss/structkit-action@v1
+  with:
+    command: generate
+    struct_file: .structkit.yaml
+    output_dir: .
+```
+
+The reusable workflow above is a full job with built-in PR creation. The action is a step you can mix with other checkout, test, or commit steps. See the [action README](https://github.com/httpdss/structkit-action) for full workflow examples and inputs.
+
 ## Best Practices
 
 1. **Secure Your Token**: Store GitHub tokens in secrets management tools.

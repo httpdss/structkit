@@ -129,11 +129,11 @@ structkit generate my-custom-structure ./output
 
 Sets the logging level for all commands.
 
-**CLI Equivalent:** `--log` (generate command)
+**CLI Equivalent:** Applied in `main.py` after parsing. When set to a non-empty value, it **overrides** `--log` and `--debug`.
 
-**Valid Values:** `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`
+**Valid Values:** `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` (case-insensitive; unknown values fall back to `INFO`)
 
-**Default:** `INFO`
+**Default:** unset, then `--debug` if present, otherwise `--log` (default `INFO`)
 
 **Use Case:** Control verbosity of output for debugging or production deployments.
 
@@ -143,14 +143,118 @@ export STRUCTKIT_LOG_LEVEL="DEBUG"
 structkit generate my-structure ./output
 ```
 
+## Hook Safety
+
+### `STRUCTKIT_NO_HOOKS`
+
+Skip all pre-generation and post-generation hooks.
+
+**CLI Equivalent:** `--no-hooks`
+
+**Valid Values:** `true`, `1`, `yes` (case-insensitive) enable skipping; any other value (including unset) leaves hooks enabled
+
+**Default:** unset / false (hooks run, subject to confirmation and allowlist)
+
+**Example:**
+```bash
+export STRUCTKIT_NO_HOOKS=true
+structkit generate my-structure ./output
+```
+
+### `STRUCTKIT_HOOKS_ALLOWLIST`
+
+Path to a hooks allowlist file. When hooks are enabled and this is unset, `generate` still loads `.struct-hooks-allowlist` from the current working directory if that file exists.
+
+**CLI Equivalent:** `--hooks-allowlist`
+
+**Default:** unset (`None`); then `.struct-hooks-allowlist` in the current directory if present
+
+**Example:**
+```bash
+export STRUCTKIT_HOOKS_ALLOWLIST=/path/to/allowlist.txt
+structkit generate my-structure ./output
+```
+
+## Network and HTTP
+
+Used by GitHub raw-content fetching in `ContentFetcher` (prefer `raw.githubusercontent.com`, then git fallback).
+
+### `STRUCTKIT_DENY_NETWORK`
+
+Skip HTTP attempts and use the git fallback directly. Only the string `1` enables this; `true`/`yes` are **not** recognized.
+
+**Default:** unset (HTTP is attempted)
+
+**Example:**
+```bash
+export STRUCTKIT_DENY_NETWORK=1
+structkit generate my-structure ./output
+```
+
+### `STRUCTKIT_HTTP_TIMEOUT`
+
+HTTP timeout in seconds for raw GitHub fetches.
+
+**Default:** `10`
+
+**Example:**
+```bash
+export STRUCTKIT_HTTP_TIMEOUT=30
+```
+
+### `STRUCTKIT_HTTP_RETRIES`
+
+Number of retries after the first HTTP attempt (total attempts = retries + 1).
+
+**Default:** `2`
+
+**Example:**
+```bash
+export STRUCTKIT_HTTP_RETRIES=0
+```
+
+## Named Sources
+
+These configure the **sources** file and git cache. They are separate from the CLI user config at `~/.config/struct/config.yaml`.
+
+### `STRUCTKIT_SOURCES_CONFIG`
+
+Override the user-level named sources config path.
+
+**CLI Equivalent:** `structkit sources --config-path`
+
+**Default:** `$XDG_CONFIG_HOME/structkit/sources.yaml` if `XDG_CONFIG_HOME` is set, otherwise `~/.config/structkit/sources.yaml`
+
+**Example:**
+```bash
+export STRUCTKIT_SOURCES_CONFIG=~/team/structkit-sources.yaml
+structkit sources list
+```
+
+### `STRUCTKIT_SOURCES_CACHE`
+
+Override the local cache directory used for git-backed sources.
+
+**Default:** `$XDG_CACHE_HOME/structkit/sources` if `XDG_CACHE_HOME` is set, otherwise `~/.cache/structkit/sources`
+
+**Example:**
+```bash
+export STRUCTKIT_SOURCES_CACHE=~/cache/structkit-sources
+```
+
 ## Precedence Rules
 
-Command-line arguments **always take precedence** over environment variables. This allows environment variables to set sensible defaults while maintaining the ability to override them when needed.
+For flags that use environment variables as argparse defaults (`STRUCTKIT_STRUCTURES_PATH`, `STRUCTKIT_FILE_STRATEGY`, `STRUCTKIT_INPUT_STORE`, `STRUCTKIT_BACKUP_PATH`, `STRUCTKIT_GLOBAL_SYSTEM_PROMPT`, `STRUCTKIT_NON_INTERACTIVE`, `STRUCTKIT_OUTPUT_MODE`, `STRUCTKIT_NO_HOOKS`, `STRUCTKIT_HOOKS_ALLOWLIST`):
 
-**Precedence Order (highest to lowest):**
-1. Command-line arguments
-2. Environment variables
-3. Built-in defaults
+1. Explicit command-line flags
+2. Environment variable (argparse default)
+3. Layered config files (`--config-file`, then `~/.config/struct/config.yaml`, then built-in defaults)
+
+Because those env vars populate argparse defaults, they override values from config files unless you pass a different CLI flag.
+
+**Exception:** `STRUCTKIT_LOG_LEVEL` is applied after parsing and overrides `--log` and `--debug` when set.
+
+`STRUCTKIT_DENY_NETWORK`, `STRUCTKIT_HTTP_TIMEOUT`, `STRUCTKIT_HTTP_RETRIES`, `STRUCTKIT_SOURCES_CONFIG`, and `STRUCTKIT_SOURCES_CACHE` are read directly where they are used; they are not CLI-config layers.
 
 **Example:**
 ```bash
@@ -165,6 +269,8 @@ structkit generate --file-strategy skip my-structure ./output
 structkit generate my-structure ./output
 # Uses 'backup' from STRUCTKIT_FILE_STRATEGY
 ```
+
+Layered CLI config (`~/.config/struct/config.yaml` and `--config-file`) sits below those argparse env-var defaults. See [Configuration](configuration.md).
 
 ## Docker and Containerization
 
@@ -301,8 +407,10 @@ This should not happen - CLI arguments always take precedence. If you're experie
 
 ### Boolean environment variables not working correctly
 
-For `STRUCTKIT_NON_INTERACTIVE`, only `true`, `1`, and `yes` (case-insensitive, e.g., `"True"`, `"TRUE"`, `"YeS"`) are recognized as true values. All other values are treated as false, including:
+For `STRUCTKIT_NON_INTERACTIVE` and `STRUCTKIT_NO_HOOKS`, only `true`, `1`, and `yes` (case-insensitive, e.g., `"True"`, `"TRUE"`, `"YeS"`) are recognized as true values. All other values are treated as false, including:
 - `"true "` (with trailing space)
 - `"on"` or `"enable"`
+
+`STRUCTKIT_DENY_NETWORK` is stricter: only the exact value `1` disables HTTP fetches.
 
 Use one of the recognized values for reliable behavior.

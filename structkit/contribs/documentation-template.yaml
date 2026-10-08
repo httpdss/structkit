@@ -34,4 +34,4 @@ files:
         # Code of Conduct
         Our standards for how to behave within our community.
   - LICENSE.md:
-      file: https://raw.githubusercontent.com/git/git-scm.com/main/MIT-LICENSE.txt
+      file: https://raw.githubusercontent.com/httpdss/structkit/main/LICENSE

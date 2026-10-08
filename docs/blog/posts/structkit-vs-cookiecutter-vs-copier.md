@@ -161,4 +161,4 @@ Have questions or want to share how you're using structkit? Join the [GitHub Dis
 
 ---
 
-*structkit is open source (MIT). Contributions and feedback welcome.*
+*structkit is open source (Apache-2.0). Contributions and feedback welcome.*

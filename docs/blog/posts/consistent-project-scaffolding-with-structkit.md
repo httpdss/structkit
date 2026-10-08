@@ -99,4 +99,4 @@ Full documentation: [structkit docs](https://httpdss.github.io/structkit/)
 
 ---
 
-*structkit is open source (MIT) and actively developed. Star us on [GitHub](https://github.com/httpdss/structkit) and join the [Discussions](https://github.com/httpdss/structkit/discussions).*
+*structkit is open source (Apache-2.0) and actively developed. Star us on [GitHub](https://github.com/httpdss/structkit) and join the [Discussions](https://github.com/httpdss/structkit/discussions).*

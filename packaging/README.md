@@ -165,7 +165,7 @@ Each package includes:
   - structkit and all dependencies
   - Site packages (PyYAML, requests, openai, jinja2, etc.)
 - `/usr/share/doc/structkit/README.md` — Project README
-- `/usr/share/doc/structkit/LICENSE` — MIT License
+- `/usr/share/doc/structkit/LICENSE` — Apache-2.0 License
 
 ## Maintenance
 

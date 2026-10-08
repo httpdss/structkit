@@ -116,4 +116,4 @@ structkit mcp  # start the MCP server
 
 ---
 
-*structkit is open source (MIT). Contributions and template shares welcome.*
+*structkit is open source (Apache-2.0). Contributions and template shares welcome.*

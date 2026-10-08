@@ -13,7 +13,7 @@ description: |
   AI-powered generation, and Model Context Protocol integration.
 vendor: "httpdss"
 homepage: "https://structkit.app/"
-license: "MIT"
+license: "Apache-2.0"
 
 # Runtime dependencies (minimal - we vendor Python and dependencies)
 depends:

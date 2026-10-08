@@ -95,10 +95,12 @@ The built packages will be in the `dist/` directory:
 
 ## Installing Packages
 
+Packages are **not** attached to GitHub Releases. Download them from the [build-linux-packages](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) workflow run artifacts for the release, or build them locally with the steps above.
+
 ### Debian/Ubuntu
 
 ```bash
-# Download the .deb package, then:
+# Download the .deb artifact from the workflow run, then:
 sudo dpkg -i structkit_VERSION_amd64.deb
 
 # If there are dependency issues, resolve them with:
@@ -108,7 +110,7 @@ sudo apt-get install -f
 ### Fedora/RHEL
 
 ```bash
-# Download the .rpm package, then:
+# Download the .rpm artifact from the workflow run, then:
 sudo dnf install ./structkit-VERSION-1.x86_64.rpm
 
 # Or using rpm directly:
@@ -135,6 +137,7 @@ The workflow:
 - Builds packages for both `amd64` and `arm64` architectures
 - Creates both `.deb` and `.rpm` packages (4 total artifacts)
 - Uploads packages as GitHub Actions artifacts (90-day retention)
+- Does **not** attach packages to GitHub Releases
 - Can be triggered with a custom version via workflow dispatch
 
 ### Triggering a Manual Build

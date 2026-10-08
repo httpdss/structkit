@@ -2,16 +2,29 @@
 
 ## Config Layering
 
-Structkit supports a layered configuration system that allows you to set defaults at multiple levels. Configuration values are merged in the following order (from lowest to highest priority):
+StructKit supports a layered configuration system for **CLI defaults** (file strategy, log level, structures path, and similar flags). Values are merged in this order (lowest to highest priority), matching `load_layered_config` and `main.py`:
 
-1. **Built-in defaults** - Hard-coded defaults that are always present
-2. **User config** - Global defaults from `~/.config/struct/config.yaml`
-3. **Project config** - Project-specific config from `.structkit.yaml` (legacy `.struct.yaml`) or `--config-file`
-4. **CLI arguments** - Command-line flags (highest priority)
+1. **Built-in defaults** — Hard-coded defaults that are always present
+2. **User config** — `~/.config/struct/config.yaml`, loaded automatically when the file exists
+3. **Project config** — Only the file passed with `--config-file` (not auto-loaded)
+4. **CLI arguments** — Command-line flags (highest priority)
+
+`.structkit.yaml` (and legacy `.struct.yaml`) is the **structure definition** used by `structkit generate`, `validate`, and similar commands. It is **not** auto-loaded as layered CLI config. To apply project-specific CLI defaults, pass a file with `--config-file`.
+
+Several flags also read `STRUCTKIT_*` environment variables as argparse defaults. Those values are treated like CLI arguments (they override config files) unless you pass a different flag. `STRUCTKIT_LOG_LEVEL` is applied after parsing and overrides `--log` and `--debug`. See [Environment Variables](environment-variables.md).
+
+### User config vs named sources
+
+These are two different files in different directories:
+
+| File | Purpose |
+| --- | --- |
+| `~/.config/struct/config.yaml` | User-level CLI defaults (`file_strategy`, `log`, `input_store`, and the other options listed below). Loaded automatically when present. The path is `~/.config/struct/config.yaml` as implemented in code (not XDG-overridable). |
+| `$XDG_CONFIG_HOME/structkit/sources.yaml` or `~/.config/structkit/sources.yaml` | Named structure sources for `structkit sources`. Override the path with `STRUCTKIT_SOURCES_CONFIG`. See [Custom Structures](custom-structures.md). |
 
 ### User Config
 
-You can create a user-level config file at `~/.config/struct/config.yaml` to set your personal defaults. This is useful for setting preferences that apply across all your projects.
+Create a user-level config file at `~/.config/struct/config.yaml` to set personal CLI defaults across projects.
 
 Example `~/.config/struct/config.yaml`:
 
@@ -24,7 +37,14 @@ log: WARNING
 
 ### Project Config
 
-Project-specific settings can be defined in a `.structkit.yaml` file or specified via the `--config-file` flag. These settings override user config and built-in defaults. A legacy `.struct.yaml` file is still accepted when `.structkit.yaml` is not present.
+Project-specific CLI defaults are applied only when you pass `--config-file`. There is no automatic lookup of `.structkit.yaml` or `.struct.yaml` for this layer.
+
+```bash
+structkit generate --config-file project-config.yaml
+structkit config print -c project-config.yaml
+```
+
+These settings override user config and built-in defaults. CLI flags still win.
 
 ### CLI Arguments
 
@@ -80,9 +100,11 @@ The command also displays which configuration sources were used:
 Configuration sources:
   1. Built-in defaults: always loaded
   2. User config: /home/user/.config/struct/config.yaml (exists)
-  3. Project config: .structkit.yaml
+  3. Project config: none specified
   4. CLI arguments: highest priority
 ```
+
+When `--config-file` is set, line 3 shows that path instead of `none specified`.
 
 ## YAML Configuration Properties
 
@@ -197,16 +219,16 @@ latest_release(repo_name: str, strip_v: bool = False, return_sha: bool = False) 
 | `strip_v` | `bool` | `false` | In version mode, remove exactly one leading lowercase `v` from the release tag. Tags without that prefix, including an uppercase `V`, are unchanged. |
 | `return_sha` | `bool` | `false` | Return the commit SHA identified by the release tag instead of the tag name. |
 
-Both options are optional, so existing calls keep their original behavior. For a latest release tagged `v3.2.1`, these examples produce:
+Both options are optional, so existing calls keep their original behavior. For a latest release tagged `v3.3.0`, these examples produce:
 
 ```yaml
 files:
   - release.txt:
       content: |
-        # v3.2.1 (unchanged default output)
+        # v3.3.0 (unchanged default output)
         {{@ "httpdss/structkit" | latest_release @}}
 
-        # 3.2.1 (strip one leading lowercase "v")
+        # 3.3.0 (strip one leading lowercase "v")
         {{@ "httpdss/structkit" | latest_release(strip_v=true) @}}
 
         # 0123456789abcdef0123456789abcdef01234567 (release commit)

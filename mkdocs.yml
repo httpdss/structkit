@@ -1,6 +1,6 @@
 site_name: StructKit Documentation
 site_description: Automated Project Structure Generator
-site_url: https://httpdss.github.io/structkit/
+site_url: https://structkit.app/docs/
 repo_url: https://github.com/httpdss/structkit
 repo_name: httpdss/structkit
 
@@ -62,8 +62,10 @@ nav:
     - Template Variables: template-variables.md
     - File Handling: file-handling.md
     - Mappings: mappings.md
+    - Environment Variables: environment-variables.md
   - Advanced Features:
-    - Custom Structures: structures.md
+    - Built-in Structures: structures.md
+    - Custom Structures: custom-structures.md
     - Hooks: hooks.md
     - GitHub Integration: github-integration.md
     - MCP / AI Agent Workflow: mcp-integration.md
@@ -74,6 +76,7 @@ nav:
     - Command-Line Completion: completion.md
     - Contributing: contributing.md
   - Reference:
+    - CLI Reference: cli-reference.md
     - Examples: examples/index.md
     - Articles and Tutorials: articles.md
     - Known Issues: known-issues.md
@@ -107,4 +110,4 @@ extra_css:
   - stylesheets/extra.css
 
 extra:
-  homepage: https://httpdss.github.io/structkit/
+  homepage: https://structkit.app/

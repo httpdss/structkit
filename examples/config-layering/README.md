@@ -4,12 +4,14 @@ This example demonstrates how to use structkit's config layering system to set d
 
 ## Overview
 
-Structkit supports configuration at four levels (from lowest to highest priority):
+StructKit supports CLI configuration at four levels (from lowest to highest priority):
 
 1. **Built-in defaults** - Hard-coded baseline values
-2. **User config** - Global defaults from `~/.config/struct/config.yaml`
-3. **Project config** - Project-specific config from `.structkit.yaml` (legacy `.struct.yaml`) or `--config-file`
+2. **User config** - Global defaults from `~/.config/struct/config.yaml` (loaded automatically when present)
+3. **Project config** - Project-specific CLI defaults from `--config-file` only (`.structkit.yaml` is not auto-loaded)
 4. **CLI arguments** - Command-line flags (highest priority)
+
+`.structkit.yaml` is the structure definition used by `generate`/`validate`. Named structure sources are a separate file at `~/.config/structkit/sources.yaml` (see [Custom Structures](../../docs/custom-structures.md)).
 
 ## Setup
 
@@ -136,12 +138,16 @@ backup: ~/structkit-backups
 
 ### Team Project Standards
 
-Share project-specific settings in version control:
+Share project-specific CLI defaults in version control and pass them with `--config-file`:
 ```yaml
-# .structkit.yaml (checked into git)
+# project-config.yaml (checked into git)
 structures_path: ./team-structures
 input_store: ./.structkit/input.json
 non_interactive: true
+```
+
+```bash
+structkit generate --config-file project-config.yaml
 ```
 
 ### Temporary Overrides

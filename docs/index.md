@@ -41,7 +41,8 @@ Welcome to the comprehensive documentation for StructKit - the Automated Project
 
 Companion install paths for StructKit (not separate products):
 
-- [structkit-action](https://github.com/httpdss/structkit-action) — validate, generate, or drift-check as a GitHub Actions step
+- [structkit-setup](https://github.com/httpdss/structkit-setup) — install StructKit on `PATH` in GitHub Actions (`httpdss/structkit-setup@v0`), then run any `structkit` command
+- [structkit-action](https://github.com/httpdss/structkit-action) — validate, generate, or drift-check as a GitHub Actions step (`httpdss/structkit-setup@v0`, then `httpdss/structkit-action@v0`)
 - [structkit-pre-commit](https://github.com/httpdss/structkit-pre-commit) — validate structures before they land
 - [vscode-structkit](https://github.com/httpdss/vscode-structkit) — schema and autocomplete for `.structkit.yaml`
 - [homebrew-structkit](https://github.com/httpdss/homebrew-structkit) — `brew install httpdss/structkit/structkit`

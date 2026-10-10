@@ -38,7 +38,8 @@ docker run --rm -v "$(pwd):/workdir" ghcr.io/httpdss/structkit:main \
 
 These are install paths for [StructKit](https://github.com/httpdss/structkit), not separate products. Star this repo.
 
-- [GitHub Action](https://github.com/httpdss/structkit-action) — validate, generate, or drift-check in CI
+- [structkit-setup](https://github.com/httpdss/structkit-setup) — install StructKit on `PATH` in GitHub Actions (`httpdss/structkit-setup@v0`), then run any `structkit` command
+- [GitHub Action](https://github.com/httpdss/structkit-action) — validate, generate, or drift-check in CI (`httpdss/structkit-setup@v0`, then `httpdss/structkit-action@v0`)
 - [VS Code / Cursor](https://github.com/httpdss/vscode-structkit) — schema and autocomplete for `.structkit.yaml`
 - [Agent skills](https://github.com/httpdss/structkit-skills) — inspect, preview, generate, validate from an assistant
 - [pre-commit](https://github.com/httpdss/structkit-pre-commit) — validate structures before they land

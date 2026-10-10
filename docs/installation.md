@@ -73,6 +73,26 @@ sudo dnf install ./structkit-VERSION-1.x86_64.rpm
 
 To build packages locally instead, follow [packaging/README.md](https://github.com/httpdss/structkit/blob/main/packaging/README.md).
 
+## GitHub Actions
+
+To run arbitrary StructKit commands in CI, install with [`httpdss/structkit-setup`](https://github.com/httpdss/structkit-setup):
+
+```yaml
+- uses: httpdss/structkit-setup@v0
+- run: structkit list
+```
+
+To validate or generate as a dedicated step, call setup first, then [`httpdss/structkit-action`](https://github.com/httpdss/structkit-action). The action does not install StructKit itself:
+
+```yaml
+- uses: httpdss/structkit-setup@v0
+- uses: httpdss/structkit-action@v0
+  with:
+    command: validate
+```
+
+See [GitHub Integration](github-integration.md) for full workflow examples.
+
 ## From Source
 
 Clone the repository and install locally. See the [Development](development.md) page for details.

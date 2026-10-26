@@ -6,10 +6,17 @@ on:
       - published
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Package version (e.g., 3.3.0)'
-        required: false
-        default: ''
+      tag:
+        description: 'Release tag to check out, build, and attach packages to (e.g. v3.3.1)'
+        required: true
+        type: string
+
+# GITHUB_TOKEN can attach assets to a release published by release-drafter.
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.tag }}
 
 jobs:
   build-packages:
@@ -23,6 +30,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -34,17 +43,16 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Use workflow input if provided, otherwise extract from pyproject.toml
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          elif [ "${GITHUB_EVENT_NAME}" = "release" ]; then
-            VERSION="${GITHUB_REF_NAME#v}"
-          else
-            VERSION=$(python -c "import tomllib; f = open('pyproject.toml', 'rb'); data = tomllib.load(f); f.close(); print(data['project']['version'])")
+          TAG="${RELEASE_TAG}"
+          if [ -z "${TAG}" ]; then
+            echo "A release tag is required (release event or workflow_dispatch tag input)"
+            exit 1
           fi
 
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "Package version: ${VERSION}"
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Package version: ${VERSION} (tag ${TAG})"
 
       - name: Install nfpm
         run: |
@@ -113,6 +121,26 @@ jobs:
           # List generated packages
           ls -lh dist/*.{deb,rpm} 2>/dev/null || true
 
+          VERSION="${{ steps.version.outputs.version }}"
+          ARCH="${{ steps.arch.outputs.nfpm_arch }}"
+          shopt -s nullglob
+          packages=(dist/*.deb dist/*.rpm)
+          if [ "${#packages[@]}" -eq 0 ]; then
+            echo "nfpm did not produce a .deb or .rpm"
+            exit 1
+          fi
+          for pkg in "${packages[@]}"; do
+            base="$(basename "${pkg}")"
+            if [[ "${base}" != *"${VERSION}"* ]]; then
+              echo "Package name is missing version ${VERSION}: ${base}"
+              exit 1
+            fi
+            if [[ "${base}" != *"${ARCH}"* && "${base}" != *x86_64* && "${base}" != *aarch64* ]]; then
+              echo "Package name is missing architecture: ${base}"
+              exit 1
+            fi
+          done
+
       - name: Upload package artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -122,9 +150,76 @@ jobs:
             dist/*.rpm
           retention-days: 90
 
+  upload-release-assets:
+    name: Upload packages to GitHub Release
+    needs: build-packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all package artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: dist
+          pattern: structkit-*
+          merge-multiple: true
+
+      - name: Generate checksums and upload to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          TAG="${RELEASE_TAG}"
+          if [ -z "${TAG}" ]; then
+            echo "A release tag is required (release event or workflow_dispatch tag input)"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+
+          packages=(dist/*.deb dist/*.rpm)
+          if [ "${#packages[@]}" -eq 0 ]; then
+            echo "No .deb or .rpm packages found to upload"
+            exit 1
+          fi
+
+          for pkg in "${packages[@]}"; do
+            base="$(basename "${pkg}")"
+            if [[ "${base}" != *"${VERSION}"* ]]; then
+              echo "Package name is missing version ${VERSION}: ${base}"
+              exit 1
+            fi
+            if [[ "${base}" != *amd64* && "${base}" != *arm64* && "${base}" != *x86_64* && "${base}" != *aarch64* ]]; then
+              echo "Package name is missing architecture: ${base}"
+              exit 1
+            fi
+          done
+
+          (
+            cd dist
+            sha256sum -- *.deb *.rpm | sort -k2 > SHA256SUMS
+            echo "SHA256SUMS:"
+            cat SHA256SUMS
+          )
+
+          echo "Uploading to release ${TAG}:"
+          ls -lh dist/*.deb dist/*.rpm dist/SHA256SUMS
+
+          gh release upload "${TAG}" dist/*.deb dist/*.rpm dist/SHA256SUMS --clobber
+
+      - name: Summarize release assets
+        run: |
+          {
+            echo "## Packages attached to ${RELEASE_TAG}"
+            echo ""
+            echo "Uploaded .deb, .rpm, and SHA256SUMS to https://github.com/${{ github.repository }}/releases/tag/${RELEASE_TAG}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
   summary:
     name: Build Summary
-    needs: build-packages
+    needs: [build-packages, upload-release-assets]
     runs-on: ubuntu-latest
     if: always()
 
@@ -137,4 +232,4 @@ jobs:
           echo "- Debian/Ubuntu (.deb) - amd64, arm64" >> $GITHUB_STEP_SUMMARY
           echo "- Fedora/RHEL (.rpm) - amd64, arm64" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download artifacts from the Actions tab above." >> $GITHUB_STEP_SUMMARY
+          echo "Packages are attached to the GitHub release (when the upload job succeeds) and also available as Actions artifacts." >> $GITHUB_STEP_SUMMARY

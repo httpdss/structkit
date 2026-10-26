@@ -95,13 +95,13 @@ The built packages will be in the `dist/` directory:
 
 ## Installing Packages
 
-Packages are **not** attached to GitHub Releases. Download them from the [build-linux-packages](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) workflow run artifacts for the release, or build them locally with the steps above.
+Packages are attached to each [GitHub Release](https://github.com/httpdss/structkit/releases) starting with 3.3.1. Download the `.deb` / `.rpm` (and `SHA256SUMS`) from the release, or build them locally with the steps above.
 
 ### Debian/Ubuntu
 
 ```bash
-# Download the .deb artifact from the workflow run, then:
-sudo dpkg -i structkit_VERSION_amd64.deb
+# Download the .deb from the GitHub release, then:
+sudo apt install ./structkit_VERSION_amd64.deb
 
 # If there are dependency issues, resolve them with:
 sudo apt-get install -f
@@ -110,7 +110,7 @@ sudo apt-get install -f
 ### Fedora/RHEL
 
 ```bash
-# Download the .rpm artifact from the workflow run, then:
+# Download the .rpm from the GitHub release, then:
 sudo dnf install ./structkit-VERSION-1.x86_64.rpm
 
 # Or using rpm directly:
@@ -131,32 +131,36 @@ structkit --help
 The `.github/workflows/build-linux-packages.yaml` workflow automatically builds packages when:
 
 1. **On release** — Triggered when a new GitHub release is published
-2. **Manual dispatch** — Can be triggered manually from the Actions tab
+2. **Manual dispatch** — Can be triggered from the Actions tab with a required `tag` input (for example `v3.3.1`) to rebuild that tag and attach packages to that release
 
 The workflow:
+- Checks out the release tag (or the `workflow_dispatch` tag)
 - Builds packages for both `amd64` and `arm64` architectures
 - Creates both `.deb` and `.rpm` packages (4 total artifacts)
 - Uploads packages as GitHub Actions artifacts (90-day retention)
-- Does **not** attach packages to GitHub Releases
-- Can be triggered with a custom version via workflow dispatch
+- Attaches the packages and a `SHA256SUMS` file to the corresponding GitHub Release
 
 ### Triggering a Manual Build
 
 1. Go to **Actions** → **build-linux-packages**
 2. Click **Run workflow**
-3. Optionally specify a version (defaults to version in `pyproject.toml`)
+3. Enter the release tag to backfill (for example `v3.3.1`)
 4. Click **Run workflow**
 
 ### Downloading Built Packages
 
-After the workflow completes:
-1. Go to the workflow run page
-2. Scroll to **Artifacts** section
-3. Download the desired package(s):
-   - `structkit-VERSION-amd64-deb`
-   - `structkit-VERSION-arm64-deb`
-   - `structkit-VERSION-amd64-rpm`
-   - `structkit-VERSION-arm64-rpm`
+After the workflow completes, download packages from the [GitHub release](https://github.com/httpdss/structkit/releases) for that tag:
+
+- `structkit_VERSION_amd64.deb` / `structkit_VERSION_arm64.deb`
+- `structkit-VERSION-1.x86_64.rpm` / `structkit-VERSION-1.aarch64.rpm`
+- `SHA256SUMS`
+
+The same files are also available as Actions artifacts:
+
+- `structkit-VERSION-amd64-deb`
+- `structkit-VERSION-arm64-deb`
+- `structkit-VERSION-amd64-rpm`
+- `structkit-VERSION-arm64-rpm`
 
 ## Package Contents
 

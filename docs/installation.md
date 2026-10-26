@@ -47,29 +47,30 @@ Refer to the [Quick Start](quickstart.md) guide for more options.
 
 ## Linux packages (.deb / .rpm)
 
-Native `.deb` (Debian/Ubuntu) and `.rpm` (Fedora/RHEL) packages are built by the [`build-linux-packages`](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) GitHub Actions workflow on each published release and on manual workflow dispatch. They are uploaded as **Actions workflow artifacts** (90-day retention). They are **not** attached to GitHub Releases.
+Native `.deb` (Debian/Ubuntu) and `.rpm` (Fedora/RHEL) packages are attached to each [GitHub Release](https://github.com/httpdss/structkit/releases) starting with **3.3.1**. The [`build-linux-packages`](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) workflow builds them on every published release (and on manual `workflow_dispatch` with a tag) and uploads them to that release. A `SHA256SUMS` file is published alongside the packages. The same files are also kept as Actions artifacts (90-day retention).
 
-To install a release package:
+Asset names include the version and architecture, for example:
 
-1. Open the [build-linux-packages workflow runs](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) and select the run for the release you want.
-2. Download the artifact for your architecture:
-   - `structkit-VERSION-amd64-deb` / `structkit-VERSION-arm64-deb`
-   - `structkit-VERSION-amd64-rpm` / `structkit-VERSION-arm64-rpm`
-3. Install from the downloaded file.
+- `structkit_3.3.1_amd64.deb` / `structkit_3.3.1_arm64.deb`
+- `structkit-3.3.1-1.x86_64.rpm` / `structkit-3.3.1-1.aarch64.rpm`
 
-Debian/Ubuntu:
+Debian/Ubuntu (amd64):
 
 ```sh
-sudo dpkg -i structkit_VERSION_amd64.deb
-# if needed: sudo apt-get install -f
+curl -fsSL -o structkit_3.3.1_amd64.deb \
+  https://github.com/httpdss/structkit/releases/download/v3.3.1/structkit_3.3.1_amd64.deb
+sudo apt install ./structkit_3.3.1_amd64.deb
 ```
 
-Fedora/RHEL:
+Fedora/RHEL (x86_64):
 
 ```sh
-sudo dnf install ./structkit-VERSION-1.x86_64.rpm
-# or: sudo rpm -ivh structkit-VERSION-1.x86_64.rpm
+curl -fsSL -o structkit-3.3.1-1.x86_64.rpm \
+  https://github.com/httpdss/structkit/releases/download/v3.3.1/structkit-3.3.1-1.x86_64.rpm
+sudo dnf install ./structkit-3.3.1-1.x86_64.rpm
 ```
+
+For arm64, download `structkit_3.3.1_arm64.deb` or `structkit-3.3.1-1.aarch64.rpm` from the same release URL and install the local file the same way. Replace `3.3.1` / `v3.3.1` with the version you want.
 
 To build packages locally instead, follow [packaging/README.md](https://github.com/httpdss/structkit/blob/main/packaging/README.md).
 

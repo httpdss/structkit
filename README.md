@@ -11,6 +11,8 @@ Define a repo once (files, CI, Terraform, app layout). Generate it from the CLI,
 
 > 🚀 **[Quick Start](docs/quickstart.md)** | 📚 **[Docs](docs/index.md)** | 🤖 **[MCP / AI Agent Guide](docs/mcp-integration.md)** | 💬 **[Discussions](https://github.com/httpdss/structkit/discussions)**
 
+⭐ If StructKit saves you time, please [star the repo](https://github.com/httpdss/structkit) — it helps others find it.
+
 ## Try it in 60 seconds
 
 ```bash

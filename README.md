@@ -46,7 +46,7 @@ These are install paths for [StructKit](https://github.com/httpdss/structkit), n
 - [Agent skills](https://github.com/httpdss/structkit-skills) — inspect, preview, generate, validate from an assistant
 - [pre-commit](https://github.com/httpdss/structkit-pre-commit) — validate structures before they land
 - [Homebrew](https://github.com/httpdss/homebrew-structkit) — `brew install httpdss/structkit/structkit`
-- Linux `.deb` / `.rpm` — download from [build-linux-packages](https://github.com/httpdss/structkit/actions/workflows/build-linux-packages.yaml) workflow artifacts (not attached to GitHub Releases), or build locally per [packaging/README.md](packaging/README.md)
+- Linux `.deb` / `.rpm` — download from the [GitHub release](https://github.com/httpdss/structkit/releases) (attached from 3.3.1 on), or build locally per [packaging/README.md](packaging/README.md)
 - [Backstage](https://github.com/httpdss/backstage-plugin-structkit) — scaffolder actions for platform teams
 - [Hermes plugin](https://github.com/httpdss/hermes-plugin-structkit) — safe StructKit tools inside Hermes
 

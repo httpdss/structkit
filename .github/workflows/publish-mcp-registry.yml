@@ -1,0 +1,91 @@
+name: publish-mcp-registry
+
+# Publishes server.json to the official MCP Registry.
+# Gated to published GitHub Releases only — never runs on pull requests.
+# PyPI ownership verification requires the matching version (with the
+# README mcp-name marker) to already be live, so this waits for PyPI
+# after the publish-pypi workflow that also fires on release published.
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Check server.json version matches package and release tag
+        run: |
+          set -euo pipefail
+
+          PACKAGE_VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          SERVER_VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['version'])")
+          PACKAGE_ENTRY_VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['packages'][0]['version'])")
+          RELEASE_VERSION="${GITHUB_REF_NAME#v}"
+
+          echo "Package version: $PACKAGE_VERSION"
+          echo "server.json version: $SERVER_VERSION"
+          echo "packages[0].version: $PACKAGE_ENTRY_VERSION"
+          echo "Release version: $RELEASE_VERSION"
+
+          if [ "$PACKAGE_VERSION" != "$RELEASE_VERSION" ] || \
+             [ "$SERVER_VERSION" != "$RELEASE_VERSION" ] || \
+             [ "$PACKAGE_ENTRY_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "Error: pyproject.toml, server.json, and the release tag must share the same version"
+            exit 1
+          fi
+
+      - name: Wait for the PyPI release and mcp-name marker
+        run: |
+          set -euo pipefail
+
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+
+          for i in $(seq 1 30); do
+            if curl -fsSL "https://pypi.org/pypi/structkit/${VERSION}/json" >/dev/null; then
+              echo "PyPI ${VERSION} is live"
+              break
+            fi
+            echo "waiting for PyPI ${VERSION} (${i}/30)"
+            sleep 10
+            if [ "$i" -eq 30 ]; then
+              echo "PyPI ${VERSION} did not appear within 5 minutes"
+              exit 1
+            fi
+          done
+
+          curl -fsSL "https://pypi.org/pypi/structkit/${VERSION}/json" \
+            | python3 -c "
+          import json
+          import sys
+
+          data = json.load(sys.stdin)
+          description = data['info'].get('description') or ''
+          marker = 'mcp-name: io.github.httpdss/structkit'
+          present = marker in description
+          print('marker present:', present)
+          if not present:
+              sys.exit('PyPI long description is missing the mcp-name ownership marker')
+          "
+
+      - name: Install mcp-publisher
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" \
+            | tar xz mcp-publisher
+
+      - name: Validate server.json
+        run: ./mcp-publisher validate server.json
+
+      - name: Authenticate to MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish server to MCP Registry
+        run: ./mcp-publisher publish

@@ -1,5 +1,7 @@
 # StructKit
 
+<!-- mcp-name: io.github.httpdss/structkit -->
+
 YAML scaffolding your AI assistant can actually run.
 
 Define a repo once (files, CI, Terraform, app layout). Generate it from the CLI, from CI, or through an assistant over MCP. When the org template on GitHub changes, the next generate picks it up. No golden repo. No separate Cookiecutter tree.

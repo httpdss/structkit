@@ -24,8 +24,8 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Update pyproject version from release draft
-        id: pyproject-version
+      - name: Update package versions from release draft
+        id: package-version
         env:
           RESOLVED_VERSION: ${{ steps.release-drafter.outputs.resolved_version }}
         run: |
@@ -36,13 +36,15 @@ jobs:
           fi
 
           python - <<'PY'
+          import json
           import os
           import re
           from pathlib import Path
 
           version = os.environ["RESOLVED_VERSION"].removeprefix("v")
-          path = Path("pyproject.toml")
-          text = path.read_text()
+
+          pyproject = Path("pyproject.toml")
+          text = pyproject.read_text()
           updated, count = re.subn(
               r'(?m)^(version\s*=\s*")[^"]+(")$',
               rf'\g<1>{version}\2',
@@ -51,27 +53,36 @@ jobs:
           )
           if count == 0:
               raise SystemExit("pyproject.toml version field was not found")
-          path.write_text(updated)
+          pyproject.write_text(updated)
+
+          server_json = Path("server.json")
+          data = json.loads(server_json.read_text())
+          data["version"] = version
+          packages = data.get("packages") or []
+          if not packages:
+              raise SystemExit("server.json packages entry was not found")
+          packages[0]["version"] = version
+          server_json.write_text(json.dumps(data, indent=2) + "\n")
           PY
 
-          if git diff --quiet -- pyproject.toml; then
-            echo "pyproject.toml already matches ${RESOLVED_VERSION}"
+          if git diff --quiet -- pyproject.toml server.json; then
+            echo "package versions already match ${RESOLVED_VERSION}"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            echo "pyproject.toml will be bumped to ${RESOLVED_VERSION}"
+            echo "package versions will be bumped to ${RESOLVED_VERSION}"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Open pyproject version bump PR
-        if: steps.pyproject-version.outputs.changed == 'true'
+      - name: Open package version bump PR
+        if: steps.package-version.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v8.1.1
         with:
           branch: chore/bump-pyproject-version
           delete-branch: true
-          commit-message: "chore: bump pyproject version to ${{ steps.release-drafter.outputs.resolved_version }}"
-          title: "Bump pyproject version to ${{ steps.release-drafter.outputs.resolved_version }}"
+          commit-message: "chore: bump package version to ${{ steps.release-drafter.outputs.resolved_version }}"
+          title: "Bump package version to ${{ steps.release-drafter.outputs.resolved_version }}"
           body: |
             Release Drafter resolved the next release as `${{ steps.release-drafter.outputs.resolved_version }}`.
 
-            This PR updates `pyproject.toml` before the draft release is published so the PyPI publish workflow can build a package whose version matches the release tag.
+            This PR updates `pyproject.toml` and `server.json` before the draft release is published so the PyPI and MCP Registry publish workflows can ship a package whose version matches the release tag.
           labels: release

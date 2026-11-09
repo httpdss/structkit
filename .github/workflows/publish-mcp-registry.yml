@@ -1,0 +1,109 @@
+name: publish-mcp-registry
+
+# Publishes server.json to the official MCP Registry under the
+# app.structkit/mcp domain namespace.
+# Gated to published GitHub Releases only — never runs on pull requests.
+# GitHub OIDC cannot authenticate a domain namespace; this workflow uses
+# DNS login with secrets.MCP_PRIVATE_KEY (Ed25519 hex). If the secret is
+# unset, login and publish are skipped so the release is not failed.
+# Never commit the private key.
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Check server.json version matches package and release tag
+        run: |
+          set -euo pipefail
+
+          PACKAGE_VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          SERVER_VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['version'])")
+          PACKAGE_ENTRY_VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['packages'][0]['version'])")
+          RELEASE_VERSION="${GITHUB_REF_NAME#v}"
+
+          echo "Package version: $PACKAGE_VERSION"
+          echo "server.json version: $SERVER_VERSION"
+          echo "packages[0].version: $PACKAGE_ENTRY_VERSION"
+          echo "Release version: $RELEASE_VERSION"
+
+          if [ "$PACKAGE_VERSION" != "$RELEASE_VERSION" ] || \
+             [ "$SERVER_VERSION" != "$RELEASE_VERSION" ] || \
+             [ "$PACKAGE_ENTRY_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "Error: pyproject.toml, server.json, and the release tag must share the same version"
+            exit 1
+          fi
+
+      - name: Install mcp-publisher
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" \
+            | tar xz mcp-publisher
+
+      - name: Validate server.json
+        run: ./mcp-publisher validate server.json
+
+      - name: Check whether MCP_PRIVATE_KEY is configured
+        id: mcp-auth
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: |
+          if [ -z "${MCP_PRIVATE_KEY}" ]; then
+            echo "MCP_PRIVATE_KEY is not set; skipping MCP Registry login and publish"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Wait for the PyPI release and mcp-name marker
+        if: steps.mcp-auth.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+
+          for i in $(seq 1 30); do
+            if curl -fsSL "https://pypi.org/pypi/structkit/${VERSION}/json" >/dev/null; then
+              echo "PyPI ${VERSION} is live"
+              break
+            fi
+            echo "waiting for PyPI ${VERSION} (${i}/30)"
+            sleep 10
+            if [ "$i" -eq 30 ]; then
+              echo "PyPI ${VERSION} did not appear within 5 minutes"
+              exit 1
+            fi
+          done
+
+          curl -fsSL "https://pypi.org/pypi/structkit/${VERSION}/json" \
+            | python3 -c "
+          import json
+          import sys
+
+          data = json.load(sys.stdin)
+          description = data['info'].get('description') or ''
+          marker = 'mcp-name: app.structkit/mcp'
+          present = marker in description
+          print('marker present:', present)
+          if not present:
+              sys.exit('PyPI long description is missing the mcp-name ownership marker')
+          "
+
+      - name: Authenticate to MCP Registry
+        if: steps.mcp-auth.outputs.skip != 'true'
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: ./mcp-publisher login dns --domain structkit.app --private-key "${MCP_PRIVATE_KEY}"
+
+      - name: Publish server to MCP Registry
+        if: steps.mcp-auth.outputs.skip != 'true'
+        run: ./mcp-publisher publish

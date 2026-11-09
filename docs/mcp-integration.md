@@ -7,6 +7,61 @@ tags:
 
 The structkit tool now supports MCP (Model Context Protocol) integration, providing a programmable interface to interact with structure definitions. This enables automation and integration with other tools, particularly AI-assisted development workflows.
 
+## Official MCP Registry
+
+The official MCP Registry name for StructKit is `app.structkit/mcp` (reverse-DNS of [structkit.app](https://structkit.app/)). The listing is defined in `server.json` at the repository root. Registry clients should launch the stdio server with:
+
+```bash
+uvx structkit mcp --server
+```
+
+Keep `server.json` `version` (and `packages[0].version`) in sync with the package version in `pyproject.toml`. The Release Drafter version-bump PR updates both files before a GitHub Release.
+
+Domain namespaces authenticate with DNS or HTTP proof of `structkit.app`. GitHub OIDC (`mcp-publisher login github` / `github-oidc`) only covers `io.github.*` names and will not publish `app.structkit/mcp`.
+
+### Manual publish (maintainer)
+
+Do not publish from a pull request. Do not commit the Ed25519 private key (`key.pem` is gitignored). Ownership verification only succeeds after a PyPI release whose long description includes the hidden README marker `<!-- mcp-name: app.structkit/mcp -->`.
+
+1. Install [`mcp-publisher`](https://github.com/modelcontextprotocol/registry/blob/main/docs/reference/cli/commands.md).
+2. Generate an Ed25519 keypair and the DNS TXT proof (from [registry authentication](https://modelcontextprotocol.io/registry/authentication)):
+
+```bash
+MY_DOMAIN="structkit.app"
+openssl genpkey -algorithm Ed25519 -out key.pem
+PUBLIC_KEY="$(openssl pkey -in key.pem -pubout -outform DER | tail -c 32 | base64)"
+echo "${MY_DOMAIN}. IN TXT \"v=MCPv1; k=ed25519; p=${PUBLIC_KEY}\""
+```
+
+3. Add that TXT record on **structkit.app** at the DNS host where the domain is registered (the website is hosted on Lovable; Lovable is not the DNS registrar). Host and value:
+
+```text
+Host/name: structkit.app (or `@`)
+Type: TXT
+Value: v=MCPv1; k=ed25519; p=<PUBLIC_KEY>
+```
+
+Wait until the record is visible, for example `dig TXT structkit.app +short`.
+
+HTTP alternative (same keypair): write `v=MCPv1; k=ed25519; p=${PUBLIC_KEY}` to a file and serve it at `https://structkit.app/.well-known/mcp-registry-auth`, then login with `mcp-publisher login http --domain structkit.app --private-key ...` instead of `login dns`.
+
+4. Extract the private key **hex** (this is what `mcp-publisher` and the GitHub secret expect, not the PEM file) and store it as the repository secret `MCP_PRIVATE_KEY`. Do not commit it.
+
+```bash
+PRIVATE_KEY="$(openssl pkey -in key.pem -noout -text | grep -A3 "priv:" | tail -n +2 | tr -d ' :\n')"
+# Store "${PRIVATE_KEY}" as GitHub Actions secret MCP_PRIVATE_KEY
+```
+
+5. Cut a GitHub Release so `structkit` is uploaded to PyPI with the README marker. Confirm the marker in that version's PyPI JSON `info.description`.
+6. From the repository root:
+
+```bash
+mcp-publisher login dns --domain structkit.app --private-key "${PRIVATE_KEY}"
+mcp-publisher publish
+```
+
+Published GitHub Releases also run `.github/workflows/publish-mcp-registry.yml`. That workflow authenticates with `mcp-publisher login dns --domain structkit.app --private-key …` using `secrets.MCP_PRIVATE_KEY`. If the secret is unset, login and publish are skipped and the release still succeeds. It is gated to `release: published` and does not run on pull requests.
+
 ## Available MCP Tools
 
 ### 1. list_structures

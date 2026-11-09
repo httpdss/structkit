@@ -1,6 +1,6 @@
 # StructKit
 
-<!-- mcp-name: io.github.httpdss/structkit -->
+<!-- mcp-name: app.structkit/mcp -->
 
 YAML scaffolding your AI assistant can actually run.
 

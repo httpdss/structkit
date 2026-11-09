@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SERVER_JSON = ROOT / "server.json"
 PYPROJECT = ROOT / "pyproject.toml"
 README = ROOT / "README.md"
-SERVER_NAME = "io.github.httpdss/structkit"
+SERVER_NAME = "app.structkit/mcp"
 OWNERSHIP_MARKER = f"mcp-name: {SERVER_NAME}"
 
 

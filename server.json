@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.httpdss/structkit",
+  "name": "app.structkit/mcp",
   "title": "StructKit",
   "description": "YAML scaffolding your AI assistant can actually run.",
   "version": "3.3.1",

@@ -43,7 +43,7 @@ jobs:
         with zipfile.ZipFile(wheels[0]) as wheel:
             metadata_name = next(name for name in wheel.namelist() if name.endswith(".dist-info/METADATA"))
             metadata = wheel.read(metadata_name).decode("utf-8")
-        marker = "mcp-name: io.github.httpdss/structkit"
+        marker = "mcp-name: app.structkit/mcp"
         if marker not in metadata:
             raise SystemExit("wheel METADATA is missing the MCP Registry ownership marker")
         print(f"MCP ownership marker present in {metadata_name}")

@@ -7,6 +7,9 @@ example_project/
 build/*
 dist/
 
+# MCP Registry domain-auth private key (never commit)
+key.pem
+
 # MkDocs generated documentation
 site/docs/
 
